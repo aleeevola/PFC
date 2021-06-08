@@ -5,20 +5,27 @@ import Box from '@material-ui/core/Box';
 import ProTip from '../src/ProTip';
 import Link from '../src/Link';
 import Copyright from '../src/Copyright';
+import { Button, Grid } from '@material-ui/core';
+import style from './home.module.css'
+
 
 export default function Index() {
   return (
-    <Container maxWidth="sm">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Next.js example
-        </Typography>
-        <Link href="/about" color="secondary">
-          Go to the about page
-        </Link>
-        <ProTip />
-        <Copyright />
-      </Box>
+    <Container flex>
+    <Container maxWidth="md" >
+      <Grid container spacing={2} alignItems="center">
+            <Grid item container justify="flex-start" md={8} xs={12} >
+                <Typography align="center" variant="h4" component="h1" gutterBottom>
+                Libreria
+                </Typography>
+            </Grid>
+            <Grid item container justify="flex-end" md={4} xs={12}>
+                <Button variant="contained" color="primary" component={Link} naked href="nuevoPedido">Realizar pedido</Button>
+            </Grid>
+      </Grid>
     </Container>
+    
+    
+  </Container>
   );
 }
