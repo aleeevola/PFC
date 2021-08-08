@@ -20,7 +20,7 @@ export default function Index() {
                 </Typography>
             </Grid>
             <Grid item container justify="flex-end" md={4} xs={12}>
-                <Button variant="contained" color="primary" component={Link} naked href="nuevoPedido">Realizar pedido</Button>
+                <Button variant="contained" color="primary" component={Link} naked href="pedido/nuevo">Realizar pedido</Button>
             </Grid>
       </Grid>
     </Container>

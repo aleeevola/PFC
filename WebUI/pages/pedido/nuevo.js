@@ -5,6 +5,8 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Login from '../account/login'
+import Archivos from './selectorArchivos'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,6 +19,16 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(1),
     },
+    componente:{
+      display:'flex',
+      background:'#fcfcfc',
+      maxWidth:'xs',
+      padding: theme.spacing(1),
+      margin:theme.spacing(1),
+      borderRadius:'10px',
+      boxShadow: '-3px 3px 5px -1px rgba(196,196,196,0.65)',
+      //marginBlockEnd:theme.spacing(3),
+    },
   }));
 
 function getSteps() {
@@ -26,9 +38,9 @@ function getSteps() {
 function getStepContent(step) {
     switch (step) {
       case 0:
-        return 'Select campaign settings...';
+        return <Login/>;
       case 1:
-        return 'What is an ad group anyways?';
+        return <Archivos/>;
       case 2:
         return 'This is the bit I really care about!';
       case 3:
@@ -88,6 +100,9 @@ export default function NuevoPedido() {
   
     return (
       <div className={classes.root}>
+        <Typography component="h1" variant="h4" align="center">
+            Realizar Pedido
+          </Typography>
         <Stepper activeStep={activeStep}>
           {steps.map((label, index) => {
             const stepProps = {};
@@ -117,12 +132,13 @@ export default function NuevoPedido() {
             </div>
           ) : (
             <div>
-              <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+              <div className={classes.componente}>{getStepContent(activeStep)}</div>
+              
               <div>
                 <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                  Back
+                  Atras
                 </Button>
-                {isStepOptional(activeStep) && (
+                {/* {isStepOptional(activeStep) && (
                   <Button
                     variant="contained"
                     color="primary"
@@ -131,7 +147,7 @@ export default function NuevoPedido() {
                   >
                     Skip
                   </Button>
-                )}
+                )} */}
   
                 <Button
                   variant="contained"
@@ -139,7 +155,7 @@ export default function NuevoPedido() {
                   onClick={handleNext}
                   className={classes.button}
                 >
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                  {activeStep === steps.length - 1 ? 'Terminar' : 'Siguiente'}
                 </Button>
               </div>
             </div>
