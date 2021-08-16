@@ -1,9 +1,15 @@
-package pfc.WebAPI.Entidades;
+package pfc.WebAPI.Infraestructura.Entidades;
 import java.sql.Date;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+
+@Entity
 public class Pedido {
 
+	@Id
 	private  int idPedido;
     private  int idCliente;
 	private  Date fechaIngreso;

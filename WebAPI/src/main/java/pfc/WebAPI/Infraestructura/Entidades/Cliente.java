@@ -1,4 +1,4 @@
-package pfc.WebAPI.Entidades;
+package pfc.WebAPI.Infraestructura.Entidades;
 
 public class Cliente {
 

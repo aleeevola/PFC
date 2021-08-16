@@ -1,15 +1,14 @@
-package pfc.WebAPI.Entidades;
+package pfc.WebAPI.Infraestructura.Entidades;
 import java.sql.Date;
 
-public class Archivo {
+public class ArchivoFrecuente {
 
-    private int idArchivo;
-    private String nombre;
-    private int idPedido;
+    private  int idArchivo;
+    private  String nombre;
+    private  int idUsuarioAlta;
     private Date fechaIngreso;
     private Date fechaBaja;
 	
-    
     
     public int getIdArchivo() {
 		return idArchivo;
@@ -23,11 +22,11 @@ public class Archivo {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public int getIdPedido() {
-		return idPedido;
+	public int getIdUsuarioAlta() {
+		return idUsuarioAlta;
 	}
-	public void setIdPedido(int idPedido) {
-		this.idPedido = idPedido;
+	public void setIdUsuarioAlta(int idUsuarioAlta) {
+		this.idUsuarioAlta = idUsuarioAlta;
 	}
 	public Date getFechaIngreso() {
 		return fechaIngreso;
@@ -41,7 +40,6 @@ public class Archivo {
 	public void setFechaBaja(Date fechaBaja) {
 		this.fechaBaja = fechaBaja;
 	}
-    
-    
+
 
 }
