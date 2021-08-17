@@ -2,10 +2,10 @@ package pfc.WebAPI.Infraestructura.Servicios;
 
 import java.util.Optional;
 
-import pfc.WebAPI.Infraestructura.Entidades.Pedido;
+import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 
 
 public interface IUsuarioService {
-	public Usuario obtenerUsuario(int idUsuario);
-	public Usuario crearUsuario();
+	public Optional<Usuario> obtenerUsuario(int idUsuario);
+	// public Usuario crearUsuario();
 }

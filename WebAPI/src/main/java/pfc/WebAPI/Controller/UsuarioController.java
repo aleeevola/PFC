@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import pfc.WebAPI.Infraestructura.Entidades.Pedido;
-import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
+import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Servicios.IUsuarioService;
 
 @RestController
 @RequestMapping("/usuarios")

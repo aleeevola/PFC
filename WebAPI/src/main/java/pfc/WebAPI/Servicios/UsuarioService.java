@@ -4,9 +4,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pfc.WebAPI.Infraestructura.Entidades.Pedido;
-import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
-import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
+import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Repositorios.IUsuarioRepository;
+import pfc.WebAPI.Infraestructura.Servicios.IUsuarioService;
 
 
 @Service
@@ -16,7 +16,7 @@ public class UsuarioService implements IUsuarioService{
 	private IUsuarioRepository _usuarioRepository;
 	
 	@Override
-	public Usuario obtenerUsuario(int idUsuario) {
+	public Optional<Usuario> obtenerUsuario(int idUsuario) {
 		
 		return this._usuarioRepository.findById(idUsuario);
 		

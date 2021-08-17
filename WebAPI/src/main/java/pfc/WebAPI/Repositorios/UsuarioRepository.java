@@ -2,8 +2,8 @@ package pfc.WebAPI.Repositorios;
 
 import org.springframework.stereotype.Repository;
 
-import pfc.WebAPI.Infraestructura.Entidades.Pedido;
-import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
+import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Repositorios.IUsuarioRepository;
 
 //EN ESTA CLASE SE DEBE IMPLEMENTAR EL REPOSITORIO SI ES QUE NECESITAMOS UN METODO ESPECIAL PERO NO SE COMO CONFIGURARLO CON EL JPA
 // QUE TA TE DA LOS METODOS EN LA INTERFAZ
