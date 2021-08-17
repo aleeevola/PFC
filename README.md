@@ -34,10 +34,16 @@ https://nextjs.org/docs/#custom-app
 Para la estructura del Layout se siguió el ejemplo de:\
 https://github.com/zeit/next.js/tree/master/examples/layout-component
 
-#Servidor My sql
+## JPA 
 
-1- Descargar xampp
-2- Start servidor apache y mySql
-3- Clik en el boton "admin" de la fila MySql
-4- Crear una base de datos que se llame "pfc"
-5- Las tablas las crea el JPA 
+https://docs.spring.io/spring-data/jpa/docs/2.5.4/reference/html/#reference
+
+https://www.baeldung.com/jpa-entities
+
+## Servidor My sql
+
+1. Descargar xampp https://www.apachefriends.org/es/index.html \
+2. Click `Start` servidor apache y mySql\
+3. Clik en el boton `admin` de la fila MySql\
+4. Crear una base de datos que se llame "pfc"\
+5. Las tablas las crea el JPA \

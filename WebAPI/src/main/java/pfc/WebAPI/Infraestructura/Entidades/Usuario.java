@@ -1,10 +1,18 @@
 package pfc.WebAPI.Infraestructura.Entidades;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Usuario {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private  int idUsuario;
     private  String usuario;
-	private  String pass;
+	private  String contrasenia;
     private  String nombre;
     private  String email;
     private  char rol;
@@ -24,10 +32,10 @@ public class Usuario {
 		this.usuario = usuario;
 	}
 	public String getPass() {
-		return pass;
+		return contrasenia;
 	}
 	public void setPass(String pass) {
-		this.pass = pass;
+		this.contrasenia = pass;
 	}
 	public String getNombre() {
 		return nombre;

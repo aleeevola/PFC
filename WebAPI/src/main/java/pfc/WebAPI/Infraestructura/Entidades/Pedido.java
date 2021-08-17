@@ -1,66 +1,110 @@
 package pfc.WebAPI.Infraestructura.Entidades;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 
 
 @Entity
 public class Pedido {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private  int idPedido;
-    private  int idCliente;
+	
+	@ManyToOne()
+    private  Usuario usuario;
+    
 	private  Date fechaIngreso;
     private  Date fechaEstimadaEntrega;
     private  Date fechaEntrega;
-    private  char estado;
-    private  Boolean pagado;
-    private  int idPago;
+    
+    @Enumerated(EnumType.STRING)
+    private  EstadoPedido estado;
+    
+    @OneToOne()
+    private  Pago pago;
+    
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Archivo> Archivos;
 
-    private ArrayList<Archivo> Archivos;
-
-	public ArrayList<Archivo> getArchivos() {
-		return Archivos;
-	}
-
-	public void setArchivos(ArrayList<Archivo> archivos) {
-		Archivos = archivos;
-	}
-
+    
+    
 	public int getIdPedido() {
 		return idPedido;
 	}
 
-	public int getIdCliente() {
-		return idCliente;
+	public void setIdPedido(int idPedido) {
+		this.idPedido = idPedido;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	public Date getFechaIngreso() {
 		return fechaIngreso;
 	}
 
+	public void setFechaIngreso(Date fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
 	public Date getFechaEstimadaEntrega() {
 		return fechaEstimadaEntrega;
+	}
+
+	public void setFechaEstimadaEntrega(Date fechaEstimadaEntrega) {
+		this.fechaEstimadaEntrega = fechaEstimadaEntrega;
 	}
 
 	public Date getFechaEntrega() {
 		return fechaEntrega;
 	}
 
-	public char getEstado() {
+	public void setFechaEntrega(Date fechaEntrega) {
+		this.fechaEntrega = fechaEntrega;
+	}
+
+	public EstadoPedido getEstado() {
 		return estado;
 	}
 
-	public Boolean getPagado() {
-		return pagado;
+	public void setEstado(EstadoPedido estado) {
+		this.estado = estado;
 	}
 
-	public int getIdPago() {
-		return idPago;
+	public Pago getPago() {
+		return pago;
 	}
 
+	public void setPago(Pago pago) {
+		this.pago = pago;
+	}
 
+	public List<Archivo> getArchivos() {
+		return Archivos;
+	}
+
+	public void setArchivos(List<Archivo> archivos) {
+		Archivos = archivos;
+	}
 
 }
