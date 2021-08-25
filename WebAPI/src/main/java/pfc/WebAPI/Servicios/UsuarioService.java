@@ -1,4 +1,5 @@
 package pfc.WebAPI.Servicios;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,14 @@ public class UsuarioService implements IUsuarioService{
 	@Override
 	public Optional<Usuario> obtenerUsuario(int idUsuario) {
 		
-		return this._usuarioRepository.findById(idUsuario);
+		return _usuarioRepository.findById(idUsuario);
 		
+	}
+
+	@Override
+	public List<Usuario> findAll() {
+		
+		return _usuarioRepository.findAll();
 	}
 
 }

@@ -1,4 +1,5 @@
 package pfc.WebAPI.Servicios;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,11 @@ public class PedidoService implements IPedidoService{
 		
 		return this._pedidoRepository.findById(idPedido);
 		
+	}
+
+	@Override
+	public List<Pedido> findAll() {
+		return _pedidoRepository.findAll();
 	}
 
 }

@@ -1,5 +1,6 @@
 package pfc.WebAPI.Controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -26,5 +27,10 @@ public class UsuarioController {
 		return this._usuarioService.obtenerUsuario(idUsuario);
 	}
 	
+	@GetMapping
+	public List<Usuario> findAll() {
+		
+		return this._usuarioService.findAll();
+	}
 	
 }

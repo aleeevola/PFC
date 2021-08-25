@@ -1,5 +1,6 @@
 package pfc.WebAPI.Controller;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -11,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
+import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 
 @RestController
-@RequestMapping("/pedido")
+@RequestMapping("/pedidos")
 public class PedidosController {
 
 	@Autowired
@@ -26,5 +28,10 @@ public class PedidosController {
 		return this._pedidoService.obtenerPedido(idPedido);
 	}
 	
+	@GetMapping
+	public List<Pedido> findAll() {
+		
+		return this._pedidoService.findAll();
+	}
 	
 }
