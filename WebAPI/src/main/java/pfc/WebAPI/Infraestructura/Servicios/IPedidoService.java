@@ -8,6 +8,7 @@ import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 
 
 public interface IPedidoService {
+	public Pedido nuevoPedido(Pedido pedido);
 	public Optional<Pedido> obtenerPedido(int idPedido);
 	public List<Pedido> findAll();
 }

@@ -7,6 +7,7 @@ import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 
 public interface IPedidoRepository extends JpaRepository<Pedido,Integer>{
+	//public Pedido Save(Pedido pedido);
 	public Optional<Pedido> findById(Integer idPedido);
 	public List<Pedido> findAll();
 }

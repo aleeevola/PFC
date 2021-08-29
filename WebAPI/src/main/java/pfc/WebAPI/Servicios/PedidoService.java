@@ -18,14 +18,17 @@ public class PedidoService implements IPedidoService{
 	
 	@Override
 	public Optional<Pedido> obtenerPedido(int idPedido) {
-		
 		return this._pedidoRepository.findById(idPedido);
-		
 	}
 
 	@Override
 	public List<Pedido> findAll() {
 		return _pedidoRepository.findAll();
+	}
+
+	@Override
+	public Pedido nuevoPedido(Pedido pedido) {
+		return this._pedidoRepository.save(pedido);
 	}
 
 }
