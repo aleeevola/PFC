@@ -19,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 
 @Api(value="PedidoRest",description="Permite gestionar los pedidos")
@@ -45,6 +46,11 @@ public class PedidosController {
 	@ApiOperation(value = "Obtener todos los pedidos..")
 	public List<Pedido> findAll() {
 		return this._pedidoService.findAll();
+	}
+	@ApiOperation(value = "Obtener un pedido según estado")
+	@GetMapping("/estado/{estado}")
+	public List<Pedido> getPedidoByEstado(@PathVariable("estado") String estado) {
+		return this._pedidoService.obtenerPedidoByEstado(EstadoPedido.valueOf(estado));
 	}
 	
 }

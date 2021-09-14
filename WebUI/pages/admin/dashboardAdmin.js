@@ -34,7 +34,7 @@ import Link from 'next/link';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography variant="body2" color="secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
         Your Website
@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     display: 'flex',
+    background: 'rgb(229,229,229)',
+    background: 'linear-gradient(0deg, rgba(229,229,229,1) 0%, rgba(255,255,255,1) 50%)',
   },  
   toolbarIcon: {
     display: 'flex',
@@ -68,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    background: "#E5E5E5",
+    background: "#ffffff",
   },
   drawerContainer: {
     overflow: 'auto',
@@ -100,11 +102,16 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     padding: theme.spacing(1),
   },
+  div: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontFamily: 'Roboto',
+    fontWeight: 400,
+    fontSize: '16px',
+  }
 }));
 
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
 
 export default function Dashboard({children}) {
     const classes = useStyles();
@@ -113,14 +120,21 @@ export default function Dashboard({children}) {
     return (      
       <div className={classes.root} >
         <CssBaseline />
-        <AppBar position="fixed" color="textSecondary" className={clsx(classes.appBar)}>
-          <Toolbar className={classes.toolbar} style={{display:"flex", justifyContent:"space-between"}}>            
+        <AppBar position="fixed" color="inherit" className={clsx(classes.appBar)}>
+          <Toolbar className={classes.toolbar, classes.div}>  
+          <Box width="drawerWidth" background="#606060">          
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
               Librería
             </Typography>
-            <IconButton color="inherit" edge="end">
+          </Box>
+          <div className={classes.div}>
+          <Typography component="span" variant="h6" color="inherit" className={classes.div} noWrap>
+              Josefina Raviolo
+          </Typography>
+          <IconButton color="inherit" edge="end">
             <Avatar>J</Avatar> 
-            </IconButton>
+          </IconButton>
+          </div>            
           </Toolbar>
         </AppBar>
         <Drawer
@@ -173,8 +187,8 @@ export default function Dashboard({children}) {
         <div className={classes.appBarSpacer} />        
         <Container maxWidth="lg" className={classes.container}>
           {children}
-        </Container>                    
-        </main>        
+        </Container>
+        </main>
       </div>
     );
   }

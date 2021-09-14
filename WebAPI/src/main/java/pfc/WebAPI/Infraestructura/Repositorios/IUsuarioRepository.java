@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 
-
+@Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario,Integer>{
 	public Optional<Usuario> findById(Integer idUsuario);
 	public List<Usuario> findAll();

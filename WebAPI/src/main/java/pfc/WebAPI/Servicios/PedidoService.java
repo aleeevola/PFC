@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 
@@ -29,6 +30,11 @@ public class PedidoService implements IPedidoService{
 	@Override
 	public Pedido nuevoPedido(Pedido pedido) {
 		return this._pedidoRepository.save(pedido);
+	}
+
+	@Override
+	public List<Pedido> obtenerPedidoByEstado(EstadoPedido estado) {
+		return this._pedidoRepository.findByEstado(estado);
 	}
 
 }
