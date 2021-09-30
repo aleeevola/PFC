@@ -13,7 +13,6 @@ import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

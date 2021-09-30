@@ -48,9 +48,9 @@ const rows = [
 const useStyles = makeStyles((theme) => ({
     paper: {
         //marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
+        //display: 'flex',
+        //flexDirection: 'column',
+        //alignItems: 'center',
     },
 
     form: {
@@ -89,7 +89,7 @@ export default function Archivos() {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main">
             <CssBaseline />
             <div className={classes.paper}>
 
