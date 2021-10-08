@@ -65,14 +65,17 @@ getAllUsers = () => {
 }
 */
 export async function getStaticProps() {
-  const response = await fetch('http://localhost:8080/usuarios');
-  const usuarios = await response.json()
-  
-  return {
-    props: {
-      usuarios,
-    },     
-  }
+
+    const res = await fetch('http://localhost:8080/usuarios');
+    const usuarios = await res.json()
+    if (!usuarios) {
+      return { notFound: true };
+    }
+    return { props: { 
+                usuarios,
+               },
+            };
+
 }
 
 /*
@@ -94,7 +97,7 @@ export default function HomeAdmin({usuarios}) {
   return (
     <Dashboard>
       <>
-        <Grid container spacing={3}>
+        <Grid disableGutters container spacing={3}>
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
@@ -114,7 +117,7 @@ export default function HomeAdmin({usuarios}) {
               <Typography component="span" fontWeight="light" className={classes.textBoxes}>
                 10 pedidos, 214 páginas
               </Typography>
-              <Link button href="pedidos">
+              <Link button href="pedidos/PENDIENTE">
               <Box><ButtonBase className={classes.btnBox}>Ver pedidos pendientes</ButtonBase></Box>
               </Link>              
             </Box>
@@ -124,15 +127,15 @@ export default function HomeAdmin({usuarios}) {
             <Box border={1} borderColor={'rgba(96, 96, 96, 0.3)'} className={classes.boxes}>
               <div className={classes.div}>
                 <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
-                  RECIBIDOS
+                  IMPRESOS
                 </Typography>
                 <ComboHoySemanaMes></ComboHoySemanaMes>
               </div>
               <Typography component="span" fontWeight="light" className={classes.textBoxes}>
                 23 pedidos, 380 páginas
               </Typography>
-              <Link button href="#">
-                <Box><ButtonBase className={classes.btnBox}>Ver todos los pedidos</ButtonBase></Box>
+              <Link button href="pedidos/IMPRESO">
+                <Box><ButtonBase className={classes.btnBox}>Ver pedidos impresos</ButtonBase></Box>
               </Link>
             </Box>
           </Grid>
@@ -147,8 +150,8 @@ export default function HomeAdmin({usuarios}) {
               <Typography component="span" fontWeight="light" className={classes.textBoxes}>
                 23 pedidos, 380 páginas
               </Typography>
-              <Link button href="#">
-                <Box><ButtonBase className={classes.btnBox}>Ver todos los pedidos</ButtonBase></Box>
+              <Link button href="pedidos/ENTREGADO">
+                <Box><ButtonBase className={classes.btnBox}>Ver pedidos entregados</ButtonBase></Box>
               </Link>
             </Box>
           </Grid>

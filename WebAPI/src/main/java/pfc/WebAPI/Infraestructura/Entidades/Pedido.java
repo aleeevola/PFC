@@ -27,6 +27,8 @@ public class Pedido {
 	
 	@ManyToOne()
     private  Usuario usuario;
+	
+	private String nombre;
     
 	private  Date fechaIngreso;
     private  Date fechaEstimadaEntrega;
@@ -41,6 +43,7 @@ public class Pedido {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Archivo> Archivos;
 
+    private int cantidadArchivos;
     
     
 	public int getIdPedido() {
@@ -105,6 +108,22 @@ public class Pedido {
 
 	public void setArchivos(List<Archivo> archivos) {
 		Archivos = archivos;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public int getCantidadArchivos() {
+		return cantidadArchivos;
+	}
+
+	public void setCantidadArchivos(int cantidadArchivos) {
+		this.cantidadArchivos = cantidadArchivos;
 	}
 
 }

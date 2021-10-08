@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
 import { DataGrid } from '@material-ui/data-grid';
-import Dashboard from './dashboardAdmin';
+import Dashboard from '../dashboardAdmin';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
@@ -10,22 +10,21 @@ const useStyles = makeStyles((theme) => ({}));
 
 const columns = [
   {
-    field: 'usuario.nombre',
+    field: 'nombre',
     headerName: 'Nombre',
-    width: 170,
+    width: 160,
   },
   {
-    field: 'pago_id_pago',
+    field: 'estado',
     headerName: 'Estado',  
-    width: 100,
-    sortable: false,       
+    width: 140,       
   },
   {
     field: 'fechaEstimadaEntrega',
     headerName: 'Fecha límite',
-    width: 160,
+    width: 155,
   },
-  {field: 'estado',
+  {field: 'pago',
     headerName: 'Acciones',  
     width: 210,   
     sortable: false,
@@ -64,11 +63,15 @@ export async function getStaticProps() {
   const res = await fetch('http://localhost:8080/pedidos');
   const pedidosPendientes = await res.json();
   const pedidos = pedidosPendientes.map((pedido) => {
-    const id = pedido.idPedido   
+    const id = pedido.idPedido  
+    const nombre = pedido.nombre
+    const estado = pedido.estado  
     const fechaEstimadaEntrega = pedido.fechaEstimadaEntrega
 
     return {
       id,
+      nombre,
+      estado,
       fechaEstimadaEntrega
     }
   })
@@ -102,29 +105,8 @@ export async function getStaticProps() {
 
 
 
-
-
-
-const renderDetailsButton = (params) => {
-    return (
-        <strong>
-            <Button
-                variant="contained"
-                color="red"
-                size="small"
-                style={{ marginLeft: 16 }}                
-            >
-                More Info
-            </Button>
-        </strong>
-    )
-}
-
 export default function Pedidos({pedidos}) {
  const classes = useStyles();
-
-
-
   return (
     <Dashboard>
     <>

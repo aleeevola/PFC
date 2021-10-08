@@ -49,6 +49,8 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    margin: 0,
+    padding: 0,
     width: '100%',
     display: 'flex',
     background: 'rgb(229,229,229)',
@@ -118,7 +120,7 @@ export default function Dashboard({children}) {
     const fixedHeightBox = clsx(classes.box, classes.fixedHeight);
 
     return (      
-      <div className={classes.root} >
+      <div className={classes.root} disablegutters >
         <CssBaseline />
         <AppBar position="fixed" color="inherit" className={clsx(classes.appBar)}>
           <Toolbar className={classes.toolbar, classes.div}>  
@@ -185,7 +187,7 @@ export default function Dashboard({children}) {
       </Drawer>      
         <main className={classes.content} >
         <div className={classes.appBarSpacer} />        
-        <Container maxWidth="lg" className={classes.container}>
+        <Container disableGutters maxWidth="lg" className={classes.container}>
           {children}
         </Container>
         </main>
