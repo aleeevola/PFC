@@ -30,14 +30,14 @@ export default function LayoutCliente({ children }) {
                     <Grid item container justifyContent="center" md={12} xs={12}>
                         <img className={classes.logo} src={require('../images/logo.png')} />
                     </Grid>
-                    <Grid item container justifyContent="center" md={12} xs={12}>
+                    {/* <Grid item container justifyContent="center" md={12} xs={12}>
                         <Typography align="center" variant="h2" component="h2" gutterBottom>
                             Imprenta
                         </Typography>
                         <Typography align="center" variant="h2" component="h2" gutterBottom color="primary">
                             Online
                         </Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid item container sm={12} className={classes.menu}>
                         <main>{children}</main>
                     </Grid>

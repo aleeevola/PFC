@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 
@@ -38,7 +40,21 @@ public class PedidosController {
 	@PostMapping
 	@ResponseBody
 	@ApiOperation(value = "Nuevo pedido")
-	public ResponseEntity<Pedido> newPedido(@RequestBody Pedido pedido){
+	public ResponseEntity<Pedido> newPedido(@RequestBody PedidoDto pedido){
+		return ResponseEntity.ok(this._pedidoService.nuevoPedido(pedido));
+	}
+	
+	@PostMapping("/iniciar")
+	@ResponseBody
+	@ApiOperation(value = "Iniciar pedido")
+	public ResponseEntity<Pedido> iniciarPedido(@RequestBody PedidoDto pedido){
+		return ResponseEntity.ok(this._pedidoService.iniciarPedido(pedido));
+	}
+	
+	@PatchMapping
+	@ResponseBody
+	@ApiOperation(value = "Actualizar pedido")
+	public ResponseEntity<Pedido> updatePedido(@RequestBody PedidoDto pedido){
 		return ResponseEntity.ok(this._pedidoService.nuevoPedido(pedido));
 	}
 	

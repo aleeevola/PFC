@@ -1,12 +1,7 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Table from '@material-ui/core/Table';
@@ -16,7 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import NuevoArchivoDialog from './nuevoArchivo'
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -36,23 +31,13 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-function createData(nombre, doble, color, precio) {
-    return { nombre, doble, color, precio };
-}
-
-const rows = [
-    createData('Informe FINAL FINAL.pdf', true, false, '$150'),
-    createData('Diagramas.pdf', false, true, '$205'),
-];
+const StyledTotalRow = withStyles((theme) => ({
+    root: {
+        backgroundColor: '#FA0000',
+    },
+}))(TableRow);
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        //marginTop: theme.spacing(8),
-        //display: 'flex',
-        //flexDirection: 'column',
-        //alignItems: 'center',
-    },
-
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
@@ -74,74 +59,104 @@ const useStyles = makeStyles((theme) => ({
     subirInput: {
         display: 'none',
     },
-    table: {
-        //   minWidth: 700,
-    },
 }));
 
-export default function Archivos() {
+export default function Archivos(props) {
     const classes = useStyles();
 
-    const [checked, setChecked] = React.useState(true);
+    const [editarArchivo, setEditarArchivo] = useState(false);
+    const [inputArchivo, setInputArchivo] = useState(null);
+    const [numeroPaginas, setNumeroPaginas] = useState(null);
 
-    const handleChange = (event) => {
-        setChecked(event.target.checked);
+    useEffect(() => {
+        if (inputArchivo)
+            getNumeroPaginas(inputArchivo);
+    }, [inputArchivo]);
+
+    useEffect(() => {
+        if (inputArchivo && numeroPaginas) {
+            setEditarArchivo(true);
+        }
+    }, [numeroPaginas]);
+
+    const getNumeroPaginas = async (input) => {
+        console.log("getNumeroPaginas");
+        if (input) {
+            const data = new FormData();
+            data.append("file", input);
+            const apiurl = process.env.apiURL;
+
+            try {
+                const response = await fetch(apiurl + "/archivos/numeroDePaginas", {
+                    method: "POST",
+                    mode: 'cors',
+                    body: data
+                });
+                if (!response.ok)
+                    throw new Error(response.statusText);
+                setNumeroPaginas(await response.json());
+            }
+            catch (error) {
+                console.error(error);
+            }
+        }
     };
 
     return (
         <Container component="main">
             <CssBaseline />
+            <NuevoArchivoDialog visible={editarArchivo} numeroDePaginas={numeroPaginas} archivo={inputArchivo}
+                setVisible={event => {
+                    setEditarArchivo(event);
+                    setInputArchivo(null); 
+                    setNumeroPaginas(null)
+                }}
+                addFile={nuevoArchivo=>props.addFile(nuevoArchivo)}
+            />
             <div className={classes.paper}>
-
                 <form className={classes.form} noValidate>
-
                     <div className={classes.subirArchivo}>
                         <input
                             accept="pdf/*"
                             className={classes.subirInput}
                             id="contained-button-file"
-                            multiple
                             type="file"
+                            onChange={(event) => { (event.target.files && event.target.files[0]) ? setInputArchivo(event.target.files[0]) : setInputArchivo(null) }}
                         />
                         <label htmlFor="contained-button-file">
                             <Button fullWidth variant="contained" color="primary" component="span" className={classes.subirButtom}>
                                 Agregar Archivo
                             </Button>
                         </label>
-                        <input accept="pdf/*" className={classes.subirInput} id="icon-button-file" type="file" />
-
                         <Button fullWidth variant="contained" color="primary" component="span" className={classes.submit}>
                             Seleccionar del repositorio
                         </Button>
                     </div>
-
-                    <TableContainer component={Paper}>
-                        <Table className={classes.table} aria-label="customized table">
-                            <TableHead>
-                                <TableRow>
-                                    <StyledTableCell>Archivo</StyledTableCell>
-                                    <StyledTableCell align="right">Doble</StyledTableCell>
-                                    <StyledTableCell align="right">Color</StyledTableCell>
-                                    <StyledTableCell align="right">Precio</StyledTableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {rows.map((row) => (
-                                    <StyledTableRow key={row.name}>
-                                        <StyledTableCell component="th" scope="row">{row.nombre}</StyledTableCell>
-                                        {/* <StyledTableCell align="right">{row.doble}</StyledTableCell> */}
-                                        <StyledTableCell align="right">
-                                            <Checkbox checked={row.doble} onChange={handleChange} />
-                                        </StyledTableCell>
-                                        <StyledTableCell align="right">
-                                            <Checkbox checked={row.color} onChange={handleChange} />
-                                        </StyledTableCell>
-                                        <StyledTableCell align="right">{row.precio}</StyledTableCell>
-                                    </StyledTableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {(props.archivos && props.archivos.length > 0)
+                        ? <TableContainer component={Paper}>
+                            <Table aria-label="customized table">
+                                <TableHead>
+                                    <TableRow>
+                                        <StyledTableCell>Archivo</StyledTableCell>
+                                        <StyledTableCell align="center">Formato</StyledTableCell>
+                                        <StyledTableCell align="center">Tamaño</StyledTableCell>
+                                        <StyledTableCell align="center">Precio</StyledTableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {props.archivos.map((row) => (
+                                        <StyledTableRow key={row.nombre}>
+                                            <StyledTableCell component="th" scope="row">{row.nombre}</StyledTableCell>
+                                            <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
+                                            <StyledTableCell component="th" scope="row" align="center">{row.tamanioHoja}</StyledTableCell>
+                                            <StyledTableCell component="th" scope="row" align="center">${row.precio}</StyledTableCell>
+                                        </StyledTableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        : <h3>Suba un archivo para continuar</h3>
+                    }
                 </form>
             </div>
         </Container>
