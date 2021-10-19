@@ -6,6 +6,7 @@ import Dashboard from '../dashboardAdmin';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
+import { useUser } from "@auth0/nextjs-auth0";
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -109,8 +110,10 @@ const columns = [
 export default function Pedidos({pedidos}) {
  const classes = useStyles();
  const router = useRouter()
+ const { user, error} = useUser();
  const estadoTitulo = (router.asPath.substring(router.asPath.lastIndexOf("/") + 1))+'S';
-
+ 
+if(user){
   return (
     <Dashboard>
     <>
@@ -130,5 +133,6 @@ export default function Pedidos({pedidos}) {
     </Dashboard> 
     
   );
+}
 }
 

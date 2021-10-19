@@ -75,7 +75,7 @@ export default function Login() {
             color="primary"
             className={classes.submit}
           >
-            Ingresar
+            <a href="/api/auth/login">Ingresar</a>            
           </Button>
           <Grid container>
             <Grid item xs>

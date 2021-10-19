@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import { ButtonBase } from "@material-ui/core";
 import ComboHoySemanaMes from "../../src/components/ComboHoySemanaMes";
 
+import { useUser } from "@auth0/nextjs-auth0";
+
 
 const useStyles = makeStyles((theme) => ({
   fixedHeight: {
@@ -65,9 +67,11 @@ getAllUsers = () => {
 }
 */
 export async function getStaticProps() {
-
-    const res = await fetch('http://localhost:8080/usuarios');
-    const usuarios = await res.json()
+    //const res = await fetch('http://localhost:8080/usuarios');
+    //const usuarios = await res.json()
+    const usuarios =  [
+      { id: 1, nombre: 'Lucia Arias', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 8, pago: 'Pagado'},
+    ]  
     if (!usuarios) {
       return { notFound: true };
     }
@@ -92,8 +96,9 @@ export async function getStaticProps() {
 
 export default function HomeAdmin({usuarios}) {
   const classes = useStyles();
+  const { user, error} = useUser();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+if(user){
   return (
     <Dashboard>
       <>
@@ -220,5 +225,8 @@ export default function HomeAdmin({usuarios}) {
         </Grid>
       </>
     </Dashboard>
-  )
+  );
+}
+
+return <a href="/api/auth/login">Login</a>;
 }

@@ -5,6 +5,8 @@ import Dashboard from '../dashboardAdmin';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
+import { useUser } from "@auth0/nextjs-auth0";
+
 
 const useStyles = makeStyles((theme) => ({}));
 
@@ -107,6 +109,8 @@ export async function getStaticProps() {
 
 export default function Pedidos({pedidos}) {
  const classes = useStyles();
+ const { user, error} = useUser();
+if(user){  
   return (
     <Dashboard>
     <>
@@ -126,4 +130,5 @@ export default function Pedidos({pedidos}) {
     </Dashboard> 
     
   );
+}
 }

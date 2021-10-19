@@ -10,6 +10,8 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { Button, Grid } from '@material-ui/core';
 
+import { UserProvider } from '@auth0/nextjs-auth0';
+
 export default function MyApp(props) {
   const { Component, pageProps } = props;
 
@@ -22,6 +24,7 @@ export default function MyApp(props) {
   }, []);
 
   return (
+    <UserProvider>
     <React.Fragment>
       <Head>
         <title>Imprenta blabla</title>
@@ -36,6 +39,7 @@ export default function MyApp(props) {
         </Container>
       </ThemeProvider>
     </React.Fragment>
+    </UserProvider>
   );
 }
 

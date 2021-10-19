@@ -29,6 +29,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import Link from 'next/link';
 
+import { useUser } from "@auth0/nextjs-auth0";
 
 
 
@@ -111,31 +112,38 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Roboto',
     fontWeight: 400,
     fontSize: '16px',
+  },
+  txtCerrarSesion: {
+    justifyContent: 'center',
+    alignItems: 'end',
   }
+
 }));
 
 
 export default function Dashboard({children}) {
     const classes = useStyles();
     const fixedHeightBox = clsx(classes.box, classes.fixedHeight);
+    const { user, error} = useUser();
 
-    return (      
+    if(user){
+      return (      
       <div className={classes.root} disablegutters >
         <CssBaseline />
         <AppBar position="fixed" color="inherit" className={clsx(classes.appBar)}>
           <Toolbar className={classes.toolbar, classes.div}>  
           <Box width="drawerWidth" background="#606060">          
             <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              Librería
+              TOTAL impresión digital
             </Typography>
           </Box>
           <div className={classes.div}>
           <Typography component="span" variant="h6" color="inherit" className={classes.div} noWrap>
-              Josefina Raviolo
+              {user.name}
           </Typography>
           <IconButton color="inherit" edge="end">
             <Avatar>J</Avatar> 
-          </IconButton>
+          </IconButton>          
           </div>            
           </Toolbar>
         </AppBar>
@@ -182,7 +190,10 @@ export default function Dashboard({children}) {
               <ListItemIcon><SettingsIcon /></ListItemIcon>
               <ListItemText primary="CONFIGURACIÓN" />
             </ListItem>                  
-          </List>          
+          </List>             
+          <Typography className={classes.txtCerrarSesion}>
+          <a href="/api/auth/logout">Cerrar sesion</a>  
+          </Typography>       
         </div>
       </Drawer>      
         <main className={classes.content} >
@@ -193,4 +204,5 @@ export default function Dashboard({children}) {
         </main>
       </div>
     );
+  }
   }
