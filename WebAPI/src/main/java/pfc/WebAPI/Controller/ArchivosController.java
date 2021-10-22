@@ -1,47 +1,28 @@
 package pfc.WebAPI.Controller;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.apache.pdfbox.Loader;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.tomcat.jni.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
-import pfc.WebAPI.Infraestructura.Entidades.Pedido;
-import pfc.WebAPI.Infraestructura.Entidades.Usuario;
-import pfc.WebAPI.Infraestructura.Entidades.Dto.ArchivoInputDto;
-import pfc.WebAPI.Infraestructura.Entidades.Dto.ArchivoOutputDto;
-import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
-import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
 import pfc.WebAPI.Infraestructura.Servicios.IArchivosService;
-import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 
 @Api(value="PedidosRest",description="Permite gestionar los archivos")
 @RestController
