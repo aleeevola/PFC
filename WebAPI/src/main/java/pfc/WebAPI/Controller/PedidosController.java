@@ -1,11 +1,13 @@
 package pfc.WebAPI.Controller;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +30,7 @@ import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 @Api(value="PedidoRest",description="Permite gestionar los pedidos")
 @RestController
 @RequestMapping("/pedidos")
+@CrossOrigin(origins = "*")
 public class PedidosController {
 
 	@Autowired
@@ -37,12 +41,6 @@ public class PedidosController {
 	public Optional<Pedido> getPedido(@PathVariable("idPedido") int idPedido) {
 		return this._pedidoService.obtenerPedido(idPedido);
 	}
-	@PostMapping
-	@ResponseBody
-	@ApiOperation(value = "Nuevo pedido")
-	public ResponseEntity<Pedido> newPedido(@RequestBody PedidoDto pedido){
-		return ResponseEntity.ok(this._pedidoService.nuevoPedido(pedido));
-	}
 	
 	@PostMapping("/iniciar")
 	@ResponseBody
@@ -51,11 +49,16 @@ public class PedidosController {
 		return ResponseEntity.ok(this._pedidoService.iniciarPedido(pedido));
 	}
 	
-	@PatchMapping
+	@PatchMapping("/programar")
 	@ResponseBody
-	@ApiOperation(value = "Actualizar pedido")
-	public ResponseEntity<Pedido> updatePedido(@RequestBody PedidoDto pedido){
-		return ResponseEntity.ok(this._pedidoService.nuevoPedido(pedido));
+	@ApiOperation(value = "Actualizar pedido con la fecha de entrega y el usuario")
+	public ResponseEntity<Pedido> updatePedido(
+			@RequestParam("fechaEntrega") long fechaEntrega,
+			@RequestParam("email") String email,
+			@RequestParam("nombre") String nombre,
+			@RequestParam("idPedido") int idPedido){
+		Date date = new Date(fechaEntrega);
+		return ResponseEntity.ok(this._pedidoService.updatePedido(date,email,nombre,idPedido));
 	}
 	
 	@GetMapping

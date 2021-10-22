@@ -10,5 +10,6 @@ import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 @Repository
 public interface IUsuarioRepository extends JpaRepository<Usuario,Integer>{
 	public Optional<Usuario> findById(Integer idUsuario);
+	public Optional<Usuario> findByEmail(String email);
 	public List<Usuario> findAll();
 }

@@ -9,9 +9,10 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
-
+import TextField from '@material-ui/core/TextField';
 
 export default function NuevoArchivoDialog(props) {
   const theme = useTheme();
@@ -28,6 +29,7 @@ export default function NuevoArchivoDialog(props) {
   const postNuevoArchivo = async (event) => {
     console.log("postNuevoArchivo");
     const data = new FormData();
+    data.append("idPedido", props.idPedido);
     data.append("file", props.archivo);
     data.append("formato", formato);
     data.append("tamanio", tamanio);
@@ -88,33 +90,47 @@ export default function NuevoArchivoDialog(props) {
           </DialogContentText>
           <div>
             <form noValidate>
-              <FormControl fullWidth >
-                <InputLabel id="demo-simple-select-label">Formato</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Formato"
-                  value={formato}
-                  required
-                  onChange={(event) => setFormato(event.target.value)}>
-                  <MenuItem value={1}>SIMPLE</MenuItem>
-                  <MenuItem value={2}>DOBLE</MenuItem>
-                </Select>
-              </FormControl>
-              <p></p>
-              <FormControl fullWidth >
-                <InputLabel id="demo-simple-select-label">Tamaño de hoja</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  label="Tamaño de hoja"
-                  value={tamanio}
-                  required
-                  onChange={(event) => setTamanio(event.target.value)}>
-                  <MenuItem value={1}>A4</MenuItem>
-                  <MenuItem value={2}>A3</MenuItem>
-                </Select>
-              </FormControl>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <FormControl fullWidth variant="outlined">
+                    <InputLabel id="demo-simple-select-label">Formato</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Formato"
+                      value={formato}
+                      required
+                      onChange={(event) => setFormato(event.target.value)}>
+                      <MenuItem value={1}>SIMPLE</MenuItem>
+                      <MenuItem value={2}>DOBLE</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth variant="outlined">
+                    <InputLabel id="demo-simple-select-label">Tamaño de hoja</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Tamaño de hoja"
+                      value={tamanio}
+                      required
+                      onChange={(event) => setTamanio(event.target.value)}>
+                      <MenuItem value={1}>A4</MenuItem>
+                      <MenuItem value={2}>A3</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField fullWidth
+                    id="filled-multiline-static"
+                    label="Observaciones"
+                    multiline
+                    rows={2}
+                    variant="outlined"
+                  />
+                </Grid>
+              </Grid>
             </form>
           </div>
         </DialogContent>
@@ -122,7 +138,7 @@ export default function NuevoArchivoDialog(props) {
           <Button autoFocus onClick={cerrarVentana}>
             Cancelar
           </Button>
-          <Button onClick={postNuevoArchivo} autoFocus>
+          <Button onClick={postNuevoArchivo} autoFocus variant="contained" color="primary">
             Agregar
           </Button>
         </DialogActions>

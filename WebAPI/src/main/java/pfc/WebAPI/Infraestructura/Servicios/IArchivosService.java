@@ -11,11 +11,11 @@ import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
 
 public interface IArchivosService {
-	Archivo nuevoArchivo(int idPedido, MultipartFile archivo);
+//	Archivo nuevoArchivo(int idPedido, MultipartFile archivo);
 	Resource descargarArchivo(String token);
 	
 	int getNumeroPaginas(MultipartFile archivo) throws IOException;
 	float getPrecio(int numeroPaginas, TipoImpresion formato, TamanioHoja tamanio);
 	
-	Archivo postArchivo(MultipartFile archivo, TipoImpresion formato, TamanioHoja tamanio) throws IOException;
+	Archivo postArchivo(int idPedido, MultipartFile archivo, TipoImpresion formato, TamanioHoja tamanio) throws IOException;
 }

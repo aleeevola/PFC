@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
+import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
 import pfc.WebAPI.Infraestructura.Repositorios.IArchivoRepository;
@@ -29,23 +30,6 @@ public class ArchivosService implements IArchivosService{
 	@Autowired
 	private IFileStorageService _ftpService;
 	
-	@Override
-	public Archivo nuevoArchivo(int idPedido, MultipartFile archivo) {
-		Archivo nuevoArchivo = new Archivo();
-		nuevoArchivo.setPedido(_pedidoService.obtenerPedido(idPedido).get());
-		nuevoArchivo.setFechaIngreso(new java.sql.Date(System.currentTimeMillis()));
-		nuevoArchivo.setNombre(StringUtils.cleanPath(archivo.getOriginalFilename()));
-		nuevoArchivo.setTamanioHoja(TamanioHoja.A4);
-		nuevoArchivo.setTipoImpresion(TipoImpresion.DOBLE);
-		Archivo saveArchivo = this._archivosRepository.save(nuevoArchivo);
-		
-		String token = this._ftpService.guardarArchivo(saveArchivo.getIdArchivo(), archivo);
-		
-		nuevoArchivo.setToken(token);
-		this._archivosRepository.saveAndFlush(nuevoArchivo);
-		
-		return saveArchivo;
-	}
 
 	@Override
 	public Resource descargarArchivo(String token) {
@@ -65,8 +49,18 @@ public class ArchivosService implements IArchivosService{
 	}
 
 	@Override
-	public Archivo postArchivo(MultipartFile archivo, TipoImpresion formato, TamanioHoja tamanio) throws IOException {
+	public Archivo postArchivo(int idPedido,MultipartFile archivo, TipoImpresion formato, TamanioHoja tamanio) throws IOException {
+		Pedido pedido;
+		if(idPedido==0) {
+			//TODO: Cambiar por el usaurio
+			pedido = this._pedidoService.nuevoPedido();
+		}
+		else{
+			pedido = _pedidoService.obtenerPedido(idPedido).get();
+		}
+		
 		Archivo nuevoArchivo = new Archivo();
+		nuevoArchivo.setPedido(pedido);
 		nuevoArchivo.setNumeroPaginas(this.getNumeroPaginas(archivo));
 		nuevoArchivo.setPrecio(this.getPrecio(nuevoArchivo.getNumeroPaginas(), formato, tamanio));
 		nuevoArchivo.setFechaIngreso(new java.sql.Date(System.currentTimeMillis()));

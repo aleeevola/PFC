@@ -1,9 +1,9 @@
 import { React, useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Checkbox from '@material-ui/core/Checkbox';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import { Grid, Container } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -31,13 +31,11 @@ const StyledTableRow = withStyles((theme) => ({
     },
 }))(TableRow);
 
-const StyledTotalRow = withStyles((theme) => ({
-    root: {
-        backgroundColor: '#FA0000',
-    },
-}))(TableRow);
 
 const useStyles = makeStyles((theme) => ({
+    button: {
+        marginRight: theme.spacing(1),
+    },
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(1),
@@ -59,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
     subirInput: {
         display: 'none',
     },
+    nombreArchivo: {
+        maxWidth: '20ch',
+        lineBreak: 'anywhere',
+    },
 }));
 
 export default function Archivos(props) {
@@ -67,6 +69,14 @@ export default function Archivos(props) {
     const [editarArchivo, setEditarArchivo] = useState(false);
     const [inputArchivo, setInputArchivo] = useState(null);
     const [numeroPaginas, setNumeroPaginas] = useState(null);
+
+    const [disabledSiguiente, SetDisableSiguiente] = useState(true);
+    const [archivos, SetArchivos] = useState([]);
+
+    useEffect(() => {
+        if (archivos.length > 0)
+            SetDisableSiguiente(false);
+    }, [archivos]);
 
     useEffect(() => {
         if (inputArchivo)
@@ -102,18 +112,27 @@ export default function Archivos(props) {
         }
     };
 
+    const handleNext = () => {
+        props.next();
+    };
+
+    const handleBack = () => {
+        props.back();
+    };
+
     return (
-        <Container component="main">
+        <Container >
             <CssBaseline />
             <NuevoArchivoDialog visible={editarArchivo} numeroDePaginas={numeroPaginas} archivo={inputArchivo}
+                idPedido={props.idPedido}
                 setVisible={event => {
                     setEditarArchivo(event);
-                    setInputArchivo(null); 
+                    setInputArchivo(null);
                     setNumeroPaginas(null)
                 }}
-                addFile={nuevoArchivo=>props.addFile(nuevoArchivo)}
+                addFile={nuevoArchivo => { SetArchivos([...archivos, nuevoArchivo]); props.newIdPedido(nuevoArchivo.pedido.idPedido) }}
             />
-            <div className={classes.paper}>
+            <div >
                 <form className={classes.form} noValidate>
                     <div className={classes.subirArchivo}>
                         <input
@@ -132,21 +151,29 @@ export default function Archivos(props) {
                             Seleccionar del repositorio
                         </Button>
                     </div>
-                    {(props.archivos && props.archivos.length > 0)
+                    {(archivos && archivos.length > 0)
                         ? <TableContainer component={Paper}>
                             <Table aria-label="customized table">
                                 <TableHead>
                                     <TableRow>
                                         <StyledTableCell>Archivo</StyledTableCell>
                                         <StyledTableCell align="center">Formato</StyledTableCell>
+                                        {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+
+                                            <StyledTableCell align="center">Tamaño</StyledTableCell>
+                                        </Box> */}
                                         <StyledTableCell align="center">Tamaño</StyledTableCell>
                                         <StyledTableCell align="center">Precio</StyledTableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {props.archivos.map((row) => (
+                                    {archivos.map((row) => (
                                         <StyledTableRow key={row.nombre}>
-                                            <StyledTableCell component="th" scope="row">{row.nombre}</StyledTableCell>
+                                            <StyledTableCell component="th" scope="row" className={classes.nombreArchivo}>{row.nombre}</StyledTableCell>
+                                            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+
+                                                <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
+                                            </Box> */}
                                             <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
                                             <StyledTableCell component="th" scope="row" align="center">{row.tamanioHoja}</StyledTableCell>
                                             <StyledTableCell component="th" scope="row" align="center">${row.precio}</StyledTableCell>
@@ -155,10 +182,28 @@ export default function Archivos(props) {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        : <h3>Suba un archivo para continuar</h3>
+                        : <p><b>Suba un archivo para continuar</b></p>
                     }
+                    {(archivos && archivos.length > 0) && <p><b>Total: ${archivos.reduce((a, v) => a = a + v.precio, 0)}</b></p>}
                 </form>
             </div>
+            <Grid item sm={12}  >
+                <Box m={2}>
+                    <Button disabled className={classes.button}>
+                        Atras
+                    </Button>
+
+                    <Button
+                        disabled={disabledSiguiente}
+                        variant="contained"
+                        color="primary"
+                        onClick={handleNext}
+                        className={classes.button}
+                    >
+                        Siguiente
+                    </Button>
+                </Box>
+            </Grid>
         </Container>
     );
 }

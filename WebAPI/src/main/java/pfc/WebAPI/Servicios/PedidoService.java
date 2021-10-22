@@ -2,6 +2,7 @@ package pfc.WebAPI.Servicios;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,10 @@ public class PedidoService implements IPedidoService{
 	}
 
 	@Override
-	public Pedido nuevoPedido(PedidoDto pedido) {
+	public Pedido nuevoPedido() {
 		Pedido nuevoPedido= new Pedido();
 		nuevoPedido.setFechaIngreso(new java.sql.Date(System.currentTimeMillis()));
-		nuevoPedido.setUsuario(this._usuarioService.obtenerUsuario(pedido.getIdUsuario()).get());
+//		nuevoPedido.setUsuario(this._usuarioService.obtenerUsuario(idUsuario).get());
 		nuevoPedido.setEstado(EstadoPedido.CREADO);
 		return this._pedidoRepository.save(nuevoPedido);
 	}
@@ -55,6 +56,26 @@ public class PedidoService implements IPedidoService{
 	@Override
 	public List<Pedido> obtenerPedidoByEstado(EstadoPedido estado) {
 		return this._pedidoRepository.findByEstado(estado);
+	}
+
+	@Override
+	public Pedido updatePedido(java.sql.Date fechaEntrega, String email, String nombre, int idPedido) {
+		Pedido pedido = this._pedidoRepository.findById(idPedido).get();
+		
+		Usuario usuario;
+		try {
+			usuario = this._usuarioService.obtenerUsuarioByEmail(email).get();
+			usuario.setNombre(nombre);
+			usuario = this._usuarioService.updateUsuario(usuario);
+			
+		}catch(NoSuchElementException e) {
+			usuario = this._usuarioService.crearUsuarioByEmailNombre(email, nombre);
+		}
+		
+		pedido.setUsuario(usuario);
+		pedido.setFechaEntrega(fechaEntrega);
+		
+		return this._pedidoRepository.saveAndFlush(pedido);
 	}
 
 }

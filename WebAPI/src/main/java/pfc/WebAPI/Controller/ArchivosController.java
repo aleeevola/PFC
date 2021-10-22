@@ -73,33 +73,18 @@ public class ArchivosController {
 		return ResponseEntity.ok(Float.toString(count));
 	}
 	
-	@PostMapping("/agregar")
-	@ResponseBody
-	@ApiOperation(value = "Agregar archivo al pedido")
-	public ResponseEntity<ArchivoOutputDto> agregarArchivo(@RequestParam("file") MultipartFile file,@RequestParam("idPedido") int idPedido){
-		Archivo nuevoArchivo=this._archivosService.nuevoArchivo(idPedido,file);
-		
-//		String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-//	                .path("/descargar/")
-//	                .path(nuevoArchivo.getToken())
-//	                .toUriString();
-		
-		ArchivoOutputDto dto= new ArchivoOutputDto(nuevoArchivo.getIdArchivo(),
-				nuevoArchivo.getNombre(),
-				nuevoArchivo.getToken(),
-				nuevoArchivo.getNumeroPaginas(), 999,
-				nuevoArchivo.getTipoImpresion(), nuevoArchivo.getTamanioHoja(), " ");
-		
-		return ResponseEntity.ok(dto);
-	}
 	
 	@PostMapping("/nuevo")
 	@ResponseBody
 	@ApiOperation(value = "nuevo")
-	public ResponseEntity<Archivo> nuevoArchivo(@RequestParam("file") MultipartFile file,@RequestParam("formato") int formato,@RequestParam("tamanio") int tamanio) throws Exception{
-		Archivo archivoResult;
+	public ResponseEntity<Archivo> nuevoArchivo(
+			@RequestParam("file") MultipartFile file,
+			@RequestParam("formato") int formato,
+			@RequestParam("tamanio") int tamanio,
+			@RequestParam("idPedido") int idPedido) throws Exception{
+		
 		try {
-			archivoResult = this._archivosService.postArchivo(file, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio));
+			Archivo archivoResult = this._archivosService.postArchivo(idPedido,file, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio));
 			return ResponseEntity.ok(archivoResult);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
