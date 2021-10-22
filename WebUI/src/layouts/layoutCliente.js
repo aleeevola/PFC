@@ -7,6 +7,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles((theme) => ({
+    children:{
+        minWidth:'100%',
+        padding:'0.5rem',
+    },
     menu: {
         background: '#fff',
         //maxWidth: '100%',
@@ -17,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
         padding: '0.5rem 0rem 0.5rem 0rem',
     },
     logo: {
-        maxWidth: '5rem',
+        maxWidth: '10rem',
     },
 }));
 
@@ -25,21 +29,13 @@ export default function LayoutCliente({ children }) {
     const classes = useStyles();
     return (
         <Container flex="true" disableGutters>
-            <Container maxWidth="md" disableGutters className={classes.header}>
+            <Container maxWidth="sm" disableGutters className={classes.header}>
                 <Grid container spacing={1}>
                     <Grid item container justifyContent="center" md={12} xs={12}>
                         <img className={classes.logo} src={require('../images/logo.png')} />
                     </Grid>
-                    <Grid item container justifyContent="center" md={12} xs={12}>
-                        <Typography align="center" variant="h2" component="h2" gutterBottom>
-                            Imprenta
-                        </Typography>
-                        <Typography align="center" variant="h2" component="h2" gutterBottom color="primary">
-                            Online
-                        </Typography>
-                    </Grid>
                     <Grid item container sm={12} className={classes.menu}>
-                        <main>{children}</main>
+                        <main className={classes.children}>{children}</main>
                     </Grid>
                     <Grid>
                         <Copyright></Copyright>

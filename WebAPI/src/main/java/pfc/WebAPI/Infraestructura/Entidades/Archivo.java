@@ -29,6 +29,8 @@ public class Archivo {
     private Date fechaIngreso;
     private Date fechaBaja;
     
+    private float precio;
+    
     
     
 	public String getToken() {
@@ -85,8 +87,12 @@ public class Archivo {
 	public void setFechaBaja(Date fechaBaja) {
 		this.fechaBaja = fechaBaja;
 	}
-	
-    
+	public float getPrecio() {
+		return precio;
+	}
+	public void setPrecio(float precio) {
+		this.precio = precio;
+	}
     
     
 

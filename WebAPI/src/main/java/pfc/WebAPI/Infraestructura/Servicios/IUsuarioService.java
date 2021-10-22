@@ -8,6 +8,8 @@ import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 
 public interface IUsuarioService {
 	public Optional<Usuario> obtenerUsuario(int idUsuario);
-	// public Usuario crearUsuario();
+	public Optional<Usuario> obtenerUsuarioByEmail(String email);
+	public Usuario crearUsuarioByEmailNombre(String email,String nombre);
+	public Usuario updateUsuario(Usuario usuario);
 	public List<Usuario> findAll();
 }

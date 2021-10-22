@@ -29,6 +29,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
 	//implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '2.5.4'
 	
+	// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+	// https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+	implementation group: 'org.apache.pdfbox', name: 'pdfbox', version: '3.0.0-RC1'
+	
 }
 
 test {

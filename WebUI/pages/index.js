@@ -27,7 +27,7 @@ export default function Index() {
     setName(event.target.value);
   };
   return (
-    <LayoutCliente>
+    <LayoutCliente >
         <Container  disableGutters>
             <Grid item container sm={12} >
               <Grid item sm={12} md={6} >

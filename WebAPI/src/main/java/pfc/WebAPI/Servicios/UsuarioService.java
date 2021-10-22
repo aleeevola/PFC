@@ -29,4 +29,24 @@ public class UsuarioService implements IUsuarioService{
 		return _usuarioRepository.findAll();
 	}
 
+	@Override
+	public Optional<Usuario> obtenerUsuarioByEmail(String email) {
+		return this._usuarioRepository.findByEmail(email);
+	}
+
+	@Override
+	public Usuario crearUsuarioByEmailNombre(String email, String nombre) {
+		Usuario usuario = new Usuario();
+		usuario.setEmail(email);
+		usuario.setNombre(nombre);
+		usuario.setRol('a');
+		
+		return this._usuarioRepository.save(usuario);
+	}
+
+	@Override
+	public Usuario updateUsuario(Usuario usuario) {
+		return this._usuarioRepository.saveAndFlush(usuario);
+	}
+
 }
