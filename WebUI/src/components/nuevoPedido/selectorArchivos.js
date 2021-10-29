@@ -108,6 +108,7 @@ export default function Archivos(props) {
             }
             catch (error) {
                 console.error(error);
+                setInputArchivo(null);
             }
         }
     };

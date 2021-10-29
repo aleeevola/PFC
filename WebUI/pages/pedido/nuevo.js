@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Login from '../account/login'
 import Archivos from '../../src/components/nuevoPedido/selectorArchivos'
+import PagarPedido from '../../src/components/nuevoPedido/pagarPedido'
 import ProgramarPedido from '../../src/components/nuevoPedido/programarPedido'
 import LayoutCliente from '../../src/layouts/layoutCliente';
 import { Grid, Container } from '@material-ui/core';
@@ -69,7 +70,7 @@ export default function NuevoPedido() {
       case 1:
         return <ProgramarPedido idPedido={idPedido} next={handleNext} back={handleBack}/>;
       case 2:
-        return 'Pagar!';
+        return <PagarPedido next={handleNext} back={handleBack}/>;
       default:
         return 'Unknown step';
     }
@@ -124,22 +125,3 @@ export default function NuevoPedido() {
     </LayoutCliente>
   );
 }
-
-// export async function getStaticProps() {
-//   //TODO: Remplazar por el usuario en el settings
-//   const settings = {
-//     method: 'POST',
-//     headers: {
-//       'Accept': 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ idUsuario: "0" })
-//   };
-//   const res = await fetch('http://localhost:8080/pedidos/iniciar', settings)
-//   const pedido = await res.json()
-//   return {
-//     props: {
-//       pedido,
-//     },
-//   }
-// }

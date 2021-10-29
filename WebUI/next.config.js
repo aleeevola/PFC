@@ -8,14 +8,7 @@ module.exports = withPlugins(
         /* global config here ... */
         env: {
             apiURL: 'http://localhost:8080',
+            pageName: 'Total Impresión Digital'
         },
-        // async rewrites() {
-        //     return [
-        //         {
-        //             source: '/:path*',
-        //             destination: 'http://localhost:8080/:path*',
-        //         },
-        //     ]
-        // },
     },
 );

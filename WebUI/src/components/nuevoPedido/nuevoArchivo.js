@@ -20,11 +20,20 @@ export default function NuevoArchivoDialog(props) {
 
   const [precio, setPrecio] = React.useState(null);
   const [formato, setFormato] = React.useState(1);
-  const [tamanio, setTamanio] = React.useState(1);
+  const [tamanio, setTamanio] = React.useState(4);
+  const [color, setColor] = React.useState(2);
+  const [observaciones, setObservaciones] = React.useState('');
+  const [observacionesError, setObservacionesError] = React.useState(false);
 
   React.useEffect(() => {
     getPrecio();
-  }, [formato, tamanio]);
+  }, [formato, tamanio, color]);
+
+  React.useEffect(() => {
+    if(tamanio===5 && observaciones=='')
+      setObservacionesError(true);
+    else setObservacionesError(false);
+  }, [tamanio,observaciones]);
 
   const postNuevoArchivo = async (event) => {
     console.log("postNuevoArchivo");
@@ -33,6 +42,8 @@ export default function NuevoArchivoDialog(props) {
     data.append("file", props.archivo);
     data.append("formato", formato);
     data.append("tamanio", tamanio);
+    data.append("color", color);
+    data.append("observaciones", observaciones);
 
     const apiurl = process.env.apiURL;
 
@@ -55,7 +66,7 @@ export default function NuevoArchivoDialog(props) {
   const getPrecio = async () => {
     const apiurl = process.env.apiURL;
     try {
-      const response = await fetch(apiurl + "/archivos/precio?numeroPaginas=" + props.numeroDePaginas + "&formato=" + formato + "&tamanio=" + tamanio, {
+      const response = await fetch(apiurl + "/archivos/precio?numeroPaginas=" + props.numeroDePaginas + "&formato=" + formato + "&tamanio=" + tamanio+ "&color=" + color, {
         method: "GET",
         mode: 'cors'
       });
@@ -108,6 +119,21 @@ export default function NuevoArchivoDialog(props) {
                 </Grid>
                 <Grid item xs={12}>
                   <FormControl fullWidth variant="outlined">
+                    <InputLabel id="demo-simple-select-label">Color</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Color"
+                      value={color}
+                      required
+                      onChange={(event) => setColor(event.target.value)}>
+                      <MenuItem value={1}>COLOR</MenuItem>
+                      <MenuItem value={2}>ESCALA DE GRISES</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl fullWidth variant="outlined">
                     <InputLabel id="demo-simple-select-label">Tamaño de hoja</InputLabel>
                     <Select
                       labelId="demo-simple-select-label"
@@ -116,8 +142,11 @@ export default function NuevoArchivoDialog(props) {
                       value={tamanio}
                       required
                       onChange={(event) => setTamanio(event.target.value)}>
-                      <MenuItem value={1}>A4</MenuItem>
-                      <MenuItem value={2}>A3</MenuItem>
+                      <MenuItem value={1}>A1</MenuItem>
+                      <MenuItem value={2}>A2</MenuItem>
+                      <MenuItem value={3}>A3</MenuItem>
+                      <MenuItem value={4}>A4</MenuItem>
+                      <MenuItem value={5}>OTRO</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -125,6 +154,9 @@ export default function NuevoArchivoDialog(props) {
                   <TextField fullWidth
                     id="filled-multiline-static"
                     label="Observaciones"
+                    value={observaciones}
+                    onChange={(event) => setObservaciones(event.target.value)}
+                    error={observacionesError}
                     multiline
                     rows={2}
                     variant="outlined"
@@ -138,7 +170,7 @@ export default function NuevoArchivoDialog(props) {
           <Button autoFocus onClick={cerrarVentana}>
             Cancelar
           </Button>
-          <Button onClick={postNuevoArchivo} autoFocus variant="contained" color="primary">
+          <Button onClick={postNuevoArchivo} autoFocus variant="contained" color="primary" disabled={observacionesError}>
             Agregar
           </Button>
         </DialogActions>

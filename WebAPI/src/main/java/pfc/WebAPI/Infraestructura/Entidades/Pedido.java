@@ -29,8 +29,6 @@ public class Pedido {
 	
 	@ManyToOne()
     private  Usuario usuario;
-	
-	private String nombre;
     
 	private  Date fechaIngreso;
     private  Date fechaEstimadaEntrega;
@@ -112,13 +110,6 @@ public class Pedido {
 		Archivos = archivos;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 
 	public int getCantidadArchivos() {
 		return cantidadArchivos;

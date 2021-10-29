@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
 
@@ -24,9 +25,14 @@ public class Archivo {
     private TipoImpresion tipoImpresion;
     @Enumerated(EnumType.STRING)
     private TamanioHoja tamanioHoja;
+    @Enumerated(EnumType.STRING)
+    private Color color;
+    private String observaciones;
     @ManyToOne()
     private Pedido pedido;
-    private Date fechaIngreso;
+
+    
+	private Date fechaIngreso;
     private Date fechaBaja;
     
     private float precio;
@@ -94,6 +100,17 @@ public class Archivo {
 		this.precio = precio;
 	}
     
-    
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	public String getObservaciones() {
+		return observaciones;
+	}
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
+	}
 
 }

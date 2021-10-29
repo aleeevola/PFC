@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TamanioHoja {
-	A3(1),A4(2),A1(3);
+	A1(1),A2(2),A3(3),A4(4),OTRO(5);
 	
 	private final int value;
 	private static Map map = new HashMap<>();

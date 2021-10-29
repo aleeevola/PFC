@@ -27,7 +27,7 @@ export default function MyApp(props) {
     <UserProvider>
     <React.Fragment>
       <Head>
-        <title>Imprenta blabla</title>
+        <title>{process.env.pageName}</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
         
       </Head>

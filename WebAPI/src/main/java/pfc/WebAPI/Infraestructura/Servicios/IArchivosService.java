@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
 
@@ -15,7 +16,7 @@ public interface IArchivosService {
 	Resource descargarArchivo(String token);
 	
 	int getNumeroPaginas(MultipartFile archivo) throws IOException;
-	float getPrecio(int numeroPaginas, TipoImpresion formato, TamanioHoja tamanio);
+	float getPrecio(int numeroPaginas, TipoImpresion formato, TamanioHoja tamanio, Color color);
 	
-	Archivo postArchivo(int idPedido, MultipartFile archivo, TipoImpresion formato, TamanioHoja tamanio) throws IOException;
+	Archivo postArchivo(int idPedido, MultipartFile archivo, TipoImpresion formato, TamanioHoja tamanio, Color color,String observaciones) throws IOException;
 }

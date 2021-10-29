@@ -1,7 +1,9 @@
 package pfc.WebAPI.Controller;
 
 import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,9 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
-import pfc.WebAPI.Infraestructura.Servicios.IArchivosService;
+import pfc.WebAPI.Infraestructura.Servicios.IArchivosService;  
 
 @Api(value="PedidosRest",description="Permite gestionar los archivos")
 @RestController
@@ -37,6 +40,7 @@ public class ArchivosController {
 	@ResponseBody
 	@ApiOperation(value = "Calcular numero de paginas de un archivo")
 	public ResponseEntity<Integer> detalleArchivo(@RequestParam("file") MultipartFile file) throws IOException{
+		
 		int count = this._archivosService.getNumeroPaginas(file);
 		return ResponseEntity.ok(count);
 	}
@@ -47,9 +51,10 @@ public class ArchivosController {
 	public ResponseEntity<String> getPrecio(
 			@RequestParam("numeroPaginas") int numeroPaginas,
 			@RequestParam("formato") int formato,
-			@RequestParam("tamanio") int tamanio) throws IOException{
+			@RequestParam("tamanio") int tamanio,
+			@RequestParam("color") int color) throws IOException{
 		
-		float count = this._archivosService.getPrecio(numeroPaginas, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio));
+		float count = this._archivosService.getPrecio(numeroPaginas, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio),Color.valueOf(color));
 		
 		return ResponseEntity.ok(Float.toString(count));
 	}
@@ -62,10 +67,12 @@ public class ArchivosController {
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("formato") int formato,
 			@RequestParam("tamanio") int tamanio,
-			@RequestParam("idPedido") int idPedido) throws Exception{
+			@RequestParam("idPedido") int idPedido,
+			@RequestParam("color") int color,
+			@RequestParam("observaciones") String observaciones) throws Exception{
 		
 		try {
-			Archivo archivoResult = this._archivosService.postArchivo(idPedido,file, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio));
+			Archivo archivoResult = this._archivosService.postArchivo(idPedido,file, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio),Color.valueOf(color),observaciones);
 			return ResponseEntity.ok(archivoResult);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
