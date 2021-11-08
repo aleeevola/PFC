@@ -5,22 +5,21 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
     button: {
         marginRight: theme.spacing(1),
     },
-    mercadoPago:{
-        backgroundColor:'#2866b8',
-        height:'100px',
-    }
 }));
 
 export default function PagarPedido(props) {
     const classes = useStyles();
+    const [loading, setLoading] = useState(false);
 
     const handleNext = () => {
-        putPagarPedido();
+        getPagarEfectivo();
     };
 
     const handleBack = () => {
@@ -28,30 +27,44 @@ export default function PagarPedido(props) {
     };
 
     const [efectivo, setEfectivo] = React.useState(false);
-    
-      const handleChange = (event) => {
+
+    const handleChange = (event) => {
         setEfectivo(event.target.checked);
-      };
+    };
 
-    const putPagarPedido = async (event) => {
-        console.log("putPagarPedido");
-        const data = new FormData();
-        data.append("idPedido", props.idPedido);
-        data.append("fechaEntrega", parseISO(fechaEntrega).getTime());
-        data.append("email", email);
-        data.append("nombre", nombre);
+    const handlePagar = () => {
+        getPagarMercadoPago();
+    };
 
+    const getPagarMercadoPago = async () => {
         const apiurl = process.env.apiURL;
-
+        setLoading(true);
         try {
-            const response = await fetch(apiurl + "/pedidos/programar", {
-                method: "PATCH",
+            const response = await fetch(apiurl + "/pago/mercadoPago/" + props.idPedido, {
+                method: "GET",
                 mode: 'cors',
-                body: data,
             });
             if (!response.ok)
                 throw new Error(response.statusText);
-            props.next();
+            window.location.href = await response.text();
+            //redirectToMercadoPago(await response.text());
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    const getPagarEfectivo = async () => {
+        const apiurl = process.env.apiURL;
+        setLoading(true);
+        try {
+            const response = await fetch(apiurl + "/pago/efectivo/" + props.idPedido, {
+                method: "PUT",
+                mode: 'cors',
+            });
+            if (!response.ok)
+                throw new Error(response.statusText);
+            setLoading(false);
         }
         catch (error) {
             console.error(error);
@@ -61,40 +74,59 @@ export default function PagarPedido(props) {
     return (
         <div style={{ padding: 20 }}>
             <form >
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <div className={classes.mercadoPago}></div>
+                {loading
+                    ? <Grid container spacing={3}
+                        justifyContent="center"
+                        alignItems="center">
+                        <Fade in={loading}
+                            style={{ transitionDelay: '0ms', }}
+                            unmountOnExit>
+                            <CircularProgress />
+                        </Fade>
                     </Grid>
-                    <Grid item xs={12}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={efectivo}
-                                    onChange={handleChange}
-                                    name="checkedB"
-                                    color="primary"
-                                />
-                            }
-                            label="Pagar en efectivo"
-                        />
-                    </Grid>
-                    <Grid item sm={12}  >
-                        <Box m={2}>
-                            <Button className={classes.button} onClick={handleBack}>
-                                Atras
-                            </Button>
-
+                    :
+                    <Grid container spacing={3}>
+                        <Grid item xs={12}>
                             <Button
+                                fullWidth
                                 variant="contained"
-                                color="primary"
-                                onClick={handleNext}
-                                className={classes.button}
-                            >
-                                Siguiente
+                                color="secondary"
+                                component="span"
+                                onClick={handlePagar}
+                                className={classes.button}>
+                                Pagar con Mercado Pago
                             </Button>
-                        </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={efectivo}
+                                        onChange={handleChange}
+                                        name="checkedB"
+                                        color="primary"
+                                    />
+                                }
+                                label="Pagar en efectivo"
+                            />
+                        </Grid>
+                        <Grid item sm={12}  >
+                            <Box m={2}>
+                                <Button className={classes.button} onClick={handleBack}>
+                                    Atras
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleNext}
+                                    disabled={!efectivo}
+                                    className={classes.button} >
+                                    Terminar
+                                </Button>
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
+                }
             </form>
         </div>
     );

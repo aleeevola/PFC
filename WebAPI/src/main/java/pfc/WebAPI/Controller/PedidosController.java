@@ -66,7 +66,8 @@ public class PedidosController {
 	public List<Pedido> findAll() {
 		return this._pedidoService.findAll();
 	}
-	@ApiOperation(value = "Obtener un pedido según estado")
+
+	@ApiOperation(value = "Obtener un pedido segun estado")
 	@GetMapping("/estado/{estado}")
 	public List<Pedido> getPedidoByEstado(@PathVariable("estado") String estado) {
 		return this._pedidoService.obtenerPedidoByEstado(EstadoPedido.valueOf(estado));

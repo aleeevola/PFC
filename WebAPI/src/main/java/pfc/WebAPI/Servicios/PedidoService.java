@@ -71,7 +71,7 @@ public class PedidoService implements IPedidoService{
 		}
 		
 		pedido.setUsuario(usuario);
-		pedido.setFechaEntrega(fechaEntrega);
+		pedido.setFechaEstimadaEntrega(fechaEntrega);
 		
 		return this._pedidoRepository.saveAndFlush(pedido);
 	}

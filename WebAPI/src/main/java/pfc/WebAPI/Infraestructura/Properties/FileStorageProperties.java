@@ -1,4 +1,4 @@
-package pfc.WebAPI.Infraestructura.FtpConfig;
+package pfc.WebAPI.Infraestructura.Properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

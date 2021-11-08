@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import pfc.WebAPI.Infraestructura.Excepciones.FileStorageException;
 import pfc.WebAPI.Infraestructura.Excepciones.MyFileNotFoundException;
-import pfc.WebAPI.Infraestructura.FtpConfig.FileStorageProperties;
+import pfc.WebAPI.Infraestructura.Properties.FileStorageProperties;
 import pfc.WebAPI.Infraestructura.Servicios.IFileStorageService;
 
 import java.io.IOException;

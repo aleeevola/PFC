@@ -70,7 +70,7 @@ export default function NuevoPedido() {
       case 1:
         return <ProgramarPedido idPedido={idPedido} next={handleNext} back={handleBack}/>;
       case 2:
-        return <PagarPedido next={handleNext} back={handleBack}/>;
+        return <PagarPedido idPedido={idPedido} next={handleNext} back={handleBack}/>;
       default:
         return 'Unknown step';
     }
@@ -86,7 +86,7 @@ export default function NuevoPedido() {
                 Nuevo Pedido 
               </Typography>
               {idPedido!='0' &&
-                <Typography align="left" gutterBottom variant="p" component="p">
+                <Typography align="left" gutterBottom variant="body1">
                   Numero de orden #{idPedido}
                 </Typography>
               }

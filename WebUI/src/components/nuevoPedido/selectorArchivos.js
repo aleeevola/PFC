@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
     subirButtom: {
         margin: theme.spacing(1, 0, 2),
-        background: '#9068BE',
+        //background: '#9068BE',
     },
     subirArchivo: {
         '& > *': {
@@ -148,7 +148,7 @@ export default function Archivos(props) {
                                 Agregar Archivo
                             </Button>
                         </label>
-                        <Button fullWidth variant="contained" color="primary" component="span" className={classes.submit}>
+                        <Button fullWidth variant="outlined" color="secondary" component="span" className={classes.submit}>
                             Seleccionar del repositorio
                         </Button>
                     </div>
