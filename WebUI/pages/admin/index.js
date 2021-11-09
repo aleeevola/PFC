@@ -11,6 +11,16 @@ import Button from '@material-ui/core/Button';
 import { ButtonBase } from "@material-ui/core";
 import ComboHoySemanaMes from "../../src/components/ComboHoySemanaMes";
 
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
 import { useUser } from "@auth0/nextjs-auth0";
 
 
@@ -21,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   boxes: {
     padding: theme.spacing(2),
     fontWeight: 'light',
-    borderRadius: 1,
+    borderRadius: '4px',
     backgroundColor: '#ffffff',
   },
   textBoxes: {
@@ -33,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     justifyContent: 'center',
-    backgroundColor: "#6ED3CF",
+    backgroundColor: "#3dbbedb8",
     color: '#FFFFFF',
     fontFamily: 'Roboto',
     fontWeight: 'regular',
@@ -65,7 +75,22 @@ getAllUsers = () => {
       cantUsuarios = users.length;
     });
 }
+
 */
+function createData(precio, color, tamanioHoja, tipoImpresion) {
+  return { precio, color, tamanioHoja, tipoImpresion };
+}
+
+const precios = [
+  createData('17', 'ESCALA DE GRISES', 'A4', 'SIMPLE'),
+  createData('14', 'ESCALA DE GRISES', 'A4', 'DOBLE'),
+  createData('22', 'ESCALA DE GRISES', 'A3', 'SIMPLE'),
+  createData('38', 'ESCALA DE GRISES', 'A3', 'DOBLE'),
+  createData('25', 'COLOR', 'A4', 'SIMPLE'),
+  createData('21', 'COLOR', 'A4', 'DOBLE'),
+];
+
+
 export async function getStaticProps() {
     //const res = await fetch('http://localhost:8080/usuarios');
     //const usuarios = await res.json()
@@ -96,7 +121,7 @@ export async function getStaticProps() {
 
 export default function HomeAdmin({usuarios}) {
   const classes = useStyles();
-  const { user, error} = useUser();
+  const { user, error, isLoading} = useUser();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 if(user){
   return (
@@ -122,8 +147,8 @@ if(user){
               <Typography component="span" fontWeight="light" className={classes.textBoxes}>
                 10 pedidos, 214 páginas
               </Typography>
-              <Link button href="pedidos/PENDIENTE">
-              <Box><ButtonBase className={classes.btnBox}>Ver pedidos pendientes</ButtonBase></Box>
+              <Link button href="admin/pedidos/PENDIENTE">
+              <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver pedidos pendientes</Button> 
               </Link>              
             </Box>
           </Grid>
@@ -139,8 +164,8 @@ if(user){
               <Typography component="span" fontWeight="light" className={classes.textBoxes}>
                 23 pedidos, 380 páginas
               </Typography>
-              <Link button href="pedidos/IMPRESO">
-                <Box><ButtonBase className={classes.btnBox}>Ver pedidos impresos</ButtonBase></Box>
+              <Link button href="admin/pedidos/IMPRESO">
+              <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver pedidos impresos</Button>   
               </Link>
             </Box>
           </Grid>
@@ -155,15 +180,15 @@ if(user){
               <Typography component="span" fontWeight="light" className={classes.textBoxes}>
                 23 pedidos, 380 páginas
               </Typography>
-              <Link button href="pedidos/ENTREGADO">
-                <Box><ButtonBase className={classes.btnBox}>Ver pedidos entregados</ButtonBase></Box>
+              <Link button href="admin/pedidos/ENTREGADO">
+              <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver entregados</Button>               
               </Link>
             </Box>
           </Grid>
           <Grid item xs={12} md={12} lg={12}>
             <div>
               <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
-                UTILIDADES
+                ARCHIVOS FRECUENTES
               </Typography>
             </div>
           </Grid>
@@ -209,19 +234,60 @@ if(user){
               </Link>
             </Box>
           </Grid>
-          <Grid item xs={6} md={12} lg={12}>
-            <Box border={1} borderColor={'rgba(96, 96, 96, 0.3)'} className={classes.boxes}>
-              <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
-                ESTADÍSTICAS
-              </Typography>
-              <Typography component="p" className={classes.boxes}>
-                $22516.00 recibidos
-              </Typography>
-              <Link button href="#">
-                <Box className={classes.btnBox}>Ver estadísticas</Box>
-              </Link>
-            </Box>
-          </Grid>
+              <Grid item xs={12} md={12} lg={12}>
+                            <br/>
+                            <br/>
+                                <Typography component="h2" variant="h6" color="inherit"  className={classes.title}>
+                                    PRECIOS
+                                </Typography>
+                                <br/>
+                                <TableContainer component={Paper}>
+                                    <Table className={classes.table} aria-label="simple table">                                       
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Precio</TableCell>
+                                                <TableCell align="center">Color</TableCell>
+                                                <TableCell align="center">Tamaño</TableCell>
+                                                <TableCell align="center">Faz</TableCell>
+                                                <TableCell align="right"></TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {precios.map((item) => (                                                           
+                                                <TableRow>
+                                                    <TableCell component="th" scope="row">
+                                                        ${item.precio}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        {item.color}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        {item.tamanioHoja}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        {item.tipoImpresion}
+                                                        </TableCell>                                                   
+                                                    <TableCell align="right">
+                                                        <Button variant="outlined" 
+                                                                onClick={async (e) => {
+                                                                            const { value } = e.currentTarget                                                                            
+                                                                            console.log('http://localhost:8080/archivos/');                                                       
+                                                                            fetch(urlArchivo)
+                                                                            .then(response => {
+                                                                                response.blob().then(blob => {
+                                                                                    let url = URL.createObjectURL(blob);
+                                                                                    printJS(url);                                                                                               
+                                                                                });
+                                                                            });
+                      
+                              }}>Actualizar</Button></TableCell>
+                                                </TableRow>                                                 
+                                            ))}
+                                           
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                                </Grid>     
         </Grid>
       </>
     </Dashboard>

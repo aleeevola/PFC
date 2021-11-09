@@ -1,4 +1,5 @@
 package pfc.WebAPI.Servicios;
+import java.sql.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
+import pfc.WebAPI.Infraestructura.Servicios.IEmailService;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 import pfc.WebAPI.Infraestructura.Servicios.IUsuarioService;
 
@@ -21,7 +23,9 @@ public class PedidoService implements IPedidoService{
 	@Autowired
 	private IPedidoRepository _pedidoRepository;
 	@Autowired
-	private IUsuarioService _usuarioService;
+	private IUsuarioService _usuarioService;	
+	@Autowired 
+	private IEmailService _emailService;
 	
 	@Override
 	public Optional<Pedido> obtenerPedido(int idPedido) {
@@ -73,6 +77,22 @@ public class PedidoService implements IPedidoService{
 		pedido.setUsuario(usuario);
 		pedido.setFechaEstimadaEntrega(fechaEntrega);
 		
+		return this._pedidoRepository.saveAndFlush(pedido);
+	}
+
+	@Override
+	public Pedido updateEstadoPedido(EstadoPedido estado, int idPedido, String email) {
+		Pedido pedido = this._pedidoRepository.findById(idPedido).get();
+		pedido.setEstado(estado);	
+		if(estado == EstadoPedido.IMPRESO) {
+			
+			this._emailService.sendEmail(email);
+		}else {
+			if(estado == EstadoPedido.ENTREGADO) {
+				pedido.setFechaEntrega(new Date(System.currentTimeMillis()));
+				
+			}
+		}
 		return this._pedidoRepository.saveAndFlush(pedido);
 	}
 

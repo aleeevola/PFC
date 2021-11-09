@@ -14,53 +14,38 @@ public class ArchivoFrecuente {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private int idArchivoFrecuente;
-    private String nombre;
-    @ManyToOne()
-    private Usuario usuario;
-    @OneToOne()
-    private Archivo archivo;
-    
-    private Date fechaIngreso;
-    private Date fechaBaja;
-	
-   
-	public String getNombre() {
-		return nombre;
-	}
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	
-	public int getIdArchivoFrecuente() {
+    private String nombre;  
+    private String token;
+	private int numeroPaginas;
+        
+    public int getIdArchivoFrecuente() {
 		return idArchivoFrecuente;
 	}
 	public void setIdArchivoFrecuente(int idArchivoFrecuente) {
 		this.idArchivoFrecuente = idArchivoFrecuente;
 	}
-	public Usuario getUsuario() {
-		return usuario;
+    
+	public String getNombre() {
+		return nombre;
 	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}	
+	
+	public String getToken() {
+		return token;
 	}
-	public Archivo getArchivo() {
-		return archivo;
+	public void setToken(String token) {
+		this.token = token;
 	}
-	public void setArchivo(Archivo archivo) {
-		this.archivo = archivo;
+	public int getNumeroPaginas() {
+		return numeroPaginas;
 	}
-	public Date getFechaIngreso() {
-		return fechaIngreso;
+	public void setNumeroPaginas(int numeroPaginas) {
+		this.numeroPaginas = numeroPaginas;
 	}
-	public void setFechaIngreso(Date fechaIngreso) {
-		this.fechaIngreso = fechaIngreso;
-	}
-	public Date getFechaBaja() {
-		return fechaBaja;
-	}
-	public void setFechaBaja(Date fechaBaja) {
-		this.fechaBaja = fechaBaja;
-	}
+
+    
 
 
 }

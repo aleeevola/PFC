@@ -2,6 +2,7 @@ package pfc.WebAPI.Infraestructura.Entidades;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,7 +16,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 
@@ -40,9 +45,15 @@ public class Pedido {
     @OneToOne()
     private  Pago pago;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("pedido")
     private List<Archivo> Archivos;
-
+    
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("pedido")
+    private Set<DetalleArchivoFrecuente> ArchivosFrecuentes;
+ 
     private int cantidadArchivos;
     
     

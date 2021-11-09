@@ -32,7 +32,7 @@ export async function getStaticProps({ params }) {
 
       const pedidos = pedidosRes.map((pedido) => {
         const id = pedido.idPedido  
-        const nombre = pedido.nombre         
+        const nombre = pedido.usuario.nombre         
         const estado = pedido.estado
         const fechaEstimadaEntrega = pedido.fechaEstimadaEntrega
     
@@ -134,5 +134,6 @@ if(user){
     
   );
 }
+return <a href="/api/auth/login">Login</a>;
 }
 

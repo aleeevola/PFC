@@ -18,6 +18,6 @@ public interface IPedidoService {
 	public List<Pedido> findAll();
 	public List<Pedido> obtenerPedidoByEstado(EstadoPedido estado);
 	public Pedido iniciarPedido(PedidoDto pedido);
-	
 	public Pedido updatePedido(Date fechaEntrega,String email,String nombre,int idPedido);
+	public Pedido updateEstadoPedido(EstadoPedido estado, int idPedido, String email);
 }

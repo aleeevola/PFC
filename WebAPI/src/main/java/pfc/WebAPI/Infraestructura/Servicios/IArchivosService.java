@@ -2,8 +2,11 @@ package pfc.WebAPI.Infraestructura.Servicios;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.util.Optional;
 
 import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;

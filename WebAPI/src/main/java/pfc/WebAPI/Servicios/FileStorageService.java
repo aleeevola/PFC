@@ -70,4 +70,10 @@ public class FileStorageService implements IFileStorageService{
             throw new MyFileNotFoundException("File not found " + tokenFile, ex);
         }
     }
+
+    @Override
+    public byte[] load(String token) {
+        return null;
+    }
+
 }

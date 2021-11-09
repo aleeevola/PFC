@@ -5,6 +5,7 @@ import Dashboard from '../dashboardAdmin';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import Archivos from '../../../src/components/nuevoArchivoFrecuente/selectorArchivos';
 
 import { useUser } from "@auth0/nextjs-auth0";
 
@@ -61,7 +62,7 @@ const columns = [
     }
   }
 ];
-
+/*
 export async function getStaticProps() {
   const res = await fetch('http://localhost:8080/pedidos');
   const pedidosPendientes = await res.json();
@@ -107,28 +108,27 @@ export async function getStaticProps() {
     },
   } 
 };
+*/
 
 
-
-export default function Pedidos({pedidos}) {
+export default function ArchivosFrecuentes() {
  const classes = useStyles();
  const { user, error} = useUser();
+ const [idArchivoFrecuente, SetidArchivoFrecuente] = React.useState(0);
 if(user){  
   return (
     <Dashboard>
     <>
     <div>
         <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
-        PEDIDOS
+        ARCHIVOS FRECUENTES    
         </Typography>
     </div>
      <div style={{ height: 600, width: '100%' }}>
-      <DataGrid
-        rows={pedidos}
-        columns={columns}
-        pageSize={9}
-      />
+
     </div>
+    <Archivos idArchivoFrecuente={idArchivoFrecuente} 
+        newIdArchivoFrecuente={value => { SetIdArchivoFrecuente(value); }} />
     </>
     </Dashboard> 
     

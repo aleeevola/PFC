@@ -14,6 +14,8 @@ import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -28,8 +30,10 @@ import FolderIcon from '@material-ui/icons/Folder';
 import SettingsIcon from '@material-ui/icons/Settings';
 import EventNoteIcon from '@material-ui/icons/EventNote';
 import Link from 'next/link';
+import logo from '../../src/images/logo.png';
 
 import { useUser } from "@auth0/nextjs-auth0";
+import { useRouter } from 'next/router';
 
 
 
@@ -54,8 +58,8 @@ const useStyles = makeStyles((theme) => ({
     padding: 0,
     width: '100%',
     display: 'flex',
-    background: 'rgb(229,229,229)',
-    background: 'linear-gradient(0deg, rgba(229,229,229,1) 0%, rgba(255,255,255,1) 50%)',
+    //background: 'rgb(252,255,255)',
+    //background: 'linear-gradient(0deg, rgba(229,229,229,1) 0%, rgba(255,255,255,1) 50%)',
   },  
   toolbarIcon: {
     display: 'flex',
@@ -116,37 +120,84 @@ const useStyles = makeStyles((theme) => ({
   txtCerrarSesion: {
     justifyContent: 'center',
     alignItems: 'end',
+  },
+  logo: {
+    maxWidth: '3rem',
   }
-
 }));
+
 
 
 export default function Dashboard({children}) {
     const classes = useStyles();
     const fixedHeightBox = clsx(classes.box, classes.fixedHeight);
     const { user, error} = useUser();
+    const [anchorEl, setAnchorEl] = React.useState(null);
+  const isMenuOpen = Boolean(anchorEl);
+  const router = useRouter()
+
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null); 
+  };
+  const cerrarSesion = () => {
+    setAnchorEl(null);
+    router.push('/api/auth/logout');
+  };
+
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={() => router.push('/api/auth/logout')}>Cerrar sesión</MenuItem>
+    </Menu>
+  );
 
     if(user){
-      return (      
+      return (  
       <div className={classes.root} disablegutters >
         <CssBaseline />
         <AppBar position="fixed" color="inherit" className={clsx(classes.appBar)}>
           <Toolbar className={classes.toolbar, classes.div}>  
           <Box width="drawerWidth" background="#606060">          
-            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              TOTAL impresión digital
-            </Typography>
+            <img className={classes.logo} src={logo} />
           </Box>
           <div className={classes.div}>
           <Typography component="span" variant="h6" color="inherit" className={classes.div} noWrap>
               {user.name}
           </Typography>
-          <IconButton color="inherit" edge="end">
-            <Avatar>J</Avatar> 
-          </IconButton>          
+          <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <Avatar sx={{ width: 32, height: 32 }}>{user.name.substring(0,1)}</Avatar>
+            </IconButton>        
           </div>            
           </Toolbar>
         </AppBar>
+        {renderMenu}
         <Drawer
         className={classes.drawer}
           variant="permanent"
@@ -157,13 +208,13 @@ export default function Dashboard({children}) {
         <Toolbar />
         <div className={classes.drawerContainer}>
           <List>      
-            <Link href="/admin/home">   
+            <Link href="/admin">   
               <ListItem button>
                 <ListItemIcon><HomeIcon /></ListItemIcon>
                 <ListItemText primary="HOME" />
               </ListItem>
               </Link> 
-              <Link href="pedidos">
+              <Link href="/admin/pedidos">
               <ListItem button >              
                 <ListItemIcon><EventNoteIcon /></ListItemIcon>
                 <ListItemText primary="PEDIDOS" />                 
@@ -180,8 +231,7 @@ export default function Dashboard({children}) {
               <ListItemIcon><CloudUploadIcon /></ListItemIcon>
               <ListItemText primary="SUBIR ARCHIVO" />
             </ListItem>
-            </Link>    
-            
+            </Link>
             <ListItem button>
               <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText primary="GESTIÓN ARCHIVOS" />
@@ -190,10 +240,7 @@ export default function Dashboard({children}) {
               <ListItemIcon><SettingsIcon /></ListItemIcon>
               <ListItemText primary="CONFIGURACIÓN" />
             </ListItem>                  
-          </List>             
-          <Typography className={classes.txtCerrarSesion}>
-          <a href="/api/auth/logout">Cerrar sesion</a>  
-          </Typography>       
+          </List>
         </div>
       </Drawer>      
         <main className={classes.content} >

@@ -61,6 +61,18 @@ public class PedidosController {
 		return ResponseEntity.ok(this._pedidoService.updatePedido(date,email,nombre,idPedido));
 	}
 	
+	@PatchMapping("/actualizarEstado")
+	@ResponseBody
+	@ApiOperation(value = "Actualizar estado del pedido")
+	public ResponseEntity<Pedido> updateEstadoPedido(
+			@RequestParam("estado") String estado,
+			@RequestParam("email") String email,
+			@RequestParam("idPedido") int idPedido){		
+		
+		return ResponseEntity.ok(this._pedidoService.updateEstadoPedido(EstadoPedido.valueOf(estado),idPedido, email));
+	}
+	
+	
 	@GetMapping
 	@ApiOperation(value = "Obtener todos los pedidos..")
 	public List<Pedido> findAll() {
