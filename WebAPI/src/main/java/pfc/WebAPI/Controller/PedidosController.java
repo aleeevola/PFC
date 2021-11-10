@@ -38,8 +38,8 @@ public class PedidosController {
 
 	@ApiOperation(value = "Obtener un pedido")
 	@GetMapping("/{idPedido}")
-	public Optional<Pedido> getPedido(@PathVariable("idPedido") int idPedido) {
-		return this._pedidoService.obtenerPedido(idPedido);
+	public PedidoDto getPedido(@PathVariable("idPedido") int idPedido) {
+		return this._pedidoService.obtenerPedidoDto(idPedido);
 	}
 	
 	@PostMapping("/iniciar")

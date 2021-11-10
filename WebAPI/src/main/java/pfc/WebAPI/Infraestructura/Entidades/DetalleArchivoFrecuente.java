@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
@@ -30,13 +31,13 @@ public class DetalleArchivoFrecuente {
     private Color color;
     private String observaciones;
     
-    
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "pedido_id_pedido")
     @JsonIgnoreProperties("archivosFrecuentes")
     private Pedido pedido;
     
-    
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_archivo_frecuente")
     @JsonIgnoreProperties("archivoFrecuente")

@@ -151,40 +151,11 @@ export default function Archivos(props) {
                             onChange={(event) => { (event.target.files && event.target.files[0]) ? setInputArchivo(event.target.files[0]) : setInputArchivo(null) }}
                         />
                         <label htmlFor="contained-button-file">
-                            <Button fullWidth variant="contained" color="primary" component="span" className={classes.subirButtom}>
-                                Agregar Archivo
+                            <Button variant="contained" color="primary" component="span">
+                                Subir Archivo
                             </Button>
                         </label>
                     </div>
-                    {(archivos && archivos.length > 0)
-                        ? <TableContainer component={Paper}>
-                            <Table aria-label="customized table">
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell>Archivo</StyledTableCell>
-                                        <StyledTableCell align="center">Descripcion</StyledTableCell>
-                                        {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-
-                                            <StyledTableCell align="center">Tamaño</StyledTableCell>
-                                        </Box> */}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {archivos.map((row) => (
-                                        <StyledTableRow key={row.nombre}>
-                                            <StyledTableCell component="th" scope="row" className={classes.nombreArchivo}>{row.nombre}</StyledTableCell>
-                                            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-
-                                                <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
-                                            </Box> */}
-                                            <StyledTableCell component="th" scope="row" align="center">{row.descripcion}</StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        : <p><b>Suba un archivo para continuar</b></p>
-                    }
                 </form>
             </div>
             <NuevoArchivoFrecuenteDialog visible={editarArchivo} numeroDePaginas={numeroPaginas} archivo={inputArchivo}

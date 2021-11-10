@@ -89,9 +89,9 @@ export async function getStaticPaths() {
 
 
 export async function getStaticProps({ params }) {
-   const res = await fetch(`http://localhost:8080/pedidos/${params.id}`)
+  const res = await fetch(`http://localhost:8080/pedidos/${params.id}`)
    const pedido = await res.json()
-
+console.log(pedido.archivos);
        return{ 
          props: {
            pedido

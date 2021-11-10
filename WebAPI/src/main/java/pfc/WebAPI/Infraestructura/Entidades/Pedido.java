@@ -20,6 +20,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.annotations.Fetch;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
@@ -45,14 +46,15 @@ public class Pedido {
     @OneToOne()
     private  Pago pago;
     
+    @JsonIgnore 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pedido", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("pedido")
     private List<Archivo> Archivos;
     
-    
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "pedido", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("pedido")
-    private Set<DetalleArchivoFrecuente> ArchivosFrecuentes;
+    private Set<DetalleArchivoFrecuente> DetalleArchivosFrecuentes;
  
     private int cantidadArchivos;
     
@@ -129,5 +131,14 @@ public class Pedido {
 	public void setCantidadArchivos(int cantidadArchivos) {
 		this.cantidadArchivos = cantidadArchivos;
 	}
+
+	public Set<DetalleArchivoFrecuente> getDetalleArchivosFrecuentes() {
+		return DetalleArchivosFrecuentes;
+	}
+
+	public void setDetalleArchivosFrecuentes(Set<DetalleArchivoFrecuente> archivosFrecuentes) {
+		DetalleArchivosFrecuentes = archivosFrecuentes;
+	}	
+	
 
 }

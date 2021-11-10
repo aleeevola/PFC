@@ -232,10 +232,12 @@ export default function Dashboard({children}) {
               <ListItemText primary="SUBIR ARCHIVO" />
             </ListItem>
             </Link>
+            <Link href="/admin/archivosFrecuentes">
             <ListItem button>
               <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText primary="GESTIÓN ARCHIVOS" />
             </ListItem>   
+            </Link>
             <ListItem button>
               <ListItemIcon><SettingsIcon /></ListItemIcon>
               <ListItemText primary="CONFIGURACIÓN" />
