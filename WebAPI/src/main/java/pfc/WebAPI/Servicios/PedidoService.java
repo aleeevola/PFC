@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pfc.WebAPI.Infraestructura.Entidades.Archivo;
+import pfc.WebAPI.Infraestructura.Entidades.DetalleArchivoFrecuente;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
@@ -31,6 +33,35 @@ public class PedidoService implements IPedidoService{
 	public Optional<Pedido> obtenerPedido(int idPedido) {
 		return this._pedidoRepository.findById(idPedido);
 	}
+	
+	@Override
+	public PedidoDto obtenerPedidoDto(int idPedido) {
+		Pedido pedido = this._pedidoRepository.findById(idPedido).get();		
+		PedidoDto pedidoResult = new PedidoDto();
+		pedidoResult.setIdPedido(pedido.getIdPedido());
+		pedidoResult.setEstado(pedido.getEstado());
+		//pedidoResult.setPago(pedido.getPago().getEstado());
+		pedidoResult.setFechaEstimadaEntrega(pedido.getFechaEstimadaEntrega());
+		pedidoResult.setUsuario(pedido.getUsuario());
+		pedidoResult.setCantidadArchivos(pedido.getCantidadArchivos());
+		pedidoResult.setArchivos(pedido.getArchivos());
+		
+		for(DetalleArchivoFrecuente detalleAF : pedido.getDetalleArchivosFrecuentes()) {
+			Archivo a = new Archivo();
+			a.setIdArchivo(detalleAF.getIdDetalleArchivoFrecuente());
+			a.setNombre(detalleAF.getArchivoFrecuente().getNombre());
+			a.setColor(detalleAF.getColor());
+			a.setObservaciones(detalleAF.getObservaciones());
+			a.setTamanioHoja(detalleAF.getTamanioHoja());
+			a.setTipoImpresion(detalleAF.getTipoImpresion());
+			a.setToken(detalleAF.getArchivoFrecuente().getToken());		
+			
+			pedidoResult.getArchivos().add(a);
+		}
+		
+		return pedidoResult;		
+		
+	}
 
 	@Override
 	public List<Pedido> findAll() {
@@ -50,7 +81,7 @@ public class PedidoService implements IPedidoService{
 	public Pedido iniciarPedido(PedidoDto pedido) {
 		Pedido nuevoPedido= new Pedido();
 		nuevoPedido.setFechaIngreso(new java.sql.Date(System.currentTimeMillis()));
-		nuevoPedido.setUsuario(this._usuarioService.obtenerUsuario(pedido.getIdUsuario()).get());
+		nuevoPedido.setUsuario(this._usuarioService.obtenerUsuario(pedido.getUsuario().getIdUsuario()).get());
 		nuevoPedido.setEstado(EstadoPedido.CREADO);
 		return this._pedidoRepository.save(nuevoPedido);
 	}
@@ -94,6 +125,6 @@ public class PedidoService implements IPedidoService{
 			}
 		}
 		return this._pedidoRepository.saveAndFlush(pedido);
-	}
+	} 
 
 }
