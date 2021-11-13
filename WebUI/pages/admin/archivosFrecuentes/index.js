@@ -74,7 +74,8 @@ const columns = [
 ];
 
 export async function getStaticProps() {
-  const res = await fetch('http://localhost:8080/archivosFrecuentes');
+  const apiurl = process.env.apiURL;
+  const res = await fetch(apiurl + '/archivosFrecuentes');
   const archivosFrecuentes = await res.json();
   const archivos = archivosFrecuentes.map((archivoF) => {
     const id = archivoF.idArchivoFrecuente      

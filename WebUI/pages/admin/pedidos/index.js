@@ -5,6 +5,7 @@ import Dashboard from '../dashboardAdmin';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
 
 import { useUser } from "@auth0/nextjs-auth0";
 
@@ -34,36 +35,27 @@ const columns = [
     field: 'email',
     headerName: 'Email',
     type: 'email',
-    width: 190,
-  },
-  {field: 'botones',
-    headerName: 'Acciones',  
-    width: 210,   
-    sortable: false,
-    renderCell: (params) => (
-        <strong>                    
-          <Button
-            variant="outlined"
-            color="inherit"
-            size="small"
-            style={{ marginLeft: 16 }}
-          >
-            Imprimir
-          </Button>
-        </strong>
-      ), 
+    width: 215,
   },
   {
-    field: "pedido",
+    field: " ",
     headerName: '', 
+    width: 200,
+    sortable: false,
+    filtrable: false,
+    editable: false,    
     renderCell: (cellValues) => {
-      return <Link href={`/admin/pedido/${cellValues.row.id}`}>Ver pedido</Link>;
+      return <Button variant="outlined"  
+                    color="primary"           
+                      style={{ marginLeft: 16 }}
+                      ><Link style={{ textDecoration: "none" }} href={`/admin/pedido/${cellValues.row.id}`}>Ver pedido</Link></Button>;
     }
   }
 ];
 
 export async function getStaticProps() {
-  const res = await fetch('http://localhost:8080/pedidos');
+  const apiurl = process.env.apiURL;
+  const res = await fetch(apiurl + '/pedidos');
   const pedidosPendientes = await res.json();
   const pedidos = pedidosPendientes.map((pedido) => {
     const id = pedido.idPedido  
@@ -79,27 +71,7 @@ export async function getStaticProps() {
       estado,
       fechaEstimadaEntrega
     }
-  })
-  console.log(pedidosPendientes)
-  console.log(pedidos)
-  const pedidos2 = [
-    { id: 1, nombre: 'Lucia Arias', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 8, pago: 'Pagado'},
-    { id: 2, nombre: 'Germán Perez', fechaLimite: '12 ago 2020 15:00', email: 'ejemplo@gmail.com', paginas: 150, pago: 'Pagado'},
-    { id: 3, nombre: 'Cristian Roldán', fechaLimite: '12 ago 2020 15:30', email: 'ejemplo@gmail.com', paginas: 63, pago: 'Adeuda'},
-    { id: 4, nombre: 'Lucia Correa', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 15, pago: 'Adeuda'},
-    { id: 5, nombre: 'Camila Rodriguez', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 20, pago: 'Pagado'},
-    { id: 6, nombre: 'Alejandro Acosta', fechaLimite: '12 ago 2020 17:00', email: 'ejemplo@gmail.com', paginas: 55, pago: 'Adeuda'},
-    { id: 7, nombre: 'José Romero', fechaLimite: '12 ago 2020 15:30', email: 'ejemplo@gmail.com', paginas: 640, pago: 'Pagado'},
-    { id: 8, nombre: 'Julieta Fernandez', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 5, pago: 'Pagado'},
-    { id: 9, nombre: 'Pedro Gomez', fechaLimite: '13 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 20, pago: 'Pagado'},
-    { id: 10, nombre: 'Cristian Roldán', fechaLimite: '12 ago 2020 15:30', email: 'ejemplo@gmail.com', paginas: 63, pago: 'Adeuda'},
-    { id: 11, nombre: 'Lucia Correa', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 15, pago: 'Adeuda'},
-    { id: 12, nombre: 'Camila Rodriguez', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 20, pago: 'Pagado'},
-    { id: 13, nombre: 'Alejandro Acosta', fechaLimite: '12 ago 2020 17:00', email: 'ejemplo@gmail.com', paginas: 55, pago: 'Adeuda'},
-    { id: 14, nombre: 'José Romero', fechaLimite: '12 ago 2020 15:30', email: 'ejemplo@gmail.com', paginas: 640, pago: 'Pagado'},
-    { id: 15, nombre: 'Julieta Fernandez', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 5, pago: 'Pagado'},
-    { id: 16, nombre: 'Pedro Gomez', fechaLimite: '13 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 20, pago: 'Pagado'},
-  ];
+  }) 
 
   return{ 
     props: {
@@ -122,16 +94,18 @@ if(user){
         PEDIDOS
         </Typography>
     </div>
-     <div style={{ height: 600, width: '100%' }}>
+    <Paper>
+     <div style={{ height: 600, width: '100%' }}>       
       <DataGrid
         rows={pedidos}
         columns={columns}
-        pageSize={9}
+        pageSize={10}
       />
+      
     </div>
+    </Paper>
     </>
-    </Dashboard> 
-    
+    </Dashboard>     
   );
 }
   return <a href="/api/auth/login">Login</a>;

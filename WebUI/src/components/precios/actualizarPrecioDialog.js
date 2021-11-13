@@ -15,38 +15,34 @@ import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import ProgramarPedido from '../nuevoPedido/programarPedido';
 
-export default function NuevoArchivoFrecuenteDialog(props) {
+export default function ActualizarPrecioDialog(props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const [descripcion, setDescripcion] = useState('');
-  const [nombre, setNombre] = useState('');
+  const [precio, setPrecio] = useState(null);
+  const [nuevoPrecio, setNuevoPrecio] = useState();
   const [descripcionError, setDescripcionError] = useState(false);
 
   useEffect(() => {
-    if (props.archivo)
-       setNombre(props.archivo.name);
-  }, [props.archivo]);
+    if (props.precio)
+       setPrecio(props.precio);
+  }, [props.precio]);
 
-
-  const postNuevoArchivoFrecuente = async (event) => {
-    console.log("postNuevoArchivoFrecuente");
+  const actualizarPrecio = async (event) => {
     const data = new FormData();
-    data.append("idArchivoFrecuente", props.idArchivoFrecuente);
-    data.append("file", props.archivo);
-    data.append("descripcion", descripcion);
+    data.append("idPrecio", props.idPrecio);
+    data.append("nuevoPrecio", nuevoPrecio);
 
     const apiurl = process.env.apiURL;
 
     try {
-      const response = await fetch(apiurl + "/archivosFrecuentes/nuevo", {
-        method: "POST",
+      const response = await fetch(apiurl + "/precios/actualizar", {
+        method: "PATCH",
         mode: 'cors',
         body: data,
       });
       if (!response.ok)
         throw new Error(response.statusText);
-    //  props.addFile(await response.json());
       cerrarVentana();
     }
     catch (error) {
@@ -66,22 +62,21 @@ export default function NuevoArchivoFrecuenteDialog(props) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"Nuevo archivo"}
+          {"Actualizar precio"}
         </DialogTitle>        
         <DialogContent>
-          <DialogContentText>
-            <p>{nombre}</p>         
-            <p>Cantidad de páginas: {props.numeroDePaginas}</p>
-          </DialogContentText>
+          <DialogContentText>      
+            {(precio!=null)?<p>Tamaño: {props.precio.tamanioHoja}, Faz: {props.precio.tipoImpresion}, Color: {props.precio.color}</p> : <></>}
+                     </DialogContentText>
           <div>
             <form noValidate>
               <Grid container spacing={2}>             
                 <Grid item xs={12}>
                   <TextField fullWidth
                     id="filled-multiline-static"
-                    label="Descripcion"
-                    value={descripcion}
-                    onChange={(event) => setDescripcion(event.target.value)}
+                    label="Nuevo precio"
+                    value={nuevoPrecio}
+                    onChange={(event) => setNuevoPrecio(event.target.value)}
                     error={descripcionError}
                     multiline
                     rows={2}
@@ -96,8 +91,8 @@ export default function NuevoArchivoFrecuenteDialog(props) {
           <Button autoFocus onClick={cerrarVentana}>
             Cancelar
           </Button>
-          <Button onClick={postNuevoArchivoFrecuente} autoFocus variant="contained" color="primary" disabled={descripcionError}>
-            Agregar
+          <Button onClick={actualizarPrecio} autoFocus variant="contained" color="primary" disabled={descripcionError}>
+            Guardar
           </Button>
         </DialogActions>
       </Dialog>

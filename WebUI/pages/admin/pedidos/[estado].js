@@ -5,6 +5,8 @@ import { DataGrid } from '@material-ui/data-grid';
 import Dashboard from '../dashboardAdmin';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Link from '@material-ui/core/Link';
+import Paper from '@material-ui/core/Paper';
 
 import { useUser } from "@auth0/nextjs-auth0";
 
@@ -12,22 +14,20 @@ const useStyles = makeStyles((theme) => ({}));
 
 
 export async function getStaticPaths() {
-  // Call an external API endpoint to get posts
-  const res = await fetch('http://localhost:8080/pedidos')
+  const apiurl = process.env.apiURL;
+  const res = await fetch(apiurl + '/pedidos')
   const pedidos = await res.json()
 
-  // Get the paths we want to pre-render based on posts
   const paths = pedidos.map((pedido) => ({
     params: { estado: pedido.estado },
   }))
 
-  // We'll pre-render only these paths at build time.
-  // { fallback: false } means other routes should 404.
   return { paths, fallback: true }
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(`http://localhost:8080/pedidos/estado/${params.estado}`)
+  const apiurl = process.env.apiURL;
+  const res = await fetch(apiurl +`/pedidos/estado/${params.estado}`)
   const pedidosRes = await res.json()
 
       const pedidos = pedidosRes.map((pedido) => {
@@ -43,9 +43,7 @@ export async function getStaticProps({ params }) {
           fechaEstimadaEntrega
         }
       })
-      console.log(pedidosRes)
-      console.log(pedidos)
-    
+
       return{ 
         props: {
           pedidos
@@ -54,57 +52,46 @@ export async function getStaticProps({ params }) {
     };
     
 
-const columns = [
-  {
-    field: 'nombre',
-    headerName: 'Nombre',
-    width: 170,
-  },
-  {
-    field: 'estado',
-    headerName: 'Estado',  
-    width: 100,
-    sortable: false,       
-  },
-  {
-    field: 'fechaEstimadaEntrega',
-    headerName: 'Fecha límite',
-    width: 160,
-  },
-  {field: 'pago',
-    headerName: 'Acciones',  
-    width: 210,   
-    sortable: false,
-    renderCell: (params) => (
-        <strong>              
-          <Button
-            variant="contained"
-            color="light"
-            size="small"            
-          >
-            Ver pedido
-          </Button>
-          <Button
-            variant="contained"
-            color="inherit"
-            size="small"
-            style={{ marginLeft: 16 }}
-          >
-            Imprimir
-          </Button>
-        </strong>
-      ), 
-  },
-  {
-    field: 'email',
-    headerName: 'Email',
-    type: 'email',
-    width: 190,
-  },
-  { field: 'id_pedido',
-    headerName: 'ID',
-    width: 90 },  
-];
+    const columns = [
+      { field: 'id',
+      headerName: 'ID',
+      width: 90 },  
+      {
+        field: 'nombre',
+        headerName: 'Nombre',
+        width: 160,
+      },
+      {
+        field: 'estado',
+        headerName: 'Estado',  
+        width: 140,       
+      },
+      {
+        field: 'fechaEstimadaEntrega',
+        headerName: 'Fecha límite',
+        width: 155,
+      },  
+      {
+        field: 'email',
+        headerName: 'Email',
+        type: 'email',
+        width: 215,
+      },
+      {
+        field: " ",
+        headerName: '', 
+        width: 200,
+        sortable: false,
+        filtrable: false,
+        editable: false,    
+        renderCell: (cellValues) => {
+          return <Button variant="outlined"  
+                        color="primary"           
+                          style={{ marginLeft: 16 }}
+                          ><Link style={{ textDecoration: "none" }} href={`/admin/pedido/${cellValues.row.id}`}>Ir al pedido</Link></Button>;
+        }
+      }
+    ];
 
 
 export default function Pedidos({pedidos}) {
@@ -122,13 +109,15 @@ if(user){
         PEDIDOS {estadoTitulo}
         </Typography>
     </div>    
-     <div style={{ height: 600, width: '100%' }}>
-     <DataGrid
+    <Paper>
+     <div style={{ height: 600, width: '100%' }}>       
+      <DataGrid
         rows={pedidos}
         columns={columns}
-        pageSize={9}
-      />
+        pageSize={10}
+      />      
     </div>
+    </Paper>
     </>
     </Dashboard> 
     

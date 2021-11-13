@@ -216,32 +216,16 @@ export default function Dashboard({children}) {
               </Link> 
               <Link href="/admin/pedidos">
               <ListItem button >              
-                <ListItemIcon><EventNoteIcon /></ListItemIcon>
+                <ListItemIcon><PrintIcon /></ListItemIcon>
                 <ListItemText primary="PEDIDOS" />                 
               </ListItem>      
-              </Link> 
-              <Link href="#">
-              <ListItem button>
-                <ListItemIcon><PrintIcon /></ListItemIcon>
-                <ListItemText primary="IMPRESIONES" />
-              </ListItem>
-              </Link>                    
-            <Link href="#">
-            <ListItem button>
-              <ListItemIcon><CloudUploadIcon /></ListItemIcon>
-              <ListItemText primary="SUBIR ARCHIVO" />
-            </ListItem>
-            </Link>
+              </Link>                 
             <Link href="/admin/archivosFrecuentes">
             <ListItem button>
-              <ListItemIcon><FolderIcon /></ListItemIcon>
+              <ListItemIcon><CloudUploadIcon /></ListItemIcon>
               <ListItemText primary="GESTIÓN ARCHIVOS" />
             </ListItem>   
-            </Link>
-            <ListItem button>
-              <ListItemIcon><SettingsIcon /></ListItemIcon>
-              <ListItemText primary="CONFIGURACIÓN" />
-            </ListItem>                  
+            </Link>                 
           </List>
         </div>
       </Drawer>      
