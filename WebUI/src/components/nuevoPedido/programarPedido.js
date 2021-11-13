@@ -5,17 +5,22 @@ import { format, parseISO } from 'date-fns'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const useStyles = makeStyles((theme) => ({
   button: {
     marginRight: theme.spacing(1),
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+},
 }));
 
 export default function ProgramarPedido(props) {
   const classes = useStyles();
 
-  const [fechaEntrega, setFechaEntrega] = useState('');
+  const [fechaEntrega, setFechaEntrega] = useState(null);
   const [email, setEmail] = useState('');
   const [nombre, setNombre] = useState('');
 
@@ -23,26 +28,38 @@ export default function ProgramarPedido(props) {
   const [emailError, setEmailError] = useState(false);
   const [nombreError, setNombreError] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   const [disabledSiguiente, SetDisableSiguiente] = useState(true);
 
   useEffect(() => {
-    if (!fechaEntregaError && email != '' && nombre != ''){
-      console.log("sin errores")
+    if (!fechaEntregaError && email != '' && nombre != '') {
       SetDisableSiguiente(false);
     }
-    else{
-      console.log("con errores")
+    else {
       SetDisableSiguiente(true);
     }
-  }, [fechaEntregaError,fechaEntrega, email, nombre]);
+  }, [fechaEntregaError, fechaEntrega, email, nombre]);
 
   useEffect(() => {
-    if (fechaEntrega != '') {
+    if (fechaEntrega) {
+      console.log("holi")
+      const fechaEntregaISO=parseISO(fechaEntrega);
       const fechaActual = new Date();
-      if (parseISO(fechaEntrega).getTime() < fechaActual.getTime())
+      if (fechaEntregaISO.getTime() < fechaActual.getTime())
+        setFechaEntregaError(true);
+      else if(fechaEntregaISO.getHours()>'19')
+        setFechaEntregaError(true);
+      else if(fechaEntregaISO.getHours()<'9')
+        setFechaEntregaError(true);
+      else if(fechaEntregaISO.toString().slice(0, 3)=='Sun')
         setFechaEntregaError(true);
       else
         setFechaEntregaError(false);
+    }
+    else{
+      console.log("chau")
+      setFechaEntregaError(true);
     }
   }, [fechaEntrega]);
 
@@ -65,6 +82,7 @@ export default function ProgramarPedido(props) {
     const apiurl = process.env.apiURL;
 
     try {
+      setLoading(true);
       const response = await fetch(apiurl + "/pedidos/programar", {
         method: "PATCH",
         mode: 'cors',
@@ -73,15 +91,20 @@ export default function ProgramarPedido(props) {
       if (!response.ok)
         throw new Error(response.statusText);
       props.next();
+      setLoading(false);
     }
     catch (error) {
       console.error(error);
+      setLoading(false);
     }
   }
 
   return (
     <div style={{ padding: 20 }}>
       <form >
+        <Backdrop className={classes.backdrop} open={loading} >
+          <CircularProgress color="primary" />
+        </Backdrop>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -96,6 +119,7 @@ export default function ProgramarPedido(props) {
               onChange={e => setFechaEntrega(e.target.value)}
               error={fechaEntregaError}
               variant="outlined"
+              helperText="Lunes a Sábados de 9:00hs a 19:00hs"
             />
           </Grid>
           <Grid item xs={12}>

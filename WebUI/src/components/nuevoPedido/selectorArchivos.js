@@ -12,6 +12,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import NuevoArchivoDialog from './nuevoArchivo'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Hidden from '@material-ui/core/Hidden';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -58,8 +62,11 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     nombreArchivo: {
-        maxWidth: '20ch',
+        //maxWidth: '20ch',
         lineBreak: 'anywhere',
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
     },
 }));
 
@@ -72,6 +79,8 @@ export default function Archivos(props) {
 
     const [disabledSiguiente, SetDisableSiguiente] = useState(true);
     const [archivos, SetArchivos] = useState([]);
+
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (archivos.length > 0)
@@ -92,6 +101,7 @@ export default function Archivos(props) {
     const getNumeroPaginas = async (input) => {
         console.log("getNumeroPaginas");
         if (input) {
+            setLoading(true);
             const data = new FormData();
             data.append("file", input);
             const apiurl = process.env.apiURL;
@@ -104,6 +114,7 @@ export default function Archivos(props) {
                 });
                 if (!response.ok)
                     throw new Error(response.statusText);
+                setLoading(false);
                 setNumeroPaginas(await response.json());
             }
             catch (error) {
@@ -124,6 +135,9 @@ export default function Archivos(props) {
     return (
         <Container >
             <CssBaseline />
+            <Backdrop className={classes.backdrop} open={loading} >
+                    <CircularProgress color="primary" />
+                </Backdrop>
             <NuevoArchivoDialog visible={editarArchivo} numeroDePaginas={numeroPaginas} archivo={inputArchivo}
                 idPedido={props.idPedido}
                 setVisible={event => {
@@ -135,57 +149,84 @@ export default function Archivos(props) {
             />
             <div >
                 <form className={classes.form} noValidate>
-                    <div className={classes.subirArchivo}>
-                        <input
-                            accept="pdf/*"
-                            className={classes.subirInput}
-                            id="contained-button-file"
-                            type="file"
-                            onChange={(event) => { (event.target.files && event.target.files[0]) ? setInputArchivo(event.target.files[0]) : setInputArchivo(null) }}
-                        />
-                        <label htmlFor="contained-button-file">
-                            <Button fullWidth variant="contained" color="primary" component="span" className={classes.subirButtom}>
-                                Agregar Archivo
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <input
+                                accept=".doc,.docx,.pdf"
+                                className={classes.subirInput}
+                                id="contained-button-file"
+                                type="file"
+                                onChange={(event) => { (event.target.files && event.target.files[0]) ? setInputArchivo(event.target.files[0]) : setInputArchivo(null) }}
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button fullWidth variant="contained" color="primary" component="span"
+                                    startIcon={<CloudUploadIcon />} >
+                                    Agregar Archivo
+                                </Button>
+                            </label>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button fullWidth variant="outlined" color="secondary" component="span" >
+                                Seleccionar del repositorio
                             </Button>
-                        </label>
-                        <Button fullWidth variant="outlined" color="secondary" component="span" className={classes.submit}>
-                            Seleccionar del repositorio
-                        </Button>
-                    </div>
-                    {(archivos && archivos.length > 0)
-                        ? <TableContainer component={Paper}>
-                            <Table aria-label="customized table">
-                                <TableHead>
-                                    <TableRow>
-                                        <StyledTableCell>Archivo</StyledTableCell>
-                                        <StyledTableCell align="center">Formato</StyledTableCell>
-                                        {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-
-                                            <StyledTableCell align="center">Tamaño</StyledTableCell>
-                                        </Box> */}
-                                        <StyledTableCell align="center">Tamaño</StyledTableCell>
-                                        <StyledTableCell align="center">Precio</StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {archivos.map((row) => (
-                                        <StyledTableRow key={row.nombre}>
-                                            <StyledTableCell component="th" scope="row" className={classes.nombreArchivo}>{row.nombre}</StyledTableCell>
-                                            {/* <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-
-                                                <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
-                                            </Box> */}
-                                            <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
-                                            <StyledTableCell component="th" scope="row" align="center">{row.tamanioHoja}</StyledTableCell>
-                                            <StyledTableCell component="th" scope="row" align="center">${row.precio}</StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        : <p><b>Suba un archivo para continuar</b></p>
-                    }
-                    {(archivos && archivos.length > 0) && <p><b>Total: ${archivos.reduce((a, v) => a = a + v.precio, 0)}</b></p>}
+                        </Grid>
+                        {(archivos && archivos.length > 0)
+                            ? <Grid item xs={12}>
+                                <Hidden xsDown>
+                                    <TableContainer component={Paper}>
+                                        <Table aria-label="customized table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <StyledTableCell>Archivo</StyledTableCell>
+                                                    <StyledTableCell align="center">Formato</StyledTableCell>
+                                                    <StyledTableCell align="center">Tamaño</StyledTableCell>
+                                                    <StyledTableCell align="center">Precio</StyledTableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {archivos.map((row) => (
+                                                    <StyledTableRow key={row.nombre}>
+                                                        <StyledTableCell component="th" scope="row" className={classes.nombreArchivo}>{row.nombre}</StyledTableCell>
+                                                        <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
+                                                        <StyledTableCell component="th" scope="row" align="center">{row.tamanioHoja}</StyledTableCell>
+                                                        <StyledTableCell component="th" scope="row" align="center">${row.precio}</StyledTableCell>
+                                                    </StyledTableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Hidden>
+                                <Hidden smUp>
+                                    <TableContainer component={Paper}>
+                                        <Table aria-label="customized table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <StyledTableCell>Archivo</StyledTableCell>
+                                                    <StyledTableCell align="center">Precio</StyledTableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {archivos.map((row) => (
+                                                    <StyledTableRow key={row.nombre}>
+                                                        <StyledTableCell component="th" scope="row" className={classes.nombreArchivo}>{row.nombre}</StyledTableCell>
+                                                        <StyledTableCell component="th" scope="row" align="center">${row.precio}</StyledTableCell>
+                                                    </StyledTableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Hidden>
+                            </Grid>
+                            : <Grid item xs={12}>
+                                <p><b>Suba un archivo para continuar</b></p>
+                            </Grid>
+                        }
+                        {(archivos && archivos.length > 0) &&
+                            <Grid item xs={12}>
+                                <p><b>Total: ${archivos.reduce((a, v) => a = a + v.precio, 0)}</b></p>
+                            </Grid>
+                        }
+                    </Grid>
                 </form>
             </div>
             <Grid item sm={12}  >

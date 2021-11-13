@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router'
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Link from 'next/link';
 
 const useStyles = makeStyles((theme) => ({
     imgSuccess: {
@@ -20,9 +21,18 @@ const useStyles = makeStyles((theme) => ({
 export default function PagoEfectivo(props) {
     const classes = useStyles();
 
+    const router = useRouter();
+    const id = router.query.idPedido
     const [loading, setLoading] = useState(false);
-    const [idPedido,setIdPedido] = useState(123);
-    
+    const [idPedido, setIdPedido] = useState('');
+
+    useEffect(() => {
+        if (id) {
+            console.log("hola")
+            setIdPedido(id);
+        }
+    }, [id]);
+
     return (
         <LayoutCliente>
             <div style={{ padding: 20 }}>
@@ -42,14 +52,11 @@ export default function PagoEfectivo(props) {
                             justifyContent="center"
                             alignItems="center">
                             <Grid item xs={12}>
-                                <img className={classes.imgSuccess} src={require("./../../../src/images/avatares/email-notification.svg")} />
+                                <img className={classes.imgSuccess} src={require("./../../../src/images/avatares/Printer-pana.svg")} />
                             </Grid>
                             <Grid item xs={12}>
                                 <Typography align="center" variant="h4" component="h4" gutterBottom>
-                                    ¡Te hemos enviado un email para confimar tu pedido!
-                                </Typography>
-                                <Typography align="center" variant="body1" gutterBottom>
-                                    Puedes seguir el estado de tu pedido haciendo click <a href="">aqui</a>
+                                    Tu pedido será impreso cuando abones en el local.
                                 </Typography>
                                 <Typography align="center" variant="subtitle2" gutterBottom>
                                     Codigo de pedido #{idPedido}
@@ -58,13 +65,15 @@ export default function PagoEfectivo(props) {
                             <Grid item xs={12} container spacing={3}
                                 justifyContent="center"
                                 alignItems="center">
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    component="span"
-                                    className={classes.button}>
-                                    Volver al inico
-                                </Button>
+                                <Link href="/" passHref>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        component="span"
+                                        className={classes.button}>
+                                        Volver al inico
+                                    </Button>
+                                </Link>
                             </Grid>
                         </Grid>
                     }

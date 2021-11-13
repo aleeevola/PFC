@@ -5,12 +5,16 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Fade from '@material-ui/core/Fade';
+import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
     button: {
         marginRight: theme.spacing(1),
+    },
+    backdrop: {
+        zIndex: theme.zIndex.drawer + 1,
     },
 }));
 
@@ -74,59 +78,52 @@ export default function PagarPedido(props) {
     return (
         <div style={{ padding: 20 }}>
             <form >
-                {loading
-                    ? <Grid container spacing={3}
-                        justifyContent="center"
-                        alignItems="center">
-                        <Fade in={loading}
-                            style={{ transitionDelay: '0ms', }}
-                            unmountOnExit>
-                            <CircularProgress />
-                        </Fade>
+                <Backdrop className={classes.backdrop} open={loading} >
+                    <CircularProgress color="primary" />
+                </Backdrop>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color="secondary"
+                            component="span"
+                            onClick={handlePagar}
+                            className={classes.button}>
+                            Pagar con Mercado Pago
+                        </Button>
                     </Grid>
-                    :
-                    <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="secondary"
-                                component="span"
-                                onClick={handlePagar}
-                                className={classes.button}>
-                                Pagar con Mercado Pago
+                    <Grid item xs={12}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={efectivo}
+                                    onChange={handleChange}
+                                    name="checkedB"
+                                    color="primary"
+                                />
+                            }
+                            label="Pagar en efectivo"
+                        />
+                    </Grid>
+                    <Grid item sm={12}  >
+                        <Box m={2}>
+                            <Button className={classes.button} onClick={handleBack}>
+                                Atras
                             </Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={efectivo}
-                                        onChange={handleChange}
-                                        name="checkedB"
-                                        color="primary"
-                                    />
-                                }
-                                label="Pagar en efectivo"
-                            />
-                        </Grid>
-                        <Grid item sm={12}  >
-                            <Box m={2}>
-                                <Button className={classes.button} onClick={handleBack}>
-                                    Atras
-                                </Button>
+                            <Link href={`/pedido/result/efectivo/?idPedido=${props.idPedido}`} passHref>
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={handleNext}
                                     disabled={!efectivo}
                                     className={classes.button} >
                                     Terminar
                                 </Button>
-                            </Box>
-                        </Grid>
+                            </Link>
+                        </Box>
                     </Grid>
-                }
+                </Grid>
+
             </form>
         </div>
     );

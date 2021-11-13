@@ -97,7 +97,7 @@ public class PagosService implements  IPagosService{
 		Pago pago = this._pagoRepository.findByToken(token).get();
 		pago.setEstadoFront(estado);
 		//TODO: SETEO EL ESTADO EN PENDIENTE CON ESTE CALLBACK O CON EL DE BACKEND?
-		//pago.getPedido().setEstado(EstadoPedido.PENDIENTE);
+		pago.getPedido().setEstado(EstadoPedido.PENDIENTE);
 		this._pagoRepository.saveAndFlush(pago);
 		return pago.getPedido().getIdPedido();
 		//return 0;

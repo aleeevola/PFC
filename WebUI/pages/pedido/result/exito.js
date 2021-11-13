@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router'
 import Fade from '@material-ui/core/Fade';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Link from 'next/link';
+
 
 const useStyles = makeStyles((theme) => ({
     imgSuccess: {
@@ -97,17 +99,19 @@ export default function PagoExito(props) {
                                     Codigo de pedido #{idPedido}
                                 </Typography>
                             </Grid>
-                            <Grid item xs={12} container spacing={3}
-                                justifyContent="center"
-                                alignItems="center">
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    component="span"
-                                    className={classes.button}>
-                                    Volver al inico
-                                </Button>
-                            </Grid>
+                            <Link href="/" passHref>
+                                <Grid item xs={12} container spacing={3}
+                                    justifyContent="center"
+                                    alignItems="center">
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        component="span"
+                                        className={classes.button}>
+                                        Volver al inico
+                                    </Button>
+                                </Grid>
+                            </Link>
                         </Grid>
                     }
                 </form>

@@ -13,6 +13,10 @@ import Grid from '@material-ui/core/Grid';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
+
 
 export default function NuevoArchivoDialog(props) {
   const theme = useTheme();
@@ -25,15 +29,18 @@ export default function NuevoArchivoDialog(props) {
   const [observaciones, setObservaciones] = React.useState('');
   const [observacionesError, setObservacionesError] = React.useState(false);
 
-  React.useEffect(() => {
-    getPrecio();
-  }, [formato, tamanio, color]);
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
-    if(tamanio===5 && observaciones=='')
+    if (props.numeroDePaginas)
+      getPrecio();
+  }, [formato, tamanio, color, props.numeroDePaginas]);
+
+  React.useEffect(() => {
+    if (tamanio === 5 && observaciones == '')
       setObservacionesError(true);
     else setObservacionesError(false);
-  }, [tamanio,observaciones]);
+  }, [tamanio, observaciones]);
 
   const postNuevoArchivo = async (event) => {
     console.log("postNuevoArchivo");
@@ -48,6 +55,7 @@ export default function NuevoArchivoDialog(props) {
     const apiurl = process.env.apiURL;
 
     try {
+      setLoading(true)
       const response = await fetch(apiurl + "/archivos/nuevo", {
         method: "POST",
         mode: 'cors',
@@ -56,6 +64,7 @@ export default function NuevoArchivoDialog(props) {
       if (!response.ok)
         throw new Error(response.statusText);
       props.addFile(await response.json());
+      setLoading(false);
       cerrarVentana();
     }
     catch (error) {
@@ -65,13 +74,17 @@ export default function NuevoArchivoDialog(props) {
 
   const getPrecio = async () => {
     const apiurl = process.env.apiURL;
+    setLoading(true)
     try {
-      const response = await fetch(apiurl + "/archivos/precio?numeroPaginas=" + props.numeroDePaginas + "&formato=" + formato + "&tamanio=" + tamanio+ "&color=" + color, {
+      const response = await fetch(apiurl + "/archivos/precio?numeroPaginas=" + props.numeroDePaginas + "&formato=" + formato + "&tamanio=" + tamanio + "&color=" + color, {
         method: "GET",
         mode: 'cors'
       });
-      if (!response.ok)
+      if (!response.ok) {
+        setLoading(false);
         throw new Error(response.statusText);
+      }
+      setLoading(false)
       setPrecio(await response.json());
     }
     catch (error) {
@@ -96,8 +109,11 @@ export default function NuevoArchivoDialog(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <p>Cantidad de páginas: {props.numeroDePaginas}</p>
-            {precio ? <p>Precio: <b>${precio}</b></p> : <p>No se pudo obtener el precio</p>}
+            <Typography variant={'body1'}>Cantidad de páginas: {props.numeroDePaginas}</Typography>
+            {precio ?
+              <Typography  variant={'body1'}>Precio: <b>${precio}</b></Typography>
+              : <Typography  variant={'body1'}>No se pudo obtener el precio</Typography>
+            }
           </DialogContentText>
           <div>
             <form noValidate>
@@ -167,6 +183,16 @@ export default function NuevoArchivoDialog(props) {
           </div>
         </DialogContent>
         <DialogActions>
+          <Fade
+            in={loading}
+            style={{
+              transitionDelay: '0ms',
+              width: '20px',
+              height: '20px'
+            }}
+            unmountOnExit>
+            <CircularProgress />
+          </Fade>
           <Button autoFocus onClick={cerrarVentana}>
             Cancelar
           </Button>
@@ -178,32 +204,3 @@ export default function NuevoArchivoDialog(props) {
     </div>
   );
 }
-
-
-// const subirArchivo = async (event) => {
-//   console.log("subirArchivo");
-//   if (event.target.files && event.target.files[0]) {
-//       const i = event.target.files[0];
-//       console.log(i);
-//       console.log(URL.createObjectURL(i));
-//       const data = new FormData();
-//       data.append("file", i);
-//       data.append("idPedido", props.idPedido);
-//       const apiurl = "http://localhost:8080";
-
-//       try {
-//           const response = await fetch("http://localhost:8080/archivos/agregar", {
-//               method: "POST",
-//               mode: 'cors',
-//               body: data
-//           });
-//           if (!response.ok)
-//               throw new Error(response.statusText);
-//           const nuevoArchivo = await response.json();
-//           props.addFile(nuevoArchivo);
-//       }
-//       catch (error) {
-//           console.error(error);
-//       }
-//   }
-// };
