@@ -16,6 +16,7 @@ import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Hidden from '@material-ui/core/Hidden';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import ListaFrecuentesDialog from './listaFrecuentes';
 
 const StyledTableCell = withStyles((theme) => ({
     head: {
@@ -74,6 +75,7 @@ export default function Archivos(props) {
     const classes = useStyles();
 
     const [editarArchivo, setEditarArchivo] = useState(false);
+    const [listaFrecuentes, setListaFrecuentes] = useState(false);
     const [inputArchivo, setInputArchivo] = useState(null);
     const [numeroPaginas, setNumeroPaginas] = useState(null);
 
@@ -145,8 +147,13 @@ export default function Archivos(props) {
                     setInputArchivo(null);
                     setNumeroPaginas(null)
                 }}
-                addFile={nuevoArchivo => { SetArchivos([...archivos, nuevoArchivo]); props.newIdPedido(nuevoArchivo.pedido.idPedido) }}
+                addFile={nuevoArchivo => { SetArchivos([...archivos, nuevoArchivo]); props.newIdPedido(nuevoArchivo.idPedido) }}
             />
+            <ListaFrecuentesDialog visible={listaFrecuentes} setVisible={event => {
+                    setListaFrecuentes(event);
+                }}>
+
+            </ListaFrecuentesDialog>
             <div >
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>
@@ -166,7 +173,8 @@ export default function Archivos(props) {
                             </label>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button fullWidth variant="outlined" color="secondary" component="span" >
+                            <Button fullWidth variant="outlined" color="secondary" component="span" 
+                                    onClick={()=> setListaFrecuentes(true)}>
                                 Seleccionar del repositorio
                             </Button>
                         </Grid>

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +45,14 @@ public class ArchivosFrecuentesController {
 	@ApiOperation(value = "Obtener lista de archivos frecuentes")
 	public List<ArchivoFrecuente> findAll() {
 		return this._archivoFrecuenteService.findAll();
+	}
+
+	@GetMapping("/porNombrePaginado")
+	@ApiOperation(value = "Obtener lista de archivos frecuentes por nombre pagindo")
+	public Page<ArchivoFrecuente> findAllByNombre(@RequestParam(value = "nombre",required = false) String nombre, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize) {
+		if(nombre==null)
+			nombre="";
+		return this._archivoFrecuenteService.findAllByNombre(nombre,page,pageSize);
 	}
 	
 	@ApiOperation(value = "Obtener un archivo frecuente")

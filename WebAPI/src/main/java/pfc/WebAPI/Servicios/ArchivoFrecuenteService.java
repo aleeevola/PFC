@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import pfc.WebAPI.Infraestructura.Entidades.ArchivoFrecuente;
 import pfc.WebAPI.Infraestructura.Repositorios.IArchivoFrecuenteRepository;
-import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
 import pfc.WebAPI.Infraestructura.Servicios.IArchivoFrecuenteService;
 import pfc.WebAPI.Infraestructura.Servicios.IFileStorageService;
 
@@ -53,6 +56,12 @@ public class ArchivoFrecuenteService implements IArchivoFrecuenteService{
 	@Override
 	public List<ArchivoFrecuente> findAll() {		
 		return this._archivoFrecuenteRepository.findAll();
+	}
+
+	@Override
+	public Page<ArchivoFrecuente> findAllByNombre(String nombre, int page, int pageSize) {
+		Pageable pageResult = PageRequest.of(page-1, pageSize, Sort.by("nombre"));
+		return _archivoFrecuenteRepository.findByNombreContainingIgnoreCase(nombre,pageResult);
 	}
 
 }

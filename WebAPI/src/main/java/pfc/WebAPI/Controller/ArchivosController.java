@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.ArchivoTablaDto;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
@@ -80,7 +81,7 @@ public class ArchivosController {
 	@PostMapping("/nuevo")
 	@ResponseBody
 	@ApiOperation(value = "nuevo")
-	public ResponseEntity<Archivo> nuevoArchivo(
+	public ResponseEntity<ArchivoTablaDto> nuevoArchivo(
 			@RequestParam("file") MultipartFile file,
 			@RequestParam("formato") int formato,
 			@RequestParam("tamanio") int tamanio,
@@ -89,7 +90,17 @@ public class ArchivosController {
 			@RequestParam("observaciones") String observaciones) throws Exception{
 		
 		try {
-			Archivo archivoResult = this._archivosService.postArchivo(idPedido,file, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio),Color.valueOf(color),observaciones);
+			Archivo archivo = this._archivosService.postArchivo(idPedido,file, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio),Color.valueOf(color),observaciones);
+
+			ArchivoTablaDto archivoResult= new ArchivoTablaDto();
+			archivoResult.setIdArchivo(archivo.getIdArchivo());
+			archivoResult.setNombre(archivo.getNombre());
+			archivoResult.setColor(archivo.getColor());
+			archivoResult.setPrecio(archivo.getPrecio());
+			archivoResult.setTamanioHoja(archivo.getTamanioHoja());
+			archivoResult.setIdPedido(archivo.getPedido().getIdPedido());
+			archivoResult.setTipoImpresion(archivo.getTipoImpresion());
+
 			return ResponseEntity.ok(archivoResult);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

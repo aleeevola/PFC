@@ -4,40 +4,84 @@ import Typography from '@material-ui/core/Typography';
 import Copyright from '../../src/Copyright';
 import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Link from 'next/link';
 
 
 const useStyles = makeStyles((theme) => ({
-    children:{
-        minWidth:'100%',
-        padding:'0.5rem',
+    appbar: {
+        backgroundColor: '#F7FAFC',
+        boxShadow: 'none',
+    },
+    piedepagina: {
+        backgroundColor: '#F7FAFC',
+        padding: '5rem 0rem',
+    },
+    children: {
+        minWidth: '100%',
+        //padding:'0.5rem',
     },
     menu: {
         background: '#fff',
-        //maxWidth: '100%',
-        borderRadius: '0.625rem',
-        boxShadow: '0px 5px 9.5px 0.5px rgb(0 0 0 / 8%)',
+        // //maxWidth: '100%',
+        // borderRadius: '0.625rem',
+        // boxShadow: '0px 5px 9.5px 0.5px rgb(0 0 0 / 8%)',
     },
     header: {
-        padding: '0.5rem 0rem 0.5rem 0rem',
+        backgroundColor: '#F7FAFC',
+        //padding: '0.5rem 0rem 0.5rem 0rem',
+        padding: '0rem',
     },
     logo: {
-        maxWidth: '10rem',
+        maxHeight: '3rem',
     },
 }));
 
 export default function LayoutCliente({ children }) {
     const classes = useStyles();
     return (
-        <Container flex="true" disableGutters>
-            <Container maxWidth="sm" disableGutters className={classes.header}>
-                <Grid container spacing={1}>
-                    <Grid item container justifyContent="center" md={12} xs={12}>
-                        <img className={classes.logo} src={require('../images/logo.png')} />
+        <Container flex="true" disableGutters maxWidth={false} className={classes.header}>
+            <Container disableGutters className={classes.header} maxWidth={false}>
+                <Grid container >
+                    <Grid container justifyContent="center" >
+                        <AppBar position="static" className={classes.appbar}>
+                            <Toolbar>
+                                <Container maxWidth="md" >
+                                    <Grid container justifyContent="space-between" alignItems="center">
+                                        <Grid item >
+                                            <Link href="/" passHref>
+                                                <a>
+                                                    <img className={classes.logo} src={require('../images/logo.svg')} />
+                                                </a>
+                                            </Link>
+                                        </Grid>
+                                        <Grid item >
+                                            {/* <Button color="inherit">Realizar pedido</Button>
+                                    <Button color="inherit">Buscar pedido</Button> */}
+                                            <Button color="inherit">Precios</Button>
+                                            <Button color="inherit">Ayuda</Button>
+                                        </Grid>
+                                    </Grid>
+                                </Container>
+                            </Toolbar>
+                        </AppBar>
                     </Grid>
                     <Grid item container sm={12} className={classes.menu}>
                         <main className={classes.children}>{children}</main>
                     </Grid>
-                    <Grid>
+                    <Grid item container sm={12} justifyContent="center" alignItems="center" className={classes.piedepagina}>
+                        <Grid item container sm={12} justifyContent="center" alignItems="center">
+                            <img className={classes.logo} src={require('../images/logo.svg')} />
+                        </Grid>
+                        <Grid item sm={12}>
+                            <Typography align="center" variant="h5" component="h5">
+                                +54 342 5118011
+                            </Typography>
+                        </Grid>
                         <Copyright></Copyright>
                     </Grid>
                 </Grid>

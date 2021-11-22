@@ -78,7 +78,7 @@ export default function NuevoPedido() {
 
   return (
     <LayoutCliente>
-      <Container disableGutters>
+      <Container disableGutters maxWidth="sm">
         <Grid item container sm={12}  >
           <Grid item sm={12} md={12} >
             <Box m={2}>

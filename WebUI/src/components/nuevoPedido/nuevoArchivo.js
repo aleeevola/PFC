@@ -107,12 +107,12 @@ export default function NuevoArchivoDialog(props) {
         <DialogTitle id="responsive-dialog-title">
           {"Nuevo archivo"}
         </DialogTitle>
-        <DialogContent>
+        <DialogContent dividers>
           <DialogContentText>
-            <Typography variant={'body1'}>Cantidad de páginas: {props.numeroDePaginas}</Typography>
+            <Typography variant={'body1'} gutterBottom>Cantidad de páginas: {props.numeroDePaginas}</Typography>
             {precio ?
-              <Typography  variant={'body1'}>Precio: <b>${precio}</b></Typography>
-              : <Typography  variant={'body1'}>No se pudo obtener el precio</Typography>
+              <Typography  variant={'body1'} gutterBottom>Precio: <b>${precio}</b></Typography>
+              : <Typography  variant={'body1'} gutterBottom>No se pudo obtener el precio</Typography>
             }
           </DialogContentText>
           <div>
@@ -193,11 +193,11 @@ export default function NuevoArchivoDialog(props) {
             unmountOnExit>
             <CircularProgress />
           </Fade>
-          <Button autoFocus onClick={cerrarVentana}>
-            Cancelar
-          </Button>
           <Button onClick={postNuevoArchivo} autoFocus variant="contained" color="primary" disabled={observacionesError}>
             Agregar
+          </Button>
+          <Button autoFocus onClick={cerrarVentana}>
+            Cancelar
           </Button>
         </DialogActions>
       </Dialog>

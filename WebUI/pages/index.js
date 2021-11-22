@@ -10,8 +10,24 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import LayoutCliente from '../src/layouts/layoutCliente';
+import Hidden from '@material-ui/core/Hidden';
 
 const useStyles = makeStyles((theme) => ({
+  typography: {
+    h3: {
+      fontWeight: 600//'bold',
+    },
+  },
+  boton: {
+    color:'#ffff'
+  },
+  encambezado: {
+    backgroundColor: '#F7FAFC',
+    padding: '5rem 2rem',
+  },
+  pasoapaso: {
+    padding: '3rem 2rem',
+  },
   imgPrincipal: {
     maxWidth: '100%',
   },
@@ -28,38 +44,109 @@ export default function Index() {
   };
   return (
     <LayoutCliente >
-        <Container  disableGutters>
-            <Grid item container sm={12} >
-              <Grid item sm={12} md={6} >
-                <img className={classes.imgPrincipal} src={require("./../src/images/home/imagen.png")} />
+      <Container disableGutters maxWidth={false} className={classes.encambezado} >
+        <Grid container justifyContent="center" alignItems="center" spacing={2}>
+          <Grid item sm={12} md={12} >
+
+            <Hidden smUp>
+              {/* vista de celulu */}
+              <Typography align="left" variant="h3" component="h3" style={{ fontWeight: 600 }}>
+                Una solución moderna para tus <spam style={{ color: '#E82E87' }}>pedidos de impresión</spam>
+              </Typography>
+              <Typography align="left" variant="body1" gutterBottom >
+                La forma más fácil de hacer tus impresiones
+              </Typography>
+            </Hidden>
+            <Hidden xsDown>
+              <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 600 }}>
+                Una solución moderna para tus
+              </Typography>
+              <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 600 }} color="secondary">
+                pedidos de impresión
+              </Typography>
+              <Typography align="center" variant="body1" gutterBottom >
+                La forma más fácil de hacer tus impresiones
+              </Typography>
+            </Hidden>
+          </Grid>
+          <Container disableGutters maxWidth="md">
+            <Grid container justifyContent="center" spacing={2} >
+              <Grid item xs={12} md={4}  >
+                <Button variant="contained" color="primary" href="/pedido/nuevo" fullWidth className={classes.boton}>
+                  Realizar pedido
+                </Button>
               </Grid>
-              <Grid item sm={12} md={6} >
-                <Box m={2}>
-                  <Typography align="center" variant="h4" component="h4" gutterBottom>
-                    Lorem Ipsum
-                  </Typography>
-                  <Typography align="justify" gutterBottom >
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </Typography>
-                </Box>
-              </Grid>
-              <Grid container  item margin={3} sm={12} md={12} >
-                <Grid item sm={12} md={6} >
-                  <Box m={2}>
-                    <Button className={classes.forceWidth} fullWidth variant="contained" size="large" color="primary" component={Link} naked href="pedido/nuevo">Nuevo pedido</Button>
-                  </Box>
-                </Grid>
-                <Grid item sm={12} md={6} >
-                  <Box m={2}>
-                    <FormControl className={classes.forceWidth} fullWidth variant="outlined">
-                      <InputLabel htmlFor="component-outlined">Buscar mi pedido</InputLabel>
-                      <OutlinedInput className={classes.forceWidth} id="component-outlined" value={name} onChange={handleChange} label="Buscar mi pedido" />
-                    </FormControl>
-                  </Box>
-                </Grid>
+              <Grid item xs={12} md={4} >
+                <Button variant="outlined" color="secondary" href="#contained-buttons" fullWidth >
+                  Buscar un pedido
+                </Button>
               </Grid>
             </Grid>
-        </Container>
+          </Container>
+        </Grid>
+
+      </Container>
+      <Container maxWidth="md" disableGutters spacing={1} className={classes.pasoapaso}>
+        <Grid item container sm={12} spacing={4}>
+          <Grid container item sm={12} md={12} justifyContent="space-between"
+            alignItems="center" spacing={3}>
+            <Grid item sm={12} md={5} >
+              <Typography align="center" variant="h4" component="h4" gutterBottom>
+                Subí tu archivo
+              </Typography>
+              <Typography align="center" variant="body1" gutterBottom >
+                Podes seleccionar un archivo en formato .PDF de tu almacenamiento local o de tu catálogo de archivos frecuentes
+              </Typography>
+            </Grid>
+            <Grid item sm={12} md={5} container justifyContent="center">
+              <img className={classes.imgPrincipal} src={require("./../src/images/home/Paso-1.svg")} />
+            </Grid>
+          </Grid>
+          <Grid container item sm={12} md={12} justifyContent="space-between"
+            alignItems="center" spacing={3}>
+            <Hidden smUp>
+              <Grid item sm={12} md={5} container justifyContent="center">
+                <Typography align="center" variant="h4" component="h4" gutterBottom>
+                  Elegí las opciones
+                </Typography>
+                <Typography align="center" variant="body1" gutterBottom >
+                  Podes elegir el tipo de impresión, color y papel
+                </Typography>
+              </Grid>
+              <Grid item sm={12} md={5} container justifyContent="center">
+                <img className={classes.imgPrincipal} src={require("./../src/images/home/Paso-2.svg")} />
+              </Grid>
+            </Hidden>
+            <Hidden xsDown>
+              <Grid item sm={12} md={5} container justifyContent="center">
+                <img className={classes.imgPrincipal} src={require("./../src/images/home/Paso-2.svg")} />
+              </Grid>
+              <Grid item sm={12} md={5} >
+                <Typography align="center" variant="h4" component="h4" gutterBottom>
+                  Elegí las opciones
+                </Typography>
+                <Typography align="center" variant="body1" gutterBottom >
+                  Podes elegir el tipo de impresión, color y papel
+                </Typography>
+              </Grid>
+            </Hidden>
+          </Grid>
+          <Grid container item sm={12} md={12} justifyContent="space-between"
+            alignItems="center" spacing={3}>
+            <Grid item sm={12} md={5} >
+              <Typography align="center" variant="h4" component="h4" gutterBottom>
+                Retiralo
+              </Typography>
+              <Typography align="center" variant="body1" gutterBottom >
+                Retiras tu impresión pagando desde la web o en el local
+              </Typography>
+            </Grid>
+            <Grid item sm={12} md={5} container justifyContent="center">
+              <img className={classes.imgPrincipal} src={require("./../src/images/home/Paso-3.svg")} />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Container>
     </LayoutCliente>
   );
 }
