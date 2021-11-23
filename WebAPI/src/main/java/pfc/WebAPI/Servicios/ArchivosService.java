@@ -27,12 +27,15 @@ import pfc.WebAPI.Infraestructura.Repositorios.IUsuarioRepository;
 import pfc.WebAPI.Infraestructura.Servicios.IArchivosService;
 import pfc.WebAPI.Infraestructura.Servicios.IFileStorageService;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
+import pfc.WebAPI.Infraestructura.Servicios.IPrecioService;
 
 @Service
 public class ArchivosService implements IArchivosService{
 
 	@Autowired
 	private IPedidoService _pedidoService;
+	@Autowired
+	private IPrecioService _precioService;
 	@Autowired
 	private IArchivoRepository _archivosRepository;
 	@Autowired
@@ -76,8 +79,8 @@ public class ArchivosService implements IArchivosService{
 
 	@Override
 	public float getPrecio(int numeroPaginas, TipoImpresion formato, TamanioHoja tamanio, Color color) {
-		// TODO Calcular precio
-		return 99;
+		return _precioService.getPrecio(color,tamanio,formato).getPrecio()*numeroPaginas;
+		//return 99;
 	}
 
 	@Override
@@ -94,7 +97,13 @@ public class ArchivosService implements IArchivosService{
 		Archivo nuevoArchivo = new Archivo();
 		nuevoArchivo.setPedido(pedido);
 		nuevoArchivo.setNumeroPaginas(this.getNumeroPaginas(archivo));
-		nuevoArchivo.setPrecio(this.getPrecio(nuevoArchivo.getNumeroPaginas(), formato, tamanio, color));
+		try {
+			nuevoArchivo.setPrecio(this.getPrecio(nuevoArchivo.getNumeroPaginas(), formato, tamanio, color));
+		}
+		catch(Exception e){
+			nuevoArchivo.setPrecio(0);
+		}
+
 		nuevoArchivo.setFechaIngreso(new java.sql.Date(System.currentTimeMillis()));
 		nuevoArchivo.setNombre(StringUtils.cleanPath(archivo.getOriginalFilename()));
 		nuevoArchivo.setTamanioHoja(tamanio);

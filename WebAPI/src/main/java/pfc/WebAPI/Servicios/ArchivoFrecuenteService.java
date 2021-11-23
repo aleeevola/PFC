@@ -102,7 +102,12 @@ public class ArchivoFrecuenteService implements IArchivoFrecuenteService{
 		DetalleArchivoFrecuente nuevoArchivo = new DetalleArchivoFrecuente();
 		nuevoArchivo.setPedido(pedido);
 		nuevoArchivo.setArchivoFrecuente(archivoFrecuente);
-		nuevoArchivo.setPrecio(this._archivosService.getPrecio(archivoFrecuente.getNumeroPaginas(), formato, tamanio, color));
+		try {
+			nuevoArchivo.setPrecio(this._archivosService.getPrecio(archivoFrecuente.getNumeroPaginas(), formato, tamanio, color));
+		}
+		catch(Exception e){
+			nuevoArchivo.setPrecio(0);
+		}
 		nuevoArchivo.setTamanioHoja(tamanio);
 		nuevoArchivo.setTipoImpresion(formato);
 		nuevoArchivo.setColor(color);

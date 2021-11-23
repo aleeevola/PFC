@@ -68,7 +68,7 @@ export default function LayoutCliente({ children }) {
                                             {/* <Button color="inherit">Realizar pedido</Button>
                                     <Button color="inherit">Buscar pedido</Button> */}
                                             <Button color="inherit" href="/precios">Precios</Button>
-                                            <Button color="inherit">Ayuda</Button>
+                                            <Button color="inherit" href="/ayuda">Ayuda</Button>
                                         </Grid>
                                     </Grid>
                                 </Container>

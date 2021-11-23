@@ -69,8 +69,8 @@ export default function EstadoPedidoDialog(props) {
   };
 
   const buttomNombre = (event, value) => {
-      if(idPedido!='')
-        getEstadoPedido();
+    if (idPedido != '')
+      getEstadoPedido();
   };
 
   const cerrarVentana = () => {
@@ -96,9 +96,9 @@ export default function EstadoPedidoDialog(props) {
     }
     catch (error) {
       setLoading(false);
-        setEstado("ERROR AL OBTENER EL ESTADO DEL PEDIDO")
-        console.error(error);
-        //throw new Error(error);
+      setEstado("ERROR AL OBTENER EL ESTADO DEL PEDIDO")
+      console.error(error);
+      //throw new Error(error);
     }
   }
 
@@ -113,8 +113,8 @@ export default function EstadoPedidoDialog(props) {
           Estado de pedido
         </DialogTitle>
         <DialogContent dividers>
-          <Grid container  spacing={2}  justifyContent="center"
-  alignItems="center">
+          <Grid container spacing={2} justifyContent="center"
+            alignItems="center">
             <Grid container justifyContent="space-between"
               alignItems="center" className={classes.buscador}>
               <InputBase
@@ -130,21 +130,21 @@ export default function EstadoPedidoDialog(props) {
             </Grid>
             <Grid container spacing={1} >
               {loading
-                ? 
+                ?
                 <Grid item >
                   <Fade
-                  in={loading}
-                  style={{
-                    transitionDelay: '0ms',
-                    width: '20px',
-                    height: '20px'
-                  }}
-                  unmountOnExit>
-                  <CircularProgress />
-                </Fade>
-                  </Grid>
+                    in={loading}
+                    style={{
+                      transitionDelay: '0ms',
+                      width: '20px',
+                      height: '20px'
+                    }}
+                    unmountOnExit>
+                    <CircularProgress />
+                  </Fade>
+                </Grid>
                 :
-                <>
+                <> {estado &&
                   <Grid item xs={12}>
                     <Typography variant="subtitle1" align="center" gutterBottom>
                       El estado de su pedido es:
@@ -153,7 +153,7 @@ export default function EstadoPedidoDialog(props) {
                       {estado}
                     </Typography>
                   </Grid>
-
+                  }
                 </>
               }
               <Grid item xs={12} >
@@ -162,9 +162,9 @@ export default function EstadoPedidoDialog(props) {
           </Grid>
         </DialogContent>
         <DialogActions>
-            <Button autoFocus onClick={cerrarVentana}>
-              Cerrar
-            </Button>
+          <Button autoFocus onClick={cerrarVentana}>
+            Cerrar
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -240,7 +240,7 @@ export default function Archivos(props) {
                                                         <StyledTableCell component="th" scope="row" className={classes.nombreArchivo}>{row.nombre}</StyledTableCell>
                                                         <StyledTableCell component="th" scope="row" align="center">{row.tipoImpresion}</StyledTableCell>
                                                         <StyledTableCell component="th" scope="row" align="center">{row.tamanioHoja}</StyledTableCell>
-                                                        <StyledTableCell component="th" scope="row" align="center">${row.precio}</StyledTableCell>
+                                                        <StyledTableCell component="th" scope="row" align="center">${row.precio>0? row.precio: "NA" }</StyledTableCell>
                                                     </StyledTableRow>
                                                 ))}
                                             </TableBody>

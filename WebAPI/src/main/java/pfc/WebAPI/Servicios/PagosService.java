@@ -10,6 +10,7 @@ import com.mercadopago.resources.datastructures.preference.Item;
 import com.mercadopago.resources.datastructures.preference.Payer;
 
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
+import pfc.WebAPI.Infraestructura.Entidades.DetalleArchivoFrecuente;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoFrontMP;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPago;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
@@ -47,21 +48,24 @@ public class PagosService implements  IPagosService{
 		}
 		pago.setMetodoDePago(MetodoDePago.MERCADO_PAGO);
 		pago.setEstado(EstadoPago.PENDIENTE);
-		float total = 140;
 
-		//TODO: Calcular el total que va a pagar
-//		for (Archivo archivo: pedido.getArchivos()){
-//			try {
-//				total = total + archivo.getPrecio();				
-//			}
-//			catch(RuntimeException e) {
-//				
-//			}
-//			};
-		
-		pago.setTotal(total);
-		
-		
+		float total = 0;
+		for(Archivo archivo :pedido.getArchivos()){
+			if(archivo.getPrecio()==0){
+				//TODO:SETEAR PARCIAL?
+			}
+			total=archivo.getPrecio()+total;
+		};
+		for(DetalleArchivoFrecuente archivoF :pedido.getDetalleArchivosFrecuentes()){
+			total=archivoF.getPrecio()+total;
+		};
+		if(total==0){
+			pago.setTotal(1);
+		}
+		else {
+			pago.setTotal(total);
+		}
+
 		//ARMO EL ITEM DE MERCADO PAGO
 		Preference preference = new Preference();
 
@@ -71,11 +75,7 @@ public class PagosService implements  IPagosService{
 		    .setQuantity(1)
 		    .setUnitPrice((float) pago.getTotal());
 		preference.appendItem(item);
-		
-		//Datos del cliente
-		//Payer payer = new Payer();
-		//payer.setEmail(pedido.getUsuario().getEmail());
-		//preference.setPayer(payer);
+
 		
 		BackUrls backUrls = new BackUrls(
                 "http://localhost:3000/pedido/result/exito",
@@ -112,7 +112,16 @@ public class PagosService implements  IPagosService{
 		pago.setEstado(EstadoPago.PENDIENTE);
 
 		//TODO: Calcular el total que va a pagar
-		float total = 140;
+		float total = 0;
+		for(Archivo archivo :pedido.getArchivos()){
+			if(archivo.getPrecio()==0){
+				//TODO:SETEAR PARCIAL?
+			}
+			total=archivo.getPrecio()+total;
+		};
+		for(DetalleArchivoFrecuente archivoF :pedido.getDetalleArchivosFrecuentes()){
+			total=archivoF.getPrecio()+total;
+		};
 		pago.setTotal(total);
 
 		pedido.setEstado(EstadoPedido.PENDIENTE);

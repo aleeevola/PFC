@@ -34,7 +34,7 @@ export default function NuevoArchivoDialog(props) {
   React.useEffect(() => {
     if (props.visible)
       getPrecio();
-  }, [formato, tamanio, color, props.numeroDePaginas]);
+  }, [formato, tamanio, color, props.numeroDePaginas, props.visible]);
 
   React.useEffect(() => {
     if (tamanio === 5 && observaciones == '')
