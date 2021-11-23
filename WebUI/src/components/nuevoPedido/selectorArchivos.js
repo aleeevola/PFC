@@ -12,6 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import NuevoArchivoDialog from './nuevoArchivo'
+import NuevoArchivoFrecuenteDialog from './nuevoArchivoFrecuente'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import Hidden from '@material-ui/core/Hidden';
 import Backdrop from '@material-ui/core/Backdrop';
@@ -75,6 +76,7 @@ export default function Archivos(props) {
     const classes = useStyles();
 
     const [editarArchivo, setEditarArchivo] = useState(false);
+    const [editarArchivoFrecuente, setEditarArchivoFrecuente] = useState(false);
     const [listaFrecuentes, setListaFrecuentes] = useState(false);
     const [inputArchivo, setInputArchivo] = useState(null);
     const [numeroPaginas, setNumeroPaginas] = useState(null);
@@ -82,12 +84,23 @@ export default function Archivos(props) {
     const [disabledSiguiente, SetDisableSiguiente] = useState(true);
     const [archivos, SetArchivos] = useState([]);
 
+    const [frecuenteSeleccionado, SetFrecuenteSeleccionado] = useState(null);
+
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        if (archivos.length > 0)
+        if (archivos.length > 0){
             SetDisableSiguiente(false);
+            props.actualizarListaArchivos(archivos);
+        }
     }, [archivos]);
+
+    useEffect(() => {
+        if (archivos.length < 1 && props.backupArchivos){
+            SetArchivos(props.backupArchivos)
+        }
+    }, [props.backupArchivos]);
+
 
     useEffect(() => {
         if (inputArchivo)
@@ -99,6 +112,13 @@ export default function Archivos(props) {
             setEditarArchivo(true);
         }
     }, [numeroPaginas]);
+
+    useEffect(() => {
+        setListaFrecuentes(false);
+        if (frecuenteSeleccionado) {
+            setEditarArchivoFrecuente(true);
+        }
+    }, [frecuenteSeleccionado]);
 
     const getNumeroPaginas = async (input) => {
         console.log("getNumeroPaginas");
@@ -126,6 +146,8 @@ export default function Archivos(props) {
         }
     };
 
+    
+
     const handleNext = () => {
         props.next();
     };
@@ -147,13 +169,34 @@ export default function Archivos(props) {
                     setInputArchivo(null);
                     setNumeroPaginas(null)
                 }}
-                addFile={nuevoArchivo => { SetArchivos([...archivos, nuevoArchivo]); props.newIdPedido(nuevoArchivo.idPedido) }}
+                addFile={nuevoArchivo => { 
+                    SetArchivos([...archivos, nuevoArchivo]); 
+                    props.newIdPedido(nuevoArchivo.idPedido); }}
             />
-            <ListaFrecuentesDialog visible={listaFrecuentes} setVisible={event => {
-                    setListaFrecuentes(event);
+            <ListaFrecuentesDialog 
+                visible={listaFrecuentes} 
+                setVisible={event => {
+                    selectArchivoFrecuente(event);
+                }}
+                selectArchivo={event => {
+                    SetFrecuenteSeleccionado(event);
                 }}>
 
             </ListaFrecuentesDialog>
+            
+            <NuevoArchivoFrecuenteDialog 
+                visible={editarArchivoFrecuente} 
+                numeroDePaginas={frecuenteSeleccionado?frecuenteSeleccionado.numeroPaginas:0} 
+                idArchivoFrecuente={frecuenteSeleccionado?frecuenteSeleccionado.idArchivoFrecuente:0} 
+                archivo={frecuenteSeleccionado}
+                idPedido={props.idPedido}
+                setVisible={event => {
+                    setEditarArchivoFrecuente(event);
+                    SetFrecuenteSeleccionado(null);
+                    setNumeroPaginas(null);
+                }}
+                addFile={nuevoArchivo => { SetArchivos([...archivos, nuevoArchivo]); props.newIdPedido(nuevoArchivo.idPedido) }}
+            />
             <div >
                 <form className={classes.form} noValidate>
                     <Grid container spacing={2}>

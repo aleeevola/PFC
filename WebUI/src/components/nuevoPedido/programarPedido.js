@@ -43,14 +43,13 @@ export default function ProgramarPedido(props) {
 
   useEffect(() => {
     if (fechaEntrega) {
-      console.log("holi")
       const fechaEntregaISO=parseISO(fechaEntrega);
       const fechaActual = new Date();
       if (fechaEntregaISO.getTime() < fechaActual.getTime())
         setFechaEntregaError(true);
-      else if(fechaEntregaISO.getHours()>'19')
+      else if(fechaEntregaISO.getHours()>'13')
         setFechaEntregaError(true);
-      else if(fechaEntregaISO.getHours()<'9')
+      else if(fechaEntregaISO.getHours()<'8')
         setFechaEntregaError(true);
       else if(fechaEntregaISO.toString().slice(0, 3)=='Sun')
         setFechaEntregaError(true);
@@ -58,7 +57,6 @@ export default function ProgramarPedido(props) {
         setFechaEntregaError(false);
     }
     else{
-      console.log("chau")
       setFechaEntregaError(true);
     }
   }, [fechaEntrega]);
@@ -119,7 +117,7 @@ export default function ProgramarPedido(props) {
               onChange={e => setFechaEntrega(e.target.value)}
               error={fechaEntregaError}
               variant="outlined"
-              helperText="Lunes a Sábados de 9:00hs a 19:00hs"
+              helperText="Lunes a Viernes de 8:00hs a 13:00hs"
             />
           </Grid>
           <Grid item xs={12}>

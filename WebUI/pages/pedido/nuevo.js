@@ -37,6 +37,7 @@ export default function NuevoPedido() {
 
   const [disabledSiguiente, SetDisableSiguiente] = React.useState(true);
   const [idPedido, SetIdPedido] = React.useState(0);
+  const [archivos, SetArchivos] = React.useState(null);
 
 
   const isStepSkipped = (step) => {
@@ -66,7 +67,9 @@ export default function NuevoPedido() {
     switch (activeStep) {
       case 0:
         return <Archivos next={handleNext} back={handleBack} idPedido={idPedido} 
-        newIdPedido={value => { SetIdPedido(value); }} />;
+        newIdPedido={value => { SetIdPedido(value); }} 
+        backupArchivos={archivos}
+        actualizarListaArchivos={value => { SetArchivos(value); }} />;
       case 1:
         return <ProgramarPedido idPedido={idPedido} next={handleNext} back={handleBack}/>;
       case 2:

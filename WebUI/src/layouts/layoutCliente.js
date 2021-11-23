@@ -13,6 +13,10 @@ import Link from 'next/link';
 
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        margin:'0',
+        background: '#F7FAFC',
+    },
     appbar: {
         backgroundColor: '#F7FAFC',
         boxShadow: 'none',
@@ -35,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: '#F7FAFC',
         //padding: '0.5rem 0rem 0.5rem 0rem',
         padding: '0rem',
+        margin:'0rem'
     },
     logo: {
         maxHeight: '3rem',
@@ -73,16 +78,24 @@ export default function LayoutCliente({ children }) {
                     <Grid item container sm={12} className={classes.menu}>
                         <main className={classes.children}>{children}</main>
                     </Grid>
-                    <Grid item container sm={12} justifyContent="center" alignItems="center" className={classes.piedepagina}>
+                    <Grid item container sm={12} justifyContent="center" alignItems="center" className={classes.piedepagina} spacing={2} >
                         <Grid item container sm={12} justifyContent="center" alignItems="center">
                             <img className={classes.logo} src={require('../images/logo.svg')} />
                         </Grid>
                         <Grid item sm={12}>
-                            <Typography align="center" variant="h5" component="h5">
-                                +54 342 5118011
+                            <Typography align="center" variant="body1">
+                                San Martin 1905 - Santo Tomé
+                            </Typography>
+                            <Typography align="center" variant="h5" >
+                                +54 342 5066420
+                            </Typography>
+                            <Typography align="center" variant="body1">
+                                Horario de atención de 8:00 a 13:00 de Lunes a Viernes
                             </Typography>
                         </Grid>
-                        <Copyright></Copyright>
+                        <Grid item sm={12}>
+                            <Copyright></Copyright>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Container>

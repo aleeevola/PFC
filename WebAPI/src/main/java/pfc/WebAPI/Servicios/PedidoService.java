@@ -64,6 +64,11 @@ public class PedidoService implements IPedidoService{
 	}
 
 	@Override
+	public String getEstado(int idPedido) {
+		return this._pedidoRepository.findById(idPedido).get().getEstado().toString();
+	}
+
+	@Override
 	public List<Pedido> findAll() {
 		return _pedidoRepository.findAll();
 	}

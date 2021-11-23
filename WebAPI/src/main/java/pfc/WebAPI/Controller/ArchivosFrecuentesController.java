@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Archivo;
 import pfc.WebAPI.Infraestructura.Entidades.ArchivoFrecuente;
 import pfc.WebAPI.Infraestructura.Entidades.DetalleArchivoFrecuente;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.ArchivoTablaDto;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
@@ -97,6 +98,36 @@ public class ArchivosFrecuentesController {
 //			throw new Exception(e.getCause());
 //		}
 		return null;
+	}
+
+	@PostMapping("/agregarAPedido")
+	@ResponseBody
+	@ApiOperation(value = "nuevo")
+	public ResponseEntity<ArchivoTablaDto> nuevoArchivo(
+			@RequestParam("idArchivoFrecuente") int idArchivoFrecuente,
+			@RequestParam("formato") int formato,
+			@RequestParam("tamanio") int tamanio,
+			@RequestParam("idPedido") int idPedido,
+			@RequestParam("color") int color,
+			@RequestParam("observaciones") String observaciones) throws Exception{
+
+		try {
+			DetalleArchivoFrecuente archivo = this._archivoFrecuenteService.agregarAPedido(idPedido,idArchivoFrecuente, TipoImpresion.valueOf(formato), TamanioHoja.valueOf(tamanio),Color.valueOf(color),observaciones);
+
+			ArchivoTablaDto archivoResult= new ArchivoTablaDto();
+			archivoResult.setIdArchivo(archivo.getArchivoFrecuente().getIdArchivoFrecuente());
+			archivoResult.setNombre(archivo.getArchivoFrecuente().getNombre());
+			archivoResult.setColor(archivo.getColor());
+			archivoResult.setPrecio(archivo.getPrecio());
+			archivoResult.setTamanioHoja(archivo.getTamanioHoja());
+			archivoResult.setIdPedido(archivo.getPedido().getIdPedido());
+			archivoResult.setTipoImpresion(archivo.getTipoImpresion());
+
+			return ResponseEntity.ok(archivoResult);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new Exception(e.getCause());
+		}
 	}
 	
 	

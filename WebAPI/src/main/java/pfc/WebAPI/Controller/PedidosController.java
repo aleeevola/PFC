@@ -84,5 +84,11 @@ public class PedidosController {
 	public List<Pedido> getPedidoByEstado(@PathVariable("estado") String estado) {
 		return this._pedidoService.obtenerPedidoByEstado(EstadoPedido.valueOf(estado));
 	}
+
+	@GetMapping("/estado")
+	@ApiOperation(value = "Obtener el estado de un pedido")
+	public String getEstado(@RequestParam("idPedido") int idPedido) {
+		return this._pedidoService.getEstado(idPedido);
+	}
 	
 }

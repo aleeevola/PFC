@@ -21,4 +21,5 @@ public interface IPedidoService {
 	public Pedido updatePedido(Date fechaEntrega,String email,String nombre,int idPedido);
 	public Pedido updateEstadoPedido(EstadoPedido estado, int idPedido, String email);
 	public PedidoDto obtenerPedidoDto(int idPedido);
+	public String getEstado(int idPedido);
 }

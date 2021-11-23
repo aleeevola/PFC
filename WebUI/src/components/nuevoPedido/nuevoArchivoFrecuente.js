@@ -18,7 +18,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
 
 
-export default function NuevoArchivoDialog(props) {
+export default function NuevoArchivoFrecuenteDialog(props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -42,21 +42,23 @@ export default function NuevoArchivoDialog(props) {
     else setObservacionesError(false);
   }, [tamanio, observaciones]);
 
-  const postNuevoArchivo = async (event) => {
-    console.log("postNuevoArchivo");
+  const postNuevoArchivoFrecuente = async (event) => {
+    console.log("postNuevoArchivoFrecuente");
     const data = new FormData();
     data.append("idPedido", props.idPedido);
-    data.append("file", props.archivo);
+
     data.append("formato", formato);
     data.append("tamanio", tamanio);
     data.append("color", color);
     data.append("observaciones", observaciones);
 
+    data.append("idArchivoFrecuente", props.idArchivoFrecuente);
+
     const apiurl = process.env.apiURL;
 
     try {
       setLoading(true)
-      const response = await fetch(apiurl + "/archivos/nuevo", {
+      const response = await fetch(apiurl + "/archivosFrecuentes/agregarAPedido", {
         method: "POST",
         mode: 'cors',
         body: data,
@@ -193,7 +195,7 @@ export default function NuevoArchivoDialog(props) {
             unmountOnExit>
             <CircularProgress />
           </Fade>
-          <Button onClick={postNuevoArchivo} autoFocus variant="contained" color="primary" disabled={observacionesError}>
+          <Button onClick={postNuevoArchivoFrecuente} autoFocus variant="contained" color="primary" disabled={observacionesError}>
             Agregar
           </Button>
           <Button autoFocus onClick={cerrarVentana}>

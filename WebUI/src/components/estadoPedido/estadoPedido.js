@@ -53,70 +53,52 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ListaFrecuentesDialog(props) {
+export default function EstadoPedidoDialog(props) {
   const classes = useStyles();
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
-
-
   const [loading, setLoading] = React.useState(false);
+  const [idPedido, setIdPedido] = React.useState('');
 
-  const [page, setPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(6);
-  const [totalPages, setTotalPages] = React.useState(0);
-  const [nombreArchivo, setNombreArchivo] = React.useState('');
-  const [archivos, setArchivos] = React.useState([]);
+  const [estado, setEstado] = React.useState(null);
 
-  React.useEffect(() => {
-    if (props.visible) {
-      getArchivosFrecuentes();
-    }
-  }, [props.visible, page]);
 
-  const pageChange = (event, value) => {
-    setPage(value);
-  };
-
-  const nombreChange = (event) => {
-    setNombreArchivo(event.target.value);
+  const idPedidoChange = (event) => {
+    setIdPedido(event.target.value);
   };
 
   const buttomNombre = (event, value) => {
-    if(page===1)
-     getArchivosFrecuentes();
-    else
-      setPage(1)
+      if(idPedido!='')
+        getEstadoPedido();
   };
-
-  const selectArchivo = (value) => {
-    props.selectArchivo(value);
-  };
-
 
   const cerrarVentana = () => {
     props.setVisible(false)
   }
 
-  const getArchivosFrecuentes = async () => {
+  const getEstadoPedido = async () => {
     const apiurl = process.env.apiURL;
     setLoading(true)
     try {
-      const response = await fetch(apiurl + "/archivosFrecuentes/porNombrePaginado?nombre=" + nombreArchivo + "&page=" + page + "&pageSize=" + pageSize, {
+      const response = await fetch(apiurl + "/pedidos/estado?idPedido=" + idPedido, {
         method: "GET",
         mode: 'cors'
       });
       if (!response.ok) {
         setLoading(false);
+        setEstado("ERROR AL OBTENER EL ESTADO DEL PEDIDO")
         throw new Error(response.statusText);
       }
-      const res = await response.json();
-      setTotalPages(res.totalPages);
-      setArchivos(res.content)
+      const res = await response.text();
+      setEstado(res);
       setLoading(false)
     }
     catch (error) {
-      console.error(error);
+      setLoading(false);
+        setEstado("ERROR AL OBTENER EL ESTADO DEL PEDIDO")
+        console.error(error);
+        //throw new Error(error);
     }
   }
 
@@ -128,13 +110,29 @@ export default function ListaFrecuentesDialog(props) {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="customized-dialog-title">
-          Repositorio
+          Estado de pedido
         </DialogTitle>
         <DialogContent dividers>
-          <div>
+          <Grid container  spacing={2}  justifyContent="center"
+  alignItems="center">
+            <Grid container justifyContent="space-between"
+              alignItems="center" className={classes.buscador}>
+              <InputBase
+                className={classes.input}
+                placeholder="Numero de pedido"
+                value={idPedido}
+                type="number"
+                onChange={idPedidoChange}
+              />
+              <IconButton type="submit" className={classes.iconButton} aria-label="search" onClick={buttomNombre} color="secondary">
+                <SearchIcon />
+              </IconButton>
+            </Grid>
             <Grid container spacing={1} >
               {loading
-              ?<Fade
+                ? 
+                <Grid item >
+                  <Fade
                   in={loading}
                   style={{
                     transitionDelay: '0ms',
@@ -144,54 +142,29 @@ export default function ListaFrecuentesDialog(props) {
                   unmountOnExit>
                   <CircularProgress />
                 </Fade>
-              : 
-              <>
-              <Grid container justifyContent="space-between"
-                alignItems="center" className={classes.buscador}>
-                <InputBase
-                  className={classes.input}
-                  placeholder="Nombre del archivo"
-                  value={nombreArchivo}
-                  onChange={nombreChange}
-                />
-                <IconButton type="submit" className={classes.iconButton} aria-label="search" onClick={buttomNombre} color="secondary">
-                  <SearchIcon />
-                </IconButton>
-              </Grid>
-              <Grid item xs={12}>
-                <List component="li">
-                  <Divider />
-                  {archivos.length>0 && archivos.map((row) => (
-                    <>
-                      <ListItem button onClick={()=>selectArchivo(row)} >
-                        <ListItemText primary={row.nombre} secondary="descipcion?" />
-                      </ListItem>
-                      <Divider />
-                    </>
-                  ))}
-                </List>
-              </Grid>
-              <Grid item xs={12} >
-                <Pagination count={totalPages} page={page} variant="outlined" shape="rounded" onChange={pageChange} />
-              </Grid>
-              </>
+                  </Grid>
+                :
+                <>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" align="center" gutterBottom>
+                      El estado de su pedido es:
+                    </Typography>
+                    <Typography variant="h5" align="center" gutterBottom>
+                      {estado}
+                    </Typography>
+                  </Grid>
+
+                </>
               }
               <Grid item xs={12} >
               </Grid>
             </Grid>
-          </div>
+          </Grid>
         </DialogContent>
         <DialogActions>
-          <Grid container justifyContent="space-between"
-            alignItems="center" >
-            <Typography variant="caption" display="block" gutterBottom>
-              Seleccione un archivo para agregarlo a su pedido.
-            </Typography>
-
             <Button autoFocus onClick={cerrarVentana}>
-              Cancelar
+              Cerrar
             </Button>
-          </Grid>
         </DialogActions>
       </Dialog>
     </div>

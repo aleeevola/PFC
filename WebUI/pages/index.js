@@ -11,12 +11,14 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import LayoutCliente from '../src/layouts/layoutCliente';
 import Hidden from '@material-ui/core/Hidden';
+import EstadoPedidoDialog from '../src/components/estadoPedido/estadoPedido'
 
 const useStyles = makeStyles((theme) => ({
-  typography: {
-    h3: {
-      fontWeight: 600//'bold',
-    },
+
+  precios:{
+    backgroundColor:'#E6F6FE',
+    padding:'2rem 1rem',
+    borderRadius: '10px',
   },
   boton: {
     color:'#ffff'
@@ -42,8 +44,20 @@ export default function Index() {
   const handleChange = (event) => {
     setName(event.target.value);
   };
+
+  const [openEstadoPedido, setOpenEstadoPedido] = React.useState(false);
+
+  const abrirEstado = () => {
+    setOpenEstadoPedido(true)
+  }
+
   return (
     <LayoutCliente >
+      <EstadoPedidoDialog 
+                visible={openEstadoPedido} 
+                setVisible={event => {
+                    setOpenEstadoPedido(event);
+                }} > </EstadoPedidoDialog>
       <Container disableGutters maxWidth={false} className={classes.encambezado} >
         <Grid container justifyContent="center" alignItems="center" spacing={2}>
           <Grid item sm={12} md={12} >
@@ -77,7 +91,7 @@ export default function Index() {
                 </Button>
               </Grid>
               <Grid item xs={12} md={4} >
-                <Button variant="outlined" color="secondary" href="#contained-buttons" fullWidth >
+                <Button variant="outlined" color="secondary" href="#contained-buttons" onClick={abrirEstado} fullWidth >
                   Buscar un pedido
                 </Button>
               </Grid>
@@ -143,6 +157,47 @@ export default function Index() {
             </Grid>
             <Grid item sm={12} md={5} container justifyContent="center">
               <img className={classes.imgPrincipal} src={require("./../src/images/home/Paso-3.svg")} />
+            </Grid>
+          </Grid>
+
+          {/* TODO: PRECIOS  */}
+          <Grid container item sm={12} md={12} justifyContent="space-between"
+            alignItems="center" spacing={3}>
+            <Grid item sm={12} md={12} >
+              <Typography align="center" variant="h4" component="h4" style={{ fontWeight: 600 }}>
+                Precios
+              </Typography>
+            </Grid>
+            <Grid  container justifyContent="center" alignItems="center" className={classes.precios} spacing={2}>
+              <Grid item sm={12} md={3}>
+                <Typography align="center" variant="h6" component="h6" style={{ fontWeight: 600 }}>
+                  Copia simple A4
+                </Typography>
+                <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 100 }}>
+                  $5,00
+                </Typography>
+              </Grid>
+              <Grid item sm={12} md={3}>
+                <Typography align="center" variant="h6" component="h6" style={{ fontWeight: 600 }}>
+                  Copia doble faz A4
+                </Typography>
+                <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 100 }}>
+                  $8,00
+                </Typography>
+              </Grid>
+              <Grid item sm={12} md={3}>
+                <Typography align="center" variant="h6" component="h6" style={{ fontWeight: 600 }}>
+                  Copia color A4
+                </Typography>
+                <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 100 }}>
+                  $17,00
+                </Typography>
+              </Grid>
+              <Grid item sm={12} md={3}>
+                <Button variant="contained" color="primary" href="/"  className={classes.boton} fullWidth>
+                  Ver mas precios
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
