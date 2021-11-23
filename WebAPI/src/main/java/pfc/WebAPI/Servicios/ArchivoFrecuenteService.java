@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -60,6 +64,7 @@ public class ArchivoFrecuenteService implements IArchivoFrecuenteService{
 	public ArchivoFrecuente postArchivoFrecuente(MultipartFile archivo) throws IOException {
 		ArchivoFrecuente archivoFrecuente = new ArchivoFrecuente();
 		archivoFrecuente.setNombre(StringUtils.cleanPath(archivo.getOriginalFilename()));
+		archivoFrecuente.setNumeroPaginas(this.getNumeroPaginas(archivo));
 		
 		ArchivoFrecuente saveArchivo = this._archivoFrecuenteRepository.save(archivoFrecuente);
 		
@@ -111,6 +116,36 @@ public class ArchivoFrecuenteService implements IArchivoFrecuenteService{
 	@Override
 	public void deleteArchivoFrecuente(int idArchivoFrecuente) {
 		this._archivoFrecuenteRepository.deleteById(idArchivoFrecuente);		
+	}
+	
+	@Override
+	public int getNumeroPaginas(MultipartFile archivo) throws IOException {
+		String nombre = archivo.getOriginalFilename();
+		
+		if(nombre.endsWith(".pdf")) {
+			PDDocument doc = Loader.loadPDF(archivo.getBytes());
+			return doc.getNumberOfPages();
+		}
+		else if (nombre.endsWith(".docx")) {
+			
+//			File convFile = new File(archivo.getOriginalFilename());
+//		      convFile.createNewFile();
+//		      FileOutputStream fos = new FileOutputStream(convFile);
+//		      fos.write(archivo.getBytes());
+//		      fos.close();
+//
+//		      FileInputStream fis = new FileInputStream(convFile.getAbsolutePath());
+//
+//		      XWPFDocument docx = new XWPFDocument(fis);
+			 XWPFDocument docx = new XWPFDocument(archivo.getResource().getInputStream());
+			 
+			 return docx.getProperties().getExtendedProperties().getUnderlyingProperties().getPages();
+		}
+		else if (nombre.endsWith(".doc")) {
+	         HWPFDocument wordDoc = new HWPFDocument(archivo.getResource().getInputStream());
+	         return wordDoc.getSummaryInformation().getPageCount();
+	     }
+		throw new IOException("Formato de archivo no soportado");
 	}
 
 }

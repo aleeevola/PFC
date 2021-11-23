@@ -12,6 +12,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import LayoutCliente from '../src/layouts/layoutCliente';
 import Hidden from '@material-ui/core/Hidden';
 import EstadoPedidoDialog from '../src/components/estadoPedido/estadoPedido'
+import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -44,12 +45,40 @@ export default function Index() {
   const handleChange = (event) => {
     setName(event.target.value);
   };
+  const [precios, setPrecios] = React.useState([]);
+  const [precioSimpleA4, setPrecioSimpleA4] = React.useState(0);
+  const [precioDobleA4, setPrecioDobleA4] = React.useState(0);
+  const [precioColorA4, setPrecioColorA4] = React.useState(0);
 
+  
   const [openEstadoPedido, setOpenEstadoPedido] = React.useState(false);
 
   const abrirEstado = () => {
     setOpenEstadoPedido(true)
   }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const apiurl = process.env.apiURL;
+      const res = await fetch(apiurl + '/precios');
+      const p = await res.json();
+      setPrecios(p);
+      p.map((item) => {
+        if(item.color == 'ESCALA_DE_GRISES' && item.tamanioHoja == 'A4' && item.tipoImpresion == 'SIMPLE')
+        setPrecioSimpleA4(item.precio);
+        else{
+          if(item.color == 'ESCALA_DE_GRISES' && item.tamanioHoja == 'A4' && item.tipoImpresion == 'DOBLE')
+          setPrecioDobleA4(item.precio);
+          else{
+            if(item.color == 'COLOR' && item.tamanioHoja == 'A4' && item.tipoImpresion == 'SIMPLE')
+            setPrecioColorA4(item.precio);
+          }
+        }
+      });
+    };
+    fetchData();
+
+  }, []);
 
   return (
     <LayoutCliente >
@@ -174,7 +203,7 @@ export default function Index() {
                   Copia simple A4
                 </Typography>
                 <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 100 }}>
-                  $5,00
+                  ${precioSimpleA4}
                 </Typography>
               </Grid>
               <Grid item sm={12} md={3}>
@@ -182,7 +211,7 @@ export default function Index() {
                   Copia doble faz A4
                 </Typography>
                 <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 100 }}>
-                  $8,00
+                  ${precioDobleA4}
                 </Typography>
               </Grid>
               <Grid item sm={12} md={3}>
@@ -190,11 +219,11 @@ export default function Index() {
                   Copia color A4
                 </Typography>
                 <Typography align="center" variant="h3" component="h3" style={{ fontWeight: 100 }}>
-                  $17,00
+                  ${precioColorA4}
                 </Typography>
               </Grid>
               <Grid item sm={12} md={3}>
-                <Button variant="contained" color="primary" href="/"  className={classes.boton} fullWidth>
+                <Button variant="contained" color="primary" href="/precios"  className={classes.boton} fullWidth>
                   Ver mas precios
                 </Button>
               </Grid>
@@ -204,4 +233,18 @@ export default function Index() {
       </Container>
     </LayoutCliente>
   );
+}
+
+export async function getStaticProps() {
+  const apiurl = process.env.apiURL;
+  const res = await fetch(apiurl + '/precios');
+  const precios = await res.json()
+  if (!precios) {
+    return { notFound: true };
+  }
+  return {
+    props: {
+      precios,
+    },
+  };  
 }

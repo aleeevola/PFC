@@ -29,4 +29,6 @@ public interface IArchivoFrecuenteService {
 	DetalleArchivoFrecuente agregarAPedido(int idPedido, int idArchivoFrecuente, TipoImpresion formato, TamanioHoja tamanio, Color color, String observaciones) throws IOException;
 
 	public void deleteArchivoFrecuente(int idArchivoFrecuente);
+
+	int getNumeroPaginas(MultipartFile archivo) throws IOException;
 }
