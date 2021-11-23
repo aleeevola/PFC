@@ -99,17 +99,31 @@ export default function ArchivosFrecuentes(props) {
  const classes = useStyles();
  const { user, error} = useUser();
  const [idArchivoFrecuente, SetidArchivoFrecuente] = React.useState(0);
+ const [refrescarLista, setRefrescarLista] = React.useState(false);
+
+ useEffect(() => {
+   if(refrescarLista){
+    //TODO
+   }
+ 
+}, [refrescarLista]);
 
 if(user){  
   return (
     <Dashboard>
     <>
     <div>
-        <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
-        ARCHIVOS FRECUENTES    
-        </Typography>       
-        <Archivos idArchivoFrecuente={idArchivoFrecuente} 
-        newIdArchivoFrecuente={value => { SetIdArchivoFrecuente(value); }} />
+      <Grid container xs={12} md={12} lg={12}>
+        <Grid container xs={12} md={8} lg={10}>
+          <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
+          ARCHIVOS FRECUENTES           
+          </Typography>
+        </Grid>
+        <Grid container xs={12} md={4} lg={2}>
+          <Archivos className={classes.title} idArchivoFrecuente={idArchivoFrecuente} 
+          newIdArchivoFrecuente={value => { SetIdArchivoFrecuente(value); }} />
+        </Grid>
+      </Grid>    
         <Grid item xs={12} md={12} lg={12}>
                             <br/>                            
                                 <TableContainer component={Paper}>
@@ -129,17 +143,26 @@ if(user){
                                                     <TableCell align="center">                                                        
                                                     </TableCell>                                                                                                
                                                     <TableCell align="right">
-                                                        <Button variant="outlined" 
-                                                                onClick={async (e) => {
-                                                                            const { value } = e.currentTarget                                                                            
-                                                                            console.log('http://localhost:8080/archivos/');                                                       
-                                                                            fetch(urlArchivo)
-                                                                            .then(response => {
-                                                                                response.blob().then(blob => {
-                                                                                    let url = URL.createObjectURL(blob);
-                                                                                    printJS(url);                                                                                               
-                                                                                });
-                                                                            });
+                                                        <Button variant="outlined" color="secondary" 
+                                                                onClick={async (e) => {                                                                 
+                                                                            const { value } = e.currentTarget   
+                                                                            const data = new FormData();
+                                                                            data.append("idArchivoFrecuente", item.id);
+                                                                            const apiurl = process.env.apiURL;
+                                                                            try {
+                                                                              const response = await fetch(apiurl + "/archivosFrecuentes/eliminar", {
+                                                                                method: "DELETE",
+                                                                                mode: 'cors',
+                                                                                body: data,
+                                                                              });
+                                                                              if (!response.ok)
+                                                                                throw new Error(response.statusText);
+                                                                            }
+                                                                            catch (error) {
+                                                                              console.error(error);
+                                                                            }  
+                                                                            setRefrescarLista(true);
+                                                                                                                                                       
                       
                               }}>Eliminar</Button></TableCell>
                                                 </TableRow>                                                 
@@ -150,10 +173,6 @@ if(user){
                                 </TableContainer>
                                 </Grid> 
     </div>
-     <div style={{ height: 600, width: '100%' }}>
-
-    </div>
-
     </>
     </Dashboard> 
     

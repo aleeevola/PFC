@@ -61,6 +61,17 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: '20ch',
         lineBreak: 'anywhere',
     },
+    btnBox: {
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'center',
+        backgroundColor: "#3dbbedb8",
+        color: '#FFFFFF',
+        fontFamily: 'Roboto',
+        fontWeight: 'regular',
+        marginTop: '-16px',
+        borderRadius: 2,
+      },
 }));
 
 export default function Archivos(props) {
@@ -151,7 +162,7 @@ export default function Archivos(props) {
                             onChange={(event) => { (event.target.files && event.target.files[0]) ? setInputArchivo(event.target.files[0]) : setInputArchivo(null) }}
                         />
                         <label htmlFor="contained-button-file">
-                            <Button variant="contained" color="primary" component="span">
+                            <Button className={classes.btnBox} variant="contained" color="primary" component="span">
                                 Subir Archivo
                             </Button>
                         </label>

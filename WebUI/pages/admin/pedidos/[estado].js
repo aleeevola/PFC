@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import Cargando from '../../../src/components/Cargando';
+import { format } from "date-fns";
 
 import { useUser } from "@auth0/nextjs-auth0";
 
@@ -32,13 +34,17 @@ export async function getStaticProps({ params }) {
 
       const pedidos = pedidosRes.map((pedido) => {
         const id = pedido.idPedido  
-        const nombre = pedido.usuario.nombre         
+        const nombre = pedido.usuario.nombre    
+        const email = pedido.usuario.email     
         const estado = pedido.estado
-        const fechaEstimadaEntrega = pedido.fechaEstimadaEntrega
+        var date = new Date(pedido.fechaEstimadaEntrega);
+        const fechaEstimadaEntrega = format(date, "dd/MM/yyyy 'a las' HH:mm");
+   
     
         return {
           estado,
           nombre,
+          email,
           id,
           fechaEstimadaEntrega
         }
@@ -55,32 +61,32 @@ export async function getStaticProps({ params }) {
     const columns = [
       { field: 'id',
       headerName: 'ID',
-      width: 90 },  
+      width: 110 },  
       {
         field: 'nombre',
         headerName: 'Nombre',
-        width: 160,
+        width: 220,
       },
       {
         field: 'estado',
         headerName: 'Estado',  
-        width: 140,       
+        width: 150,       
       },
       {
         field: 'fechaEstimadaEntrega',
-        headerName: 'Fecha límite',
-        width: 155,
+        headerName: 'Fecha estimada entrega',
+        width: 230,
       },  
       {
         field: 'email',
         headerName: 'Email',
         type: 'email',
-        width: 215,
+        width: 240,
       },
       {
         field: " ",
         headerName: '', 
-        width: 200,
+        width: 220,
         sortable: false,
         filtrable: false,
         editable: false,    
@@ -88,7 +94,7 @@ export async function getStaticProps({ params }) {
           return <Button variant="outlined"  
                         color="primary"           
                           style={{ marginLeft: 16 }}
-                          ><Link style={{ textDecoration: "none" }} href={`/admin/pedido/${cellValues.row.id}`}>Ir al pedido</Link></Button>;
+                          ><Link style={{ textDecoration: "none" }} href={`/admin/pedido/${cellValues.row.id}`}>Ver pedido</Link></Button>;
         }
       }
     ];
@@ -97,7 +103,7 @@ export async function getStaticProps({ params }) {
 export default function Pedidos({pedidos}) {
  const classes = useStyles();
  const router = useRouter()
- const { user, error} = useUser();
+ const { user, isLoading, error} = useUser();
  const estadoTitulo = (router.asPath.substring(router.asPath.lastIndexOf("/") + 1))+'S';
  
 if(user){
@@ -114,7 +120,7 @@ if(user){
       <DataGrid
         rows={pedidos}
         columns={columns}
-        pageSize={10}
+        pageSize={9}
       />      
     </div>
     </Paper>
@@ -123,6 +129,8 @@ if(user){
     
   );
 }
-return <a href="/api/auth/login">Login</a>;
+if(isLoading)
+return <Cargando></Cargando>;
+return Router.push("/api/auth/login");
 }
 

@@ -108,4 +108,9 @@ public class ArchivoFrecuenteService implements IArchivoFrecuenteService{
 		return saveArchivo;
 	}
 
+	@Override
+	public void deleteArchivoFrecuente(int idArchivoFrecuente) {
+		this._archivoFrecuenteRepository.deleteById(idArchivoFrecuente);		
+	}
+
 }

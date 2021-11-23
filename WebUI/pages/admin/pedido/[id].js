@@ -30,44 +30,36 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Cargando from '../../../src/components/Cargando';
+import { format } from "date-fns";
 
-
-//import printJS from 'print-js'
-//const printJS = dynamic(
-//    () => dynamic(() => import('printJS').then((module) => module.printjs)),
-//    { ssr: false }    
-//  )
 
 const printJS = dynamic(() => import('print-js'), {
     ssr: false
 });
 
-function createData(name, color, tamaño, faz) {
-    return { name, color, tamaño, faz };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 'ESCALA DE GRISES', 'A4', 'SIMPLE'),
-    createData('Ice cream sandwich', 'COLOR', 'A4', 'DOBLE'),
-    createData('Eclair', 'COLOR', 'A4', 'DOBLE'),
-    createData('Cupcake', 'ESCALA DE GRISES', 'A3', 'SIMPLE'),
-];
-
-function generate(element) {
-    return [0, 1, 2].map((value) =>
-        React.cloneElement(element, {
-            key: value,
-            value: "Nombre archivo",
-        }),
-    );
-}
 
 const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: 275,
+      width: '100%',
     },
     espacios: {
-        marginLeft: theme.spacing(3),
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    margen: {
+        paddingLeft: theme.spacing(8),
+        paddingRight: theme.spacing(8),
+    },
+    cardEstado: {
+        textAlign: 'center',
+        justifyContent: 'center',
+        paddingRight: 0,
+    },
+    justifyCenter: {
+        justifyContent: 'center',
     },
 }));
 
@@ -91,7 +83,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const res = await fetch(`http://localhost:8080/pedidos/${params.id}`)
    const pedido = await res.json()
-console.log(pedido.archivos);
+    console.log(pedido.archivos);
        return{ 
          props: {
            pedido
@@ -111,6 +103,10 @@ export default function Pedido({pedido}) {
     const classes = useStyles();
     const router = useRouter()
     const { user, error, isLoading } = useUser();
+
+    var date = new Date(pedido.fechaEstimadaEntrega);
+    const fechaEstimadaEntrega = format(date, "dd/MM/yyyy 'a las' HH:mm");
+
 
      
   useEffect(() => {
@@ -161,7 +157,7 @@ export default function Pedido({pedido}) {
             <Dashboard>
                 <>
                     <div>
-                        <Grid container>
+                        <Grid container>                            
                             <Grid item xs={12} md={12} lg={12}>
                                 <div>
                                     <Typography component="h2" variant="h6" color="inherit" className={classes.title}>
@@ -170,6 +166,7 @@ export default function Pedido({pedido}) {
                                 </div>
                                 <br/>
                             </Grid>
+                            <Grid container xs={12} md={12} lg={12} spacing={2}>
                             <Grid item xs={12} md={8} lg={8}>
                                 <TableContainer component={Paper}>
                                     <Table className={classes.table} aria-label="simple table">
@@ -196,14 +193,14 @@ export default function Pedido({pedido}) {
                                                 <TableCell component="th" scope="row">
                                                     Fecha programada de entrega
                                                 </TableCell>
-                                                <TableCell align="right">{pedido.fechaEstimadaEntrega}</TableCell>
+                                                <TableCell align="right">{fechaEstimadaEntrega}</TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
                             </Grid>
-                            <Grid item xs={12} md={4} lg={4}>
-                                <Card className={classes.root, classes.espacios}>
+                            <Grid  item xs={12} md={4} lg={4}>
+                                <Card className={classes.cardEstado}>
                                     <CardContent>
                                         <Typography variant="h5" component="h2">
                                             PAGADO
@@ -219,12 +216,12 @@ export default function Pedido({pedido}) {
                                             {pedido.estado}
                                         </Typography>
                                     </CardContent>
-                                    <CardActions>
-                                        <Button size="small" variant="outlined" align="right" onClick={actualizarEstadoPedido}> MARCAR {estadoSiguiente} </Button>                                       
+                                    <CardActions className={classes.justifyCenter} >
+                                        <Button size="small" variant="contained" color="secondary" onClick={actualizarEstadoPedido}> MARCAR {estadoSiguiente} </Button>                              
                                     </CardActions>
                                 </Card>
                             </Grid>
-                            
+                            </Grid>
                             <Grid item xs={12} md={12} lg={12}>
                             <br/>
                             <br/>
@@ -263,7 +260,7 @@ export default function Pedido({pedido}) {
                                                         {archivo.tipoImpresion}
                                                         </TableCell>
                                                     <TableCell align="right">
-                                                        <Button variant="outlined" 
+                                                        <Button variant="outlined" color="primary"                                                                 
                                                                 onClick={async (e) => {
                                                                             const { value } = e.currentTarget
                                                                             /* Importo print-js dinamicamente */
@@ -285,18 +282,24 @@ export default function Pedido({pedido}) {
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                </Grid>
+                            </Grid>
                         </Grid>
-                    </div>
-
-                    <div style={{ height: 600, width: '100%' }}>
-                   
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <Grid container item xs={12} md={12} lg={12} justifyContent="flex-end">
+                        <Button size="small" variant="outlined" color="secondary"> CANCELAR PEDIDO </Button>   
+                        </Grid>
                     </div>
                 </>
             </Dashboard>
 
         );
     }
-    return <a href="/api/auth/login">Login</a>;
+    if(isLoading)
+    return <Cargando></Cargando>;
+    return Router.push("/api/auth/login");
 }
 

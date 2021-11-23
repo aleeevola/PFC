@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,10 +37,10 @@ public class PreciosController {
 	
 	@PatchMapping("/actualizar")
 	@ResponseBody
-	@ApiOperation(value = "Actualizar estado del precio")
+	@ApiOperation(value = "Actualizar precio")
 	public ResponseEntity<Precio> updatePrecio(
 			@RequestParam("idPrecio") int idPrecio,
-			@RequestParam("precio") float precio){		
+			@RequestParam("nuevoPrecio") float precio){		
 		
 		return ResponseEntity.ok(this._precioService.updatePrecio(idPrecio, precio));
 	}

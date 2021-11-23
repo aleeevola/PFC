@@ -27,4 +27,6 @@ public interface IArchivoFrecuenteService {
 	public Page<ArchivoFrecuente> findAllByNombre(String nombre, int page, int pageSize);
 
 	DetalleArchivoFrecuente agregarAPedido(int idPedido, int idArchivoFrecuente, TipoImpresion formato, TamanioHoja tamanio, Color color, String observaciones) throws IOException;
+
+	public void deleteArchivoFrecuente(int idArchivoFrecuente);
 }

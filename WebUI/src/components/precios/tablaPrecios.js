@@ -10,6 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { makeStyles} from '@material-ui/core/styles';
 import ActualizarPrecioDialog from './actualizarPrecioDialog';
+import Cargando from '../Cargando';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -53,34 +54,40 @@ const useStyles = makeStyles((theme) => ({
     }
   }));
   
-
+/*
   export async function getStaticProps() {
     const apiurl = process.env.apiURL;
     const res = await fetch(apiurl + '/precios');
     const precios = await res.json()
-    //const usuarios = [
-    //  { id: 1, nombre: 'Lucia Arias', fechaLimite: '12 ago 2020 12:30', email: 'ejemplo@gmail.com', paginas: 8, pago: 'Pagado' },
-    //]
-    console.log("Ejecuta static props");
-    console.log(precios);
     if (!precios) {
       return { notFound: true };
     }
-  console.log(precios);
     return {
       props: {
         precios,
       },
     };  
   }  
+*/
 
-
-export default function TablaPrecios({ precios }) {
+export default function TablaPrecios({ props }) {
     const classes = useStyles();
-    const [pre, setPrecios] = useState([]);
+    //const [pre, setPrecios] = useState([]);
     const [precio, setPrecio] = useState(null);
+    const [precios, setPrecios] = useState(null);
     const [actualizarPrecio, setActualizarPrecio] = useState(false);
 
+    useEffect(() => {
+      const fetchData = async () => {
+        const apiurl = process.env.apiURL;
+        const res = await fetch(apiurl + '/precios');
+        const precios = await res.json();
+        setPrecios(precios);
+      };
+      fetchData();
+    }, [actualizarPrecio]);
+
+    if(precios!=null)
     return (
         <>
         <ActualizarPrecioDialog visible={actualizarPrecio} precio={precio}
@@ -119,7 +126,7 @@ export default function TablaPrecios({ precios }) {
                                     {item.tipoImpresion}
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Button variant="outlined"
+                                    <Button variant="outlined" color="secondary"
                                         onClick={async (e) => {
                                             const { value } = e.currentTarget
                                             setPrecio({...item});
@@ -133,4 +140,5 @@ export default function TablaPrecios({ precios }) {
             </TableContainer>
         </>
     )
+    return <></>
 }

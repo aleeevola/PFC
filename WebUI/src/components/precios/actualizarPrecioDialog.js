@@ -29,8 +29,10 @@ export default function ActualizarPrecioDialog(props) {
   }, [props.precio]);
 
   const actualizarPrecio = async (event) => {
+    console.log("idPrecio: " + precio.idPrecio + " nuevo precio: " + nuevoPrecio )
+    console.log("Precio: " + precio.idPrecio); 
     const data = new FormData();
-    data.append("idPrecio", props.idPrecio);
+    data.append("idPrecio", precio.idPrecio);
     data.append("nuevoPrecio", nuevoPrecio);
 
     const apiurl = process.env.apiURL;

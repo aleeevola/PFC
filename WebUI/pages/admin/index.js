@@ -13,7 +13,9 @@ import ComboHoySemanaMes from "../../src/components/ComboHoySemanaMes";
 import { useState, useEffect } from 'react';
 
 import { useUser } from "@auth0/nextjs-auth0";
+import { useRouter } from 'next/router';
 import TablaPrecios from "../../src/components/precios/tablaPrecios";
+import Cargando from '../../src/components/Cargando';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,7 +80,7 @@ export default function HomeAdmin({ precios }) {
   const classes = useStyles();
   const { user, error, isLoading } = useUser();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
+  const Router = useRouter()
 
   if (user) {
     return (
@@ -151,6 +153,7 @@ export default function HomeAdmin({ precios }) {
       </Dashboard>
     );
   }
-
-  return <a href="/api/auth/login">Login</a>;
+  if(isLoading)
+  return <Cargando></Cargando>;
+  return Router.push("/api/auth/login");
 }

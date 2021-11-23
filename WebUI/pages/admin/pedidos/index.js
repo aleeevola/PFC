@@ -6,8 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
+import Cargando from '../../../src/components/Cargando';
+import { format } from "date-fns";
 
 import { useUser } from "@auth0/nextjs-auth0";
+import { useRouter } from 'next/router';
 
 
 const useStyles = makeStyles((theme) => ({}));
@@ -62,7 +65,8 @@ export async function getStaticProps() {
     const nombre = pedido.usuario.nombre
     const email = pedido.usuario.email
     const estado = pedido.estado  
-    const fechaEstimadaEntrega = pedido.fechaEstimadaEntrega
+    var date = new Date(pedido.fechaEstimadaEntrega);
+    const fechaEstimadaEntrega = format(date, "dd/MM/yyyy 'a las' HH:mm");
 
     return {
       id,
@@ -84,7 +88,7 @@ export async function getStaticProps() {
 
 export default function Pedidos({pedidos}) {
  const classes = useStyles();
- const { user, error} = useUser();
+ const { user, isLoading, error} = useUser();
 if(user){  
   return (
     <Dashboard>
@@ -108,5 +112,7 @@ if(user){
     </Dashboard>     
   );
 }
-  return <a href="/api/auth/login">Login</a>;
+if(isLoading)
+return <Cargando></Cargando>;
+return Router.push("/api/auth/login");
 }
