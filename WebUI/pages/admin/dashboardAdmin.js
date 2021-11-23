@@ -40,10 +40,7 @@ import { useRouter } from 'next/router';
 function Copyright() {
   return (
     <Typography variant="body2" color="secondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
+      {'Copyright © Total impresion Digital '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>

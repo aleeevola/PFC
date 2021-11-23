@@ -15,32 +15,32 @@ const useStyles = makeStyles((theme) => ({}));
 const columns = [
   { field: 'id',
   headerName: 'ID',
-  width: 90 },  
+  width: 110 },  
   {
     field: 'nombre',
     headerName: 'Nombre',
-    width: 160,
+    width: 220,
   },
   {
     field: 'estado',
     headerName: 'Estado',  
-    width: 140,       
+    width: 150,       
   },
   {
     field: 'fechaEstimadaEntrega',
-    headerName: 'Fecha límite',
-    width: 155,
+    headerName: 'Fecha estimada entrega',
+    width: 230,
   },  
   {
     field: 'email',
     headerName: 'Email',
     type: 'email',
-    width: 215,
+    width: 240,
   },
   {
     field: " ",
     headerName: '', 
-    width: 200,
+    width: 220,
     sortable: false,
     filtrable: false,
     editable: false,    
@@ -99,7 +99,7 @@ if(user){
       <DataGrid
         rows={pedidos}
         columns={columns}
-        pageSize={10}
+        pageSize={9}
       />
       
     </div>
