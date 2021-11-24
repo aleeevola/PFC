@@ -15,6 +15,7 @@ public class ArchivoFrecuente {
 	@GeneratedValue(strategy=GenerationType.AUTO)
     private int idArchivoFrecuente;
     private String nombre;  
+    private String descripcion;
     private String token;
 	private int numeroPaginas;
         
@@ -44,8 +45,11 @@ public class ArchivoFrecuente {
 	public void setNumeroPaginas(int numeroPaginas) {
 		this.numeroPaginas = numeroPaginas;
 	}
-
-    
-
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 
 }

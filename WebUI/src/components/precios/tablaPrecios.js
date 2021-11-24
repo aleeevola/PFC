@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
   }  
 */
 
-export default function TablaPrecios({ props }) {
+export default function TablaPrecios() {
     const classes = useStyles();
     //const [pre, setPrecios] = useState([]);
     const [precio, setPrecio] = useState(null);

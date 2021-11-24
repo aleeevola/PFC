@@ -59,24 +59,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-export async function getStaticProps() {
-  const apiurl = process.env.apiURL;
-  const resPrecios = await fetch(apiurl + '/precios');
-  const precios = await resPrecios.json()
-  console.log("precios index");
-  console.log(precios)
-
-  return {
-    props: {
-     // usuarios,
-      precios,
-    },
-  };
-
-}
-
-export default function HomeAdmin({ precios }) {
+export default function HomeAdmin({ pendientes, pagsPendientes, impresos, pagsImpresos, entregados, pagsEntregados }) {
   const classes = useStyles();
   const { user, error, isLoading } = useUser();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -104,7 +87,7 @@ export default function HomeAdmin({ precios }) {
                   <ComboHoySemanaMes></ComboHoySemanaMes>
                 </div>
                 <Typography component="span" fontWeight="light" className={classes.textBoxes}>
-                  10 pedidos, 214 páginas
+                  {pendientes} pedidos, {pagsPendientes} páginas
                 </Typography>
                 <Link button href="admin/pedidos/PENDIENTE">
                   <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver pedidos pendientes</Button>
@@ -121,7 +104,7 @@ export default function HomeAdmin({ precios }) {
                   <ComboHoySemanaMes></ComboHoySemanaMes>
                 </div>
                 <Typography component="span" fontWeight="light" className={classes.textBoxes}>
-                  23 pedidos, 380 páginas
+                  {impresos} pedidos, {pagsImpresos} páginas
                 </Typography>
                 <Link button href="admin/pedidos/IMPRESO">
                   <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver pedidos impresos</Button>
@@ -137,16 +120,16 @@ export default function HomeAdmin({ precios }) {
                   <ComboHoySemanaMes></ComboHoySemanaMes>
                 </div>
                 <Typography component="span" fontWeight="light" className={classes.textBoxes}>
-                  23 pedidos, 380 páginas
+                  {entregados} pedidos, {pagsEntregados} páginas
                 </Typography>
                 <Link button href="admin/pedidos/ENTREGADO">
-                  <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver entregados</Button>
+                  <Button className={classes.btnBox} variant="contained" size="large" color="primary">Ver pedidos entregados</Button>
                 </Link>
               </Box>
             </Grid>
             <Grid item xs={12} md={12} lg={12}>
               <br />
-              <TablaPrecios precios={precios}></TablaPrecios>
+              <TablaPrecios></TablaPrecios>
             </Grid>
           </Grid>
         </>
@@ -156,4 +139,59 @@ export default function HomeAdmin({ precios }) {
   if(isLoading)
   return <Cargando></Cargando>;
   return Router.push("/api/auth/login");
+}
+
+export async function getStaticProps() {
+  const apiurl = process.env.apiURL;
+  const res = await fetch(apiurl + '/pedidos/cantidadPorEstado');
+  var cantidades = await res.json();
+  var pendientes = 0;
+  var pagsPendientes = 0;
+  var impresos = 0;
+  var pagsImpresos = 0;
+  var entregados = 0;
+  var pagsEntregados = 0;
+
+
+  cantidades.map( (c) => {
+    switch (c.estado) {
+      case 'PENDIENTE':
+        pendientes = c.cantidadPedidos;
+        pagsPendientes = c.cantidadPaginas;
+        break;
+      case 'IMPRESO':
+           impresos = c.cantidadPedidos;
+           pagsImpresos = c.cantidadPaginas;
+          break;
+      case 'ENTREGADO':
+           entregados = c.cantidadPedidos;
+           pagsEntregados = c.cantidadPaginas;
+          break;
+    
+      default:
+        break;
+    }
+    
+    return { 
+      pendientes,
+      pagsPendientes,
+      impresos,
+      pagsImpresos,
+      entregados,
+      pagsEntregados
+    }
+  }
+  )  
+  return {
+    props: {
+     pendientes,
+     pagsPendientes,
+     impresos,
+     pagsImpresos,
+     entregados,
+     pagsEntregados,
+    },
+  revalidate: 30,
+  };
+
 }

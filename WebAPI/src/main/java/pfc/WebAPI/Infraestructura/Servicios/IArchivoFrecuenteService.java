@@ -20,7 +20,7 @@ public interface IArchivoFrecuenteService {
 
 	public ArchivoFrecuente nuevoArchivoFrecuente(String nombre);
 
-	public ArchivoFrecuente postArchivoFrecuente(MultipartFile file) throws IOException;
+	public ArchivoFrecuente postArchivoFrecuente(MultipartFile file, String descripcion) throws IOException;
 
 	public List<ArchivoFrecuente> findAll();
 

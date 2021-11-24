@@ -61,9 +61,10 @@ public class ArchivoFrecuenteService implements IArchivoFrecuenteService{
 	}
 
 	@Override
-	public ArchivoFrecuente postArchivoFrecuente(MultipartFile archivo) throws IOException {
+	public ArchivoFrecuente postArchivoFrecuente(MultipartFile archivo, String descripcion) throws IOException {
 		ArchivoFrecuente archivoFrecuente = new ArchivoFrecuente();
 		archivoFrecuente.setNombre(StringUtils.cleanPath(archivo.getOriginalFilename()));
+		archivoFrecuente.setDescripcion(descripcion);
 		archivoFrecuente.setNumeroPaginas(this.getNumeroPaginas(archivo));
 		
 		ArchivoFrecuente saveArchivo = this._archivoFrecuenteRepository.save(archivoFrecuente);

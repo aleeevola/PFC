@@ -1,5 +1,7 @@
 package pfc.WebAPI.Servicios;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import pfc.WebAPI.Infraestructura.Entidades.Archivo;
 import pfc.WebAPI.Infraestructura.Entidades.DetalleArchivoFrecuente;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.CantidadPedidosDto;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
@@ -120,16 +123,79 @@ public class PedidoService implements IPedidoService{
 	public Pedido updateEstadoPedido(EstadoPedido estado, int idPedido, String email) {
 		Pedido pedido = this._pedidoRepository.findById(idPedido).get();
 		pedido.setEstado(estado);	
-		if(estado == EstadoPedido.IMPRESO) {
-			
-			this._emailService.sendEmail(email);
-		}else {
-			if(estado == EstadoPedido.ENTREGADO) {
-				pedido.setFechaEntrega(new Date(System.currentTimeMillis()));
-				
-			}
+		switch(estado){
+		case IMPRESO:
+			pedido.setFechaImpresion(new Date(System.currentTimeMillis()));
+			this._emailService.sendEmailImpreso(email, idPedido);
+			break;
+		case ENTREGADO:
+			pedido.setFechaEntrega(new Date(System.currentTimeMillis()));
+			this._emailService.sendEmailEntregado(email, idPedido);
+			break;
+		default:
+			break;
 		}
+
 		return this._pedidoRepository.saveAndFlush(pedido);
+	}
+
+	@Override
+	public List<CantidadPedidosDto> getCantidadPedidosPorEstado() {
+		List<CantidadPedidosDto> lista = new ArrayList<CantidadPedidosDto>();
+		
+	    Calendar calendar = Calendar.getInstance();
+	    calendar.set(Calendar.HOUR_OF_DAY, 0);
+	    calendar.set(Calendar.MINUTE, 0);
+	    calendar.set(Calendar.SECOND, 0);
+	    calendar.set(Calendar.MILLISECOND, 0);
+		java.util.Date hoyU = calendar.getTime();
+		
+		CantidadPedidosDto pendientes = new CantidadPedidosDto();
+		pendientes.setEstado(EstadoPedido.PENDIENTE);
+		pendientes.setCantidadPedidos(0);
+				for(Pedido p : this._pedidoRepository.findByEstado(EstadoPedido.PENDIENTE)) {
+					pendientes.setCantidadPedidos(pendientes.getCantidadPedidos() + 1);
+					for(Archivo a : p.getArchivos()) {
+						pendientes.setCantidadPaginas(pendientes.getCantidadPaginas() + a.getNumeroPaginas());
+					}
+					for(DetalleArchivoFrecuente af : p.getDetalleArchivosFrecuentes()) {
+						pendientes.setCantidadPaginas(pendientes.getCantidadPaginas() + af.getArchivoFrecuente().getNumeroPaginas());
+					}					
+				}
+				
+				CantidadPedidosDto impresos = new CantidadPedidosDto();
+				impresos.setEstado(EstadoPedido.IMPRESO);
+				impresos.setCantidadPedidos(0);
+				for(Pedido p : this._pedidoRepository.findByEstadoAndFechaImpresion(EstadoPedido.IMPRESO, hoyU)) {
+					impresos.setCantidadPedidos(impresos.getCantidadPedidos() + 1);
+					for(Archivo a : p.getArchivos()) {
+						impresos.setCantidadPaginas(impresos.getCantidadPaginas() + a.getNumeroPaginas());
+					}
+					for(DetalleArchivoFrecuente af : p.getDetalleArchivosFrecuentes()) {
+						impresos.setCantidadPaginas(impresos.getCantidadPaginas() + af.getArchivoFrecuente().getNumeroPaginas());
+					}					
+				}
+				
+				
+
+		CantidadPedidosDto entregados = new CantidadPedidosDto();
+		entregados.setEstado(EstadoPedido.ENTREGADO);
+		entregados.setCantidadPedidos(0);
+
+		for(Pedido p : this._pedidoRepository.findByEstadoAndFechaEntrega(EstadoPedido.ENTREGADO, hoyU)) {
+			entregados.setCantidadPedidos(entregados.getCantidadPedidos() + 1);
+			for(Archivo a : p.getArchivos()) {
+				entregados.setCantidadPaginas(entregados.getCantidadPaginas() + a.getNumeroPaginas());
+			}
+			for(DetalleArchivoFrecuente af : p.getDetalleArchivosFrecuentes()) {
+				entregados.setCantidadPaginas(entregados.getCantidadPaginas() + af.getArchivoFrecuente().getNumeroPaginas());
+			}					
+		}
+		
+		lista.add(pendientes);
+		lista.add(impresos);		
+		lista.add(entregados);
+		return lista;
 	} 
 
 }

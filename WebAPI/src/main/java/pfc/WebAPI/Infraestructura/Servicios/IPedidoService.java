@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.CantidadPedidosDto;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 
@@ -22,4 +23,5 @@ public interface IPedidoService {
 	public Pedido updateEstadoPedido(EstadoPedido estado, int idPedido, String email);
 	public PedidoDto obtenerPedidoDto(int idPedido);
 	public String getEstado(int idPedido);
+	public List<CantidadPedidosDto> getCantidadPedidosPorEstado();
 }

@@ -106,7 +106,7 @@ export default function PagoPendiente(props) {
                                         color="secondary"
                                         component="span"
                                         className={classes.button}>
-                                        Volver al inico
+                                        Volver al inicio
                                     </Button>
                                 </Link>
                             </Grid>

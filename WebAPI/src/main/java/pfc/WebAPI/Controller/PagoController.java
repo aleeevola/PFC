@@ -12,6 +12,8 @@ import com.mercadopago.exceptions.MPException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import pfc.WebAPI.Infraestructura.Entidades.Pago;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.PagoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoFrontMP;
 import pfc.WebAPI.Infraestructura.Servicios.IPagosService;
 
@@ -62,4 +64,12 @@ public class PagoController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
+	
+	@GetMapping("/{idPedido}")
+	@ApiOperation(value = "Retorna el pago asociado al pedido")
+	public PagoDto getPagoByIdPedido(@PathVariable("idPedido") int idPedido) {
+		return this._pagosServices.getPagobyIdPedido(idPedido);
+	}
+
+	
 }

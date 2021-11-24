@@ -1,6 +1,7 @@
 package pfc.WebAPI.Servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.mercadopago.exceptions.MPException;
@@ -16,8 +17,10 @@ import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPago;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Entidades.Pago;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.PagoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.MetodoDePago;
 import pfc.WebAPI.Infraestructura.Repositorios.IPagoRepository;
+import pfc.WebAPI.Infraestructura.Servicios.IEmailService;
 import pfc.WebAPI.Infraestructura.Servicios.IPagosService;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
 
@@ -29,6 +32,8 @@ public class PagosService implements  IPagosService{
 	private IPedidoService _pedidoService;
 	@Autowired
 	private IPagoRepository _pagoRepository;
+	@Autowired 
+	private IEmailService _emailService;
 
 	
 	@Override
@@ -99,6 +104,7 @@ public class PagosService implements  IPagosService{
 		//TODO: SETEO EL ESTADO EN PENDIENTE CON ESTE CALLBACK O CON EL DE BACKEND?
 		pago.getPedido().setEstado(EstadoPedido.PENDIENTE);
 		this._pagoRepository.saveAndFlush(pago);
+		this._emailService.sendEmailNuevoPedido();
 		return pago.getPedido().getIdPedido();
 		//return 0;
 	}
@@ -128,8 +134,20 @@ public class PagosService implements  IPagosService{
 		pago.setPedido(pedido);
 
 		this._pagoRepository.saveAndFlush(pago);
+		this._emailService.sendEmailNuevoPedido();
 
 		return pedido.getIdPedido();
+	}
+
+	@Override
+	public PagoDto getPagobyIdPedido(int idPedido) {
+		Pago p = this._pagoRepository.findByPedidoIdPedido(idPedido);
+		PagoDto pagoDto = new PagoDto();
+		pagoDto.setIdPago(p.getIdPago());
+		pagoDto.setMetodoDePago(p.getMetodoDePago());
+		pagoDto.setEstadoFront(p.getEstadoFront());
+		
+		return pagoDto;
 	}
 
 }

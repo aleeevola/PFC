@@ -81,24 +81,24 @@ export async function getStaticPaths() {
 
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(`http://localhost:8080/pedidos/${params.id}`)
-   const pedido = await res.json()
-    console.log(pedido.archivos);
+  const resPedido = await fetch(`http://localhost:8080/pedidos/${params.id}`)
+   const pedido = await resPedido.json()
+   const resPago = await fetch(`http://localhost:8080/pago/${params.id}`)
+   const pago = await resPago.json()
        return{ 
          props: {
-           pedido
+           pedido,
+           pago,
          },
        } 
      };
      
      
 
-export default function Pedido({pedido}) {
-
+export default function Pedido({pedido, pago}) {
     const [estado, setEstado] = useState(pedido.estado);
     const [estadoSiguiente, setEstadoSiguiente] = useState('');
-    const [URLfile, setURLfile] = useState('');
-    const [numPages, setNumPages] = useState('');
+
 
     const classes = useStyles();
     const router = useRouter()
@@ -107,11 +107,8 @@ export default function Pedido({pedido}) {
     var date = new Date(pedido.fechaEstimadaEntrega);
     const fechaEstimadaEntrega = format(date, "dd/MM/yyyy 'a las' HH:mm");
 
-
-     
   useEffect(() => {
     //setEstado({...pedido.estado})
-    console.log('Estado: ' + estado + ', estadoSiguiente: ' + estadoSiguiente);
     if(estado === 'PENDIENTE'){
         setEstadoSiguiente('IMPRESO')
     }else{
@@ -121,9 +118,12 @@ export default function Pedido({pedido}) {
         else(
             setEstadoSiguiente('')
         )
-    }
-   
+    }   
   });
+
+  useEffect(() => {  
+      console.log("estado: " + estado)
+    },[estado]);
 
     const pedidoID = router.asPath.substring(router.asPath.lastIndexOf("/") + 1);
 
@@ -144,13 +144,19 @@ export default function Pedido({pedido}) {
           });
           if (!response.ok)
             throw new Error(response.statusText);
-          setEstado(estadoSiguiente);
-          
+          setEstado(estadoSiguiente);          
         }
         catch (error) {
           console.error(error);
         }
       }
+
+      const handleCancelar = async (event) => {
+        setEstadoSiguiente("CANCELADO");
+        actualizarEstadoPedido();
+      }
+
+
 
     if (user) {
         return (
@@ -202,22 +208,39 @@ export default function Pedido({pedido}) {
                             <Grid  item xs={12} md={4} lg={4}>
                                 <Card className={classes.cardEstado}>
                                     <CardContent>
-                                        <Typography variant="h5" component="h2">
-                                            PAGADO
-                                        </Typography>
-                                        <Typography className={classes.pos} color="textSecondary">
-                                            Pago #223414
-                                        </Typography>
+                                        {pago.metodoDePago == 'EFECTIVO' ? 
+                                        <>
+                                            <Typography className={classes.pos} color="textSecondary">
+                                                 Pago pendiente                                                   
+                                            </Typography>
+                                            <Typography variant="h5" component="h2"  fontWeight='800'>
+                                                EFECTIVO
+                                            </Typography>                                            
+                                        </> 
+                                        :
+                                        <>
+                                            <Typography className={classes.pos} color="textSecondary">
+                                                 Pago #{pago.idPago}                                                   
+                                            </Typography>
+                                            <Typography variant="h5" component="h2" fontWeight='500'>
+                                                {pago.estadoFront}
+                                            </Typography>   
+                                        </>
+                                        }
                                         <br/>
                                         <Typography className={classes.title} color="textSecondary" gutterBottom>
                                             Estado pedido:
                                         </Typography>
                                         <Typography variant="h5" component="h2">
                                             {pedido.estado}
-                                        </Typography>
+                                        </Typography>                                        
                                     </CardContent>
                                     <CardActions className={classes.justifyCenter} >
-                                        <Button size="small" variant="contained" color="secondary" onClick={actualizarEstadoPedido}> MARCAR {estadoSiguiente} </Button>                              
+                                        {estadoSiguiente != '' ? <Button size="small" variant="contained" color="secondary" onClick={actualizarEstadoPedido}> MARCAR {estadoSiguiente} </Button> 
+                                        : 
+                                            <>
+                                                <Button size="small" variant="outlined" href="/admin/pedidos" color="secondary"> Volver a pedidos </Button>
+                                            </> }                           
                                     </CardActions>
                                 </Card>
                             </Grid>
@@ -289,8 +312,10 @@ export default function Pedido({pedido}) {
                         <br/>
                         <br/>
                         <br/>
-                        <Grid container item xs={12} md={12} lg={12} justifyContent="flex-end">
-                        <Button size="small" variant="outlined" color="secondary"> CANCELAR PEDIDO </Button>   
+                        <br/>
+                        <br/>
+                        <Grid container item xs={12} md={12} lg={12} justifyContent="center">
+                          <Button  variant="outlined" onclick={handleCancelar}> CANCELAR PEDIDO </Button>   
                         </Grid>
                     </div>
                 </>

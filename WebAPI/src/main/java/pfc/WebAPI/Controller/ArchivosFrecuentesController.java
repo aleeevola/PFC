@@ -72,7 +72,7 @@ public class ArchivosFrecuentesController {
 			@RequestParam("descripcion") String descripcion
 			) throws Exception{
 		try {
-			ArchivoFrecuente archivoFrecuenteResult = this._archivoFrecuenteService.postArchivoFrecuente(file);
+			ArchivoFrecuente archivoFrecuenteResult = this._archivoFrecuenteService.postArchivoFrecuente(file, descripcion);
 			return ResponseEntity.ok(archivoFrecuenteResult);
 		} catch (IOException e) {
 			throw new Exception(e.getCause());

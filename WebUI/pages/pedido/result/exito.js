@@ -93,7 +93,7 @@ export default function PagoExito(props) {
                                     ¡Pago exitoso!
                                 </Typography>
                                 <Typography align="center" variant="body1" gutterBottom>
-                                    Puedes seguir el estado de tu pedido haciendo click <a href="">aqui</a>
+                                    Puedes seguir el estado de tu pedido haciendo click <a href="/">aqui</a>
                                 </Typography>
                                 <Typography align="center" variant="subtitle2" gutterBottom>
                                     Codigo de pedido #{idPedido}
@@ -108,7 +108,7 @@ export default function PagoExito(props) {
                                         color="secondary"
                                         component="span"
                                         className={classes.button}>
-                                        Volver al inico
+                                        Volver al inicio
                                     </Button>
                                 </Grid>
                             </Link>

@@ -23,6 +23,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Usuario;
+import pfc.WebAPI.Infraestructura.Entidades.Dto.CantidadPedidosDto;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PedidoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPedido;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
@@ -77,6 +78,12 @@ public class PedidosController {
 	@ApiOperation(value = "Obtener todos los pedidos..")
 	public List<Pedido> findAll() {
 		return this._pedidoService.findAll();
+	}
+	
+	@GetMapping("/cantidadPorEstado")
+	@ApiOperation(value = "Obtener pantidad de pedidos por estado en fecha...")
+	public List<CantidadPedidosDto> getCantidadPedidos() {
+		return this._pedidoService.getCantidadPedidosPorEstado();
 	}
 
 	@ApiOperation(value = "Obtener un pedido segun estado")

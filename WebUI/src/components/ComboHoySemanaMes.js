@@ -96,14 +96,13 @@ export default function ComboHoySemanaMes() {
 <FormControl className={classes.margin}>
 <InputLabel></InputLabel>
 <Select
+  disabled = {true}
   value={periodo}
   onChange={handlePeriodo}
   className={classes.btnVerMas}
   input={<BootstrapInput />}
 >
   <MenuItem value={'Hoy'}>Hoy</MenuItem>
-  <MenuItem value={'Semana'}>Semana</MenuItem>
-  <MenuItem value={'Mes'}>Mes</MenuItem>
 </Select>
 </FormControl>
     );

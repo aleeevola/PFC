@@ -40,6 +40,7 @@ public class Pedido {
 	private  Date fechaIngreso;
     private  Date fechaEstimadaEntrega;
     private  Date fechaEntrega;
+    private  Date fechaImpresion;
     
     @Enumerated(EnumType.STRING)
     private  EstadoPedido estado;
@@ -139,6 +140,14 @@ public class Pedido {
 
 	public void setDetalleArchivosFrecuentes(Set<DetalleArchivoFrecuente> archivosFrecuentes) {
 		DetalleArchivosFrecuentes = archivosFrecuentes;
+	}
+
+	public Date getFechaImpresion() {
+		return fechaImpresion;
+	}
+
+	public void setFechaImpresion(Date fechaImpresion) {
+		this.fechaImpresion = fechaImpresion;
 	}	
 	
 

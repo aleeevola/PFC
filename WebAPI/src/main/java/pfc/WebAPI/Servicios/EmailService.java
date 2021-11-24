@@ -4,6 +4,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -30,6 +31,9 @@ public class EmailService implements IEmailService{
 	
 	private JavaMailSender javaMailSender;
 
+	@Value("${spring.mail.username}")
+	private String emailEmpresa; 
+	
 	/**
 	 * 
 	 * @param javaMailSender
@@ -40,26 +44,37 @@ public class EmailService implements IEmailService{
 		this.javaMailSender = javaMailSender;
 	}
 
-	/**
-	 * This function is used to send mail without attachment.
-	 * @param user
-	 * @throws MailException
-	 */
 
-	public void sendEmail(String email) throws MailException {
+	
+	
+	public void sendEmailNuevoPedido() throws MailException {
 
-		/*
-		 * This JavaMailSender Interface is used to send Mail in Spring Boot. This
-		 * JavaMailSender extends the MailSender Interface which contains send()
-		 * function. SimpleMailMessage Object is required because send() function uses
-		 * object of SimpleMailMessage as a Parameter
-		 */
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(emailEmpresa);
+		mail.setSubject("Nuevo pedido recibido");
+		mail.setText("Se recibió un nuevo pedido en la web.");
+
+		javaMailSender.send(mail);
+	}
+	
+	public void sendEmailImpreso(String email, int idPedido) throws MailException {
 
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(email);
 		mail.setSubject("Pedido impreso");
-		mail.setText("PODRAN SUS SISTEMAS MANDAR MAILS?");
+		mail.setText("El pedido #" + idPedido + " ha sido impreso y está listo para ser retirado.");
 
 		javaMailSender.send(mail);
 	}
+
+	@Override
+	public void sendEmailEntregado(String email, int idPedido) {
+		SimpleMailMessage mail = new SimpleMailMessage();
+		mail.setTo(email);
+		mail.setSubject("Pedido entregado");
+		mail.setText("El pedido #" + idPedido + " fue entregado. ¡Gracias por elegirnos!");			
+
+		javaMailSender.send(mail);		
+	}
+	
 }
