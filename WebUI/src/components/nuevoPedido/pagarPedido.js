@@ -8,6 +8,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Link from 'next/link'
+import Router from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -69,6 +70,8 @@ export default function PagarPedido(props) {
             if (!response.ok)
                 throw new Error(response.statusText);
             setLoading(false);
+            console.log(props);
+            Router.push('/pedido/result/efectivo/?idPedido='+props.idPedido);
         }
         catch (error) {
             console.error(error);
@@ -111,15 +114,16 @@ export default function PagarPedido(props) {
                             <Button className={classes.button} onClick={handleBack}>
                                 Atras
                             </Button>
-                            <Link href={`/pedido/result/efectivo/?idPedido=${props.idPedido}`} passHref>
+                            {/* <Link href={`/pedido/result/efectivo/?idPedido=${props.idPedido}`} passHref> */}
                                 <Button
                                     variant="contained"
                                     color="primary"
                                     disabled={!efectivo}
+                                    onClick={handleNext}
                                     className={classes.button} >
                                     Terminar
                                 </Button>
-                            </Link>
+                            {/* </Link> */}
                         </Box>
                     </Grid>
                 </Grid>
