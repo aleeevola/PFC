@@ -44,7 +44,7 @@ public class FileStorageService implements IFileStorageService{
 
         try {
             //encode file name
-            String fileName = URLEncoder.encode(name, "UTF-8");
+            String fileName = name.replace(" ","");
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
