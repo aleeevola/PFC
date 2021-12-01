@@ -129,7 +129,6 @@ public class PagosService implements  IPagosService{
 			total=archivoF.getPrecio()+total;
 		};
 		pago.setTotal(total);
-
 		pedido.setEstado(EstadoPedido.PENDIENTE);
 		pago.setPedido(pedido);
 
