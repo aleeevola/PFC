@@ -10,6 +10,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.multipart.MultipartFile;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.Color;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TamanioHoja;
+import pfc.WebAPI.Infraestructura.Entidades.Enumerables.TipoImpresion;
 import pfc.WebAPI.Infraestructura.Servicios.IArchivosService;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertNotNull;
@@ -31,6 +34,8 @@ public class ArchivosServiceTests {
     @Autowired
     IArchivosService _archivosServices;
 
+    float PRECIO_SIMPLE_A4_COLOR=25;
+
     @Test
     public void ObtenerNumeroDePaginas() throws IOException {
         Path resourceDirectory = Paths.get("src","test","resources","prueba.pdf");
@@ -41,5 +46,14 @@ public class ArchivosServiceTests {
         int numeroPaginas = _archivosServices.getNumeroPaginas(multipartFile);
         assertNotNull(multipartFile);
         assertEquals(2,numeroPaginas);
+    }
+
+
+    @Test
+    public void ObtenerPrecioArchivo(){
+        int numeroPaginas=3;
+        float valorEsperado = PRECIO_SIMPLE_A4_COLOR*numeroPaginas;
+        assertEquals(valorEsperado,_archivosServices.getPrecio(numeroPaginas, TipoImpresion.DOBLE, TamanioHoja.A4, Color.COLOR),0.001);
+
     }
 }
