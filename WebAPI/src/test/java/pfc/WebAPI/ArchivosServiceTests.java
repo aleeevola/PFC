@@ -54,6 +54,5 @@ public class ArchivosServiceTests {
         int numeroPaginas=3;
         float valorEsperado = PRECIO_SIMPLE_A4_COLOR*numeroPaginas;
         assertEquals(valorEsperado,_archivosServices.getPrecio(numeroPaginas, TipoImpresion.DOBLE, TamanioHoja.A4, Color.COLOR),0.001);
-
     }
 }
