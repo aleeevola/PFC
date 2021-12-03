@@ -39,9 +39,19 @@ public class PagosServiceTests {
 
         assertNotEquals("",url);
         assertEquals(idPedido,pedido.getIdPedido());
-        //assertNotNull(pedido.getPago());
-        //assertEquals(MetodoDePago.MERCADO_PAGO,pedido.getPago().getMetodoDePago());
+        assertNotNull(pedido.getPago());
+        assertEquals(MetodoDePago.MERCADO_PAGO.toString(),pedido.getPago().getMetodoDePago().toString());
     }
 
+    @Test
+    public void PagoEfectivo() {
+        int idPedido=2;
+        pagosService.putPagoEfectivo(idPedido);
+        Pedido pedido = _pedidosService.obtenerPedido(idPedido).get();
 
+        assertEquals(EstadoPedido.PENDIENTE.toString(),pedido.getEstado().toString());
+        assertEquals(idPedido,pedido.getIdPedido());
+        assertNotNull(pedido.getPago());
+        assertEquals(MetodoDePago.EFECTIVO.toString(),pedido.getPago().getMetodoDePago().toString());
+    }
 }

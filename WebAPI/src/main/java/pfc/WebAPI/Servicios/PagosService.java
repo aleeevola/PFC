@@ -20,6 +20,7 @@ import pfc.WebAPI.Infraestructura.Entidades.Pedido;
 import pfc.WebAPI.Infraestructura.Entidades.Dto.PagoDto;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.MetodoDePago;
 import pfc.WebAPI.Infraestructura.Repositorios.IPagoRepository;
+import pfc.WebAPI.Infraestructura.Repositorios.IPedidoRepository;
 import pfc.WebAPI.Infraestructura.Servicios.IEmailService;
 import pfc.WebAPI.Infraestructura.Servicios.IPagosService;
 import pfc.WebAPI.Infraestructura.Servicios.IPedidoService;
@@ -34,6 +35,8 @@ public class PagosService implements  IPagosService{
 	private IPagoRepository _pagoRepository;
 	@Autowired 
 	private IEmailService _emailService;
+	@Autowired
+	private IPedidoRepository _pedidoRepository;
 
 	
 	@Override
@@ -89,10 +92,11 @@ public class PagosService implements  IPagosService{
 
 		preference.setBackUrls(backUrls);
 		
-		
 		preference.save();
 		pago.setToken(preference.getId());
+		pedido.setPago(pago);
 		this._pagoRepository.saveAndFlush(pago);
+		this._pedidoRepository.saveAndFlush(pedido);
 		return preference.getInitPoint();
 		//return preference.getId();
 	}
@@ -102,7 +106,10 @@ public class PagosService implements  IPagosService{
 		Pago pago = this._pagoRepository.findByToken(token).get();
 		pago.setEstadoFront(estado);
 		//TODO: SETEO EL ESTADO EN PENDIENTE CON ESTE CALLBACK O CON EL DE BACKEND?
-		pago.getPedido().setEstado(EstadoPedido.PENDIENTE);
+		Pedido pedido = pago.getPedido();
+		pedido.setEstado(EstadoPedido.PENDIENTE);
+
+		this._pedidoRepository.saveAndFlush(pedido);
 		this._pagoRepository.saveAndFlush(pago);
 		this._emailService.sendEmailNuevoPedido();
 		return pago.getPedido().getIdPedido();
@@ -132,7 +139,12 @@ public class PagosService implements  IPagosService{
 		pedido.setEstado(EstadoPedido.PENDIENTE);
 		pago.setPedido(pedido);
 
+		pedido.setPago(pago);
+
 		this._pagoRepository.saveAndFlush(pago);
+
+		this._pedidoRepository.saveAndFlush(pedido);
+
 		this._emailService.sendEmailNuevoPedido();
 
 		return pedido.getIdPedido();

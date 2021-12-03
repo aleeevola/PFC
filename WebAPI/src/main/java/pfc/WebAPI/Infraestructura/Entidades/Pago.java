@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoFrontMP;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.EstadoPago;
 import pfc.WebAPI.Infraestructura.Entidades.Enumerables.MetodoDePago;
@@ -27,6 +28,7 @@ public class Pago {
 	@Enumerated(EnumType.STRING)
 	private EstadoPago estado;
 
+	@JsonIgnore
 	@OneToOne
 	private Pedido pedido;
 
